@@ -37,6 +37,8 @@
 .pwr { display: inline-flex; align-items: center; gap: 6px; }
 .pwr i { width: 6px; height: 6px; border-radius: 50%; background: var(--led); box-shadow: 0 0 6px var(--led); }
 .bay {
+  overflow: clip;
+  overflow-clip-margin: 10px;
   display: grid;
   grid-template-columns: 20px minmax(0, 1fr) 20px;
   grid-template-rows: repeat(42, var(--u));
@@ -109,7 +111,7 @@
 .dev.on .ports i { box-shadow: inset 0 -2px 0 var(--c), 0 0 4px -1px var(--c); }
 @keyframes sweep { 0% { left: -40%; opacity: 1; } 100% { left: 110%; opacity: 1; } }
 @keyframes activity { 0% { opacity: 1; } 30% { opacity: .2; } 45% { opacity: 1; } 70% { opacity: .5; } }
-@keyframes rackin { from { transform: translateX(120%); } }
+@keyframes rackin { from { transform: translateX(-120%); } }
 
 .patchbar {
   position: relative; width: 16px; flex: none;

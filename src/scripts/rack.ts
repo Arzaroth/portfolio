@@ -137,7 +137,8 @@ export function initRack() {
     } catch {}
   }
 
-  const step = (by: number) => order[(order.indexOf(current ?? 'about') + by + order.length) % order.length];
+  const step = (by: number, from = current ?? 'about') =>
+    order[(order.indexOf(from) + by + order.length) % order.length];
 
   for (const d of devs) {
     d.addEventListener('click', (e) => {
@@ -147,7 +148,7 @@ export function initRack() {
     d.addEventListener('keydown', (e) => {
       if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
       e.preventDefault();
-      const id = step(e.key === 'ArrowDown' ? 1 : -1);
+      const id = step(e.key === 'ArrowDown' ? 1 : -1, d.dataset.to);
       devs[order.indexOf(id)].focus();
       show(id);
     });

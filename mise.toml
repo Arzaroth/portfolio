@@ -1,0 +1,33 @@
+[tools]
+node = "22"
+
+[tasks.deps]
+description = "Install the dependencies"
+run = 'cd "{{config_root}}" && npm install'
+
+[tasks.dev]
+description = "Serve the site with live reload on :4321"
+depends = ["deps"]
+run = 'cd "{{config_root}}" && npm run dev'
+
+[tasks.check]
+description = "Types, unit tests, build, and the em dash and release checks"
+depends = ["deps"]
+run = """
+cd "{{config_root}}"
+npm run check
+npm test
+npm run build
+tools/no_em_dash.sh
+node tools/check_release.mjs
+"""
+
+[tasks.e2e]
+description = "Drive the built site in a desktop and a phone browser"
+depends = ["deps"]
+run = 'cd "{{config_root}}" && npx playwright install chromium && npm run e2e'
+
+[tasks.deploy]
+description = "Build and publish to arzaroth.com"
+depends = ["check", "e2e"]
+run = '"{{config_root}}/tools/deploy.sh"'

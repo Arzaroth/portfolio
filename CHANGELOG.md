@@ -10,6 +10,18 @@ CI and refuses a version with no dated section here.
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-24
+
+### Added
+
+- A favicon: the rack in miniature, three servers with their cable colours and lit LEDs,
+  drawn on the 16 px grid. Also as an ICO, an Apple touch icon, 192 and 512 PNGs and a
+  web manifest.
+
+### Changed
+
+- On load, the servers slide into the rack from the left instead of the right.
+
 ## [0.1.0] - 2026-09-24
 
 ### Added
@@ -26,5 +38,6 @@ CI and refuses a version with no dated section here.
   desktop and a phone browser.
 - `tools/deploy.sh` publishes `dist/` to arzaroth.com.
 
-[Unreleased]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.1.0...HEAD
+[Unreleased]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.2.0...HEAD
+[0.2.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.1.0...v0.2.0
 [0.1.0]: https://git.arzaroth.com/Arzaroth/portfolio/releases/tag/v0.1.0

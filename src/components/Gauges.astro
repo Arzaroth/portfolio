@@ -1,0 +1,33 @@
+---
+import Pane from './Pane.astro';
+import Entry from './Entry.astro';
+import { gauges, selvedge, codegauge } from '../data/projects';
+---
+
+<Pane
+  id="gauges"
+  title="Two gauges, one edge"
+  lede="Rust binaries that draw panels on KDE Plasma, GNOME, Waybar and Quickshell. The two projects are unrelated, but they install and update themselves the same way. That shared code is selvedge."
+>
+  <div class="pair">
+    {gauges.map((g, i) => <Entry project={g} k={3 + i} />)}
+  </div>
+  <div class="selvedge rv" style="--k:5">
+    <div class="selvedge-in">
+      <div>
+        <h3>selvedge</h3>
+        <p>{selvedge.description}</p>
+        <div class="links" style="--c:var(--c-yellow); margin-top:14px">
+          <a href={selvedge.href} target="_blank" rel="noopener">Source</a>
+        </div>
+      </div>
+      <div>
+        <ul>
+          {selvedge.duties.map((d) => <li>{d}</li>)}
+        </ul>
+        <p class="lines-saved">Was <s>{selvedge.saved}</s> in each gauge.</p>
+      </div>
+    </div>
+  </div>
+  <Entry project={codegauge} k={6} class="aside-gauge" />
+</Pane>

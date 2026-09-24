@@ -1,0 +1,39 @@
+---
+import Pane from './Pane.astro';
+import { ouroboros } from '../data/projects';
+
+const fmt = (n: number) => n.toLocaleString('en-US');
+---
+
+<Pane id="ouroboros" title="ouroboros">
+  <div class="ouro rv" style="--k:2">
+    <svg class="snake" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="26"></circle></svg>
+    <p class="lede">{ouroboros.lede}</p>
+    <div class="scale" aria-label="Lines of code, drawn to scale">
+      <div class="scale-row">
+        <div><b>{ouroboros.firstLines}</b><span>first commit</span></div>
+        <div class="bar tiny"></div>
+      </div>
+      <div class="scale-row">
+        <div>
+          <b data-count={ouroboros.lines} data-from={ouroboros.firstLines}>{fmt(ouroboros.lines)}</b><span>today, one file</span>
+        </div>
+        <div class="bar full"></div>
+      </div>
+    </div>
+    <ol class="tiers">
+      {
+        ouroboros.tiers.map(([name, text], i) => (
+          <li class="rv" style={`--k:${4 + i}`}>
+            <b>{name}</b>
+            {text}
+          </li>
+        ))
+      }
+    </ol>
+    <div class="ouro-foot">
+      <p>A differential fuzzer checks that every tier agrees.</p>
+      <a href={ouroboros.href} target="_blank" rel="noopener">Read all {fmt(ouroboros.lines)} lines</a>
+    </div>
+  </div>
+</Pane>

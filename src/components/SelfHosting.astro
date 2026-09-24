@@ -1,0 +1,30 @@
+---
+import Pane from './Pane.astro';
+import Entry from './Entry.astro';
+import { services, infrastructure } from '../data/projects';
+
+const roleColor = { plumbing: undefined, watch: 'var(--c-red)', app: 'var(--c-blue)' } as const;
+---
+
+<Pane
+  id="selfhosted"
+  title="Self-hosted, by stubbornness"
+  lede="If it can run at home, it runs at home. Every app on this page runs on the rack, next to the photos, passwords and documents the household uses every day."
+>
+  <div class="patch rv" style="--k:3" aria-label="Services running on the rack">
+    <div class="patch-grid">
+      {
+        services.map(([name, role]) => (
+          <div class="port" style={roleColor[role] ? `--pc:${roleColor[role]}` : undefined}>
+            <i />
+            {name}
+          </div>
+        ))
+      }
+    </div>
+    <div class="patch-foot">Magenta for plumbing, red for keeping watch, blue for apps</div>
+  </div>
+  <div class="entries">
+    {infrastructure.map((p, i) => <Entry project={p} k={4 + i} />)}
+  </div>
+</Pane>

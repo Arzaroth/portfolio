@@ -1,0 +1,48 @@
+---
+import Pane from './Pane.astro';
+import { friends, upstream } from '../data/projects';
+---
+
+<Pane
+  id="contributions"
+  title="Other people's code"
+  lede="A friend's desktop toys I contribute to, and patches sent upstream, mostly because a job needed them."
+>
+  <div class="friends">
+    {
+      friends.map((f, i) => (
+        <article class="entry rv" style={`--k:${3 + i}`}>
+          <div class="count">
+            <span data-count={f.pulls}>{f.pulls}</span>
+            <small>pull requests</small>
+          </div>
+          <h3>{f.name}</h3>
+          <p>{f.description}</p>
+          <div class="links">
+            <a href={f.href} target="_blank" rel="noopener">My pull requests</a>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+  <div class="upstream-wrap rv" style="--k:5">
+    <table class="upstream">
+      <caption>Landed upstream</caption>
+      <tbody>
+        {
+          upstream.map((u) => (
+            <tr>
+              <td>
+                <a href={u.href} target="_blank" rel="noopener">
+                  {u.name}
+                </a>
+              </td>
+              <td>{u.what}</td>
+              <td class="n">{u.when}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</Pane>

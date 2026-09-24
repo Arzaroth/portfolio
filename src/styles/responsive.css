@@ -1,0 +1,25 @@
+@media (max-width: 959px) {
+  .app { grid-template-columns: 1fr; }
+  .side { height: auto; padding: 10px 16px; gap: 0; background: var(--room); }
+  .brand, .side-foot, .rack-top, .rail, .un { display: none; }
+  .rack { padding: 0; background: none; box-shadow: none; }
+  .bay { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 4px 0; }
+  .bay::-webkit-scrollbar { display: none; }
+  .dev { flex: none; height: 38px; margin: 0; font-size: 16px; padding: 0 12px 0 16px; animation-name: none; }
+  .dev .ports, .dev small { display: none; }
+  .patchbar, .wires, .side::after { display: none; }
+  .dev.on { transform: none; }
+  .stage { padding: 36px 16px 64px; }
+}
+@media (max-width: 640px) {
+  .pair { grid-template-columns: 1fr; gap: 0; }
+  .pair .entry + .entry { padding-top: 16px; }
+  .selvedge-in { grid-template-columns: 1fr; gap: 20px; }
+  .archive li { grid-template-columns: 52px minmax(0, 1fr); gap: 4px 12px; }
+  .archive .ds, .archive .lg { grid-column: 2; }
+  .entry h3, .selvedge h3 { font-size: 30px; }
+  .snake { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

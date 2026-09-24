@@ -1,0 +1,42 @@
+---
+import Pane from './Pane.astro';
+import { elsewhere } from '../data/projects';
+import { servers, colorVar } from '../data/servers';
+
+const name = 'Arzaroth';
+const others = servers.filter((s) => s.id !== 'about');
+---
+
+<Pane id="about">
+  <Fragment slot="head">
+    <h1 class="hello-name" aria-label={name}>
+      {[...name].map((ch, n) => <span style={`--n:${n}`}>{ch}</span>)}
+    </h1>
+    <div class="intro">
+      <p class="rv" style="--k:4">
+        I started in DevOps and ended up a CISO. I still write plenty of code, and most of it runs on my own machines.
+      </p>
+      <p class="rv" style="--k:5">I self-host whatever I can. That's part of why there's a 42U rack in my living room.</p>
+    </div>
+    <div class="elsewhere rv" style="--k:6">
+      {
+        elsewhere.map((l) => (
+          <a href={l.href} target="_blank" rel="noopener">
+            {l.label}
+            <span>{l.detail}</span>
+          </a>
+        ))
+      }
+    </div>
+  </Fragment>
+  <div class="index">
+    {
+      others.map((s, i) => (
+        <button class="rv" style={`--k:${7 + i}; --c:${colorVar(s.color)}`} data-go={s.id}>
+          <b>{s.name}</b>
+          <small>{s.blurb}</small>
+        </button>
+      ))
+    }
+  </div>
+</Pane>

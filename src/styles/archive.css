@@ -1,0 +1,8 @@
+.archive { list-style: none; padding: 0; margin: 0; }
+.archive li { display: grid; grid-template-columns: 64px minmax(0, 200px) minmax(0, 1fr) auto; gap: 18px; padding-block: 14px; border-top: 1px solid var(--rule); align-items: baseline; }
+.archive li:last-child { border-bottom: 1px solid var(--rule); }
+.archive .yr { font-family: var(--display); font-weight: 800; font-size: 22px; line-height: 1; color: var(--c-grey); font-variant-numeric: tabular-nums; }
+.archive .nm { font-weight: 600; }
+.archive .nm a { text-underline-offset: 4px; text-decoration-thickness: 1px; }
+.archive .ds { color: var(--muted); font-size: 15px; }
+.archive .lg { font-family: var(--mono); font-size: 12px; color: var(--muted); white-space: nowrap; }

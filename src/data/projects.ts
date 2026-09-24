@@ -1,0 +1,227 @@
+export interface Link {
+  label: string;
+  href: string;
+}
+
+export interface Project {
+  name: string;
+  description: string;
+  meta?: string;
+  links?: Link[];
+  wip?: boolean;
+}
+
+const gh = (repo: string) => `https://github.com/Arzaroth/${repo}`;
+const source = (repo: string): Link => ({ label: 'Source', href: gh(repo) });
+
+export const elsewhere = [
+  { label: 'GitHub', detail: '@Arzaroth', href: 'https://github.com/Arzaroth' },
+  { label: 'Forgejo', detail: 'git.arzaroth.com', href: 'https://git.arzaroth.com/Arzaroth' },
+  { label: 'APT repository', detail: 'deb.arzaroth.com', href: 'https://deb.arzaroth.com' },
+];
+
+export const apps: Project[] = [
+  {
+    name: 'Nostragoalus',
+    description:
+      'A score-prediction game. Friends predict match scores, earn points for how close they get, and fight over per-competition and global leaderboards. Live crowd totals, bookmaker odds frozen at kickoff, one x2 joker per round, league chat. Football by default, and rugby union works too.',
+    meta: 'TypeScript, Node or Bun',
+    links: [{ label: 'Play', href: 'https://goal.arzaroth.com' }, source('Nostragoalus')],
+  },
+  {
+    name: 'La Coincherie',
+    description: 'Play coinche with your friends when you live 800 km apart. Cameras on, your house rules.',
+    meta: 'Card game, video',
+    links: [{ label: 'Sit at the table', href: 'https://coinche.arzaroth.com' }],
+  },
+  {
+    name: 'Yaek',
+    description:
+      'Pulls Thai text apart so you can read what someone wrote to you. Offline dictionary, tones derived from the spelling, and no network request you did not ask for.',
+    meta: 'Offline reading tool',
+    links: [{ label: 'Open Yaek', href: 'https://yaek.arzaroth.com' }],
+  },
+  {
+    name: 'c2c-conv',
+    description:
+      'Share one Claude Code session with a second person. They watch it live, and when you let them, they type into it as if they were you. The Cs in c2c could be Claude, Codex... or even clown. Ever heard of clown to clown conversation?',
+    meta: 'TypeScript',
+    links: [source('c2c-conv')],
+  },
+];
+
+export const gauges: Project[] = [
+  {
+    name: 'TokenGauge',
+    description:
+      'Shows usage limits, costs and token counts for Claude, Codex, Kimi, Grok, GLM and a few more. It predicts where each limit will be at reset and totals spend across all your machines.',
+    meta: 'Waybar, Plasma, GNOME, Quickshell, TUI',
+    links: [source('TokenGauge')],
+  },
+  {
+    name: 'TailGauge',
+    description:
+      "Puts Tailscale and NetBird in your panel, and switches between them when both are installed. Turn the VPN on and off, and copy any machine's address. Tailscale also gets exit nodes, Mullvad regions and Taildrop. On NetBird you can join and leave networks. There's no daemon, it calls each provider's CLI.",
+    meta: 'Plasma, GNOME, Quickshell, TUI',
+    links: [source('TailGauge')],
+  },
+];
+
+export const selvedge = {
+  description:
+    'A selvedge is the woven edge that stops cloth from unravelling. This crate stops a binary and the QML and JavaScript it feeds from drifting apart. Both ship in one archive and update together.',
+  duties: [
+    'Fetches the latest release from GitHub',
+    'Replaces the running binary in place',
+    'Reinstalls every desktop frontend from the same archive',
+    'Keeps old command names alive as symlinks',
+  ],
+  saved: '1,400 lines',
+  href: gh('selvedge'),
+};
+
+export const codegauge: Project = {
+  name: 'CodeGauge',
+  description:
+    "Same family name, different job. It walks a repository's git history, counts every line once per day, and charts production code against test code over time. The dashboard is built into one static binary, and git doesn't need to be installed.",
+  meta: 'Rust, gitoxide',
+  links: [{ label: 'Source on Forgejo', href: 'https://git.arzaroth.com/Arzaroth/CodeGauge' }],
+};
+
+export const workbench: Project[] = [
+  {
+    name: 'Tacite',
+    description:
+      'Tracks contracts, subscriptions and warranties. It works out the legal deadlines, warns you while you can still act, and drafts the cancellation or warranty letter.',
+    meta: 'TypeScript, Fastify, Postgres',
+    wip: true,
+  },
+  {
+    name: 'Pouce Vert',
+    description:
+      'A plant care app for the phone. Care sheets for common houseplants, pet toxicity with sources, watering reminders, and a diagnosis from a photo of the sad leaf.',
+    meta: 'Expo, React Native',
+    wip: true,
+  },
+  {
+    name: 'Sheaf',
+    description:
+      "An open-source Android client for paperless-ngx, built against the v3 API so a server update does not break it. Document scanner with auto-crop, upload from any app's share sheet, offline-first with a draft queue, bulk inbox triage, and a real UI for server-side mail rules. Works behind reverse proxies, with self-signed certificates, mTLS, OIDC and several servers.",
+    meta: 'Android first, iOS in development',
+    wip: true,
+  },
+];
+
+export const ouroboros = {
+  lede: 'What happens when a script that draws one small figure never gets told to stop. The first commit draws a lattice glyph in eight lines of Python. The latest one draws the same glyph.',
+  firstLines: 8,
+  lines: 25192,
+  tiers: [
+    ['Reference', 'One digest per order. Every other tier is tested against it.'],
+    ['A language for the glyph', 'A program computes the figure, through nineteen layers that include monads, a pass manager and an event-sourced rasteriser.'],
+    ['LLVM', 'Lowers the bytecode to LLVM IR, JIT-compiles it and links a native ELF.'],
+    ['A second language', 'General enough to write a compiler in. Its compiler is written in itself, and a three-generation fixpoint proves the build.'],
+    ['The closed loop', 'The first front end, rewritten in the second language. Both emit the same bytes for any program.'],
+    ['Machine code', 'Hand-encoded x86-64, aarch64 and riscv64 in a static ELF of about a kilobyte. No assembler, linker or libc.'],
+    ['WebAssembly', 'The same module as a wasm reactor that imports nothing.'],
+    ['No kernel', 'One boot sector walks the machine from 16-bit real mode to 64-bit and runs the glyph with nothing underneath.'],
+  ],
+  href: gh('ouroboros'),
+};
+
+type Role = 'plumbing' | 'watch' | 'app';
+
+export const services: [string, Role][] = [
+  ['Git forge', 'plumbing'],
+  ['CI runners', 'plumbing'],
+  ['Single sign-on', 'plumbing'],
+  ['Mesh VPN', 'plumbing'],
+  ['Password vault', 'plumbing'],
+  ['Photo library', 'plumbing'],
+  ['Document archive', 'plumbing'],
+  ['Notes sync', 'plumbing'],
+  ['Video calls', 'plumbing'],
+  ['Team chat', 'plumbing'],
+  ['Media server', 'plumbing'],
+  ['Local LLM chat', 'plumbing'],
+  ['SIEM', 'watch'],
+  ['Uptime checks', 'watch'],
+  ['Metrics', 'watch'],
+  ['Backups', 'watch'],
+  ['Update watcher', 'watch'],
+  ['Nostragoalus', 'app'],
+  ['La Coincherie', 'app'],
+  ['Yaek', 'app'],
+  ['APT mirror', 'plumbing'],
+];
+
+export const infrastructure: Project[] = [
+  {
+    name: 'DEB Party',
+    description:
+      'Turns a short list of GitHub projects into a tidy .deb mini-mirror. Picks the right release asset, repackages bare binaries, prunes old versions and publishes through Aptly. The gauges ship through it.',
+    meta: 'Python, Aptly',
+    links: [{ label: 'deb.arzaroth.com', href: 'https://deb.arzaroth.com' }, source('deb.arzaroth.com')],
+  },
+  {
+    name: 'Code lives at home too',
+    description:
+      'Every repository here lives on a Forgejo instance on the rack. Server-side mirrors push it to GitHub, which is only the shop window.',
+    meta: 'Forgejo, Forgejo Actions',
+    links: [{ label: 'git.arzaroth.com', href: 'https://git.arzaroth.com/Arzaroth' }],
+  },
+  {
+    name: 'dotfiles',
+    description: 'Zsh, Emacs, tmux and prompt configuration as GNU Stow packages. Arch on the desk, Debian on the servers.',
+    meta: 'Emacs Lisp, shell',
+    links: [source('dotfiles')],
+  },
+];
+
+const myPulls = (repo: string) => `https://github.com/${repo}/pulls?q=is%3Apr+author%3AArzaroth`;
+
+export const friends = [
+  {
+    name: 'doot',
+    pulls: 23,
+    description:
+      'A trumpet-playing skeleton that pops up at random on your screen from September 1st to October 31st. Among my contributions: native Wayland overlays, native audio output, encrypted achievement sync between machines, and the move to uv.',
+    href: myPulls('boubou666/doot'),
+  },
+  {
+    name: 'butbutbut',
+    pulls: 4,
+    description:
+      'A goal goes in, in Ligue 1, the Premier League, LaLiga, Serie A, the Bundesliga or a European cup, and the horn plays with the score on your screen. Among my contributions: native audio, a daemon that follows the session, and auto-update.',
+    href: myPulls('boubou666/butbutbut'),
+  },
+];
+
+export const upstream = [
+  { name: 'authentik', repo: 'goauthentik/authentik', what: 'SCIM provider: Basic authentication mode', when: '1 PR, 2026' },
+  { name: 'ente', repo: 'ente/ente', what: 'Auth app: pin flutter_secure_storage_linux to 1.2.1 on Linux', when: '1 PR, 2026' },
+  { name: 'acme2certifier', repo: 'grindsa/acme2certifier', what: 'EJBCA handler: rewrite the certificate chain, optional username with CN append', when: '2 PRs, 2026' },
+  { name: 'laravel/framework', repo: 'laravel/framework', what: 'Better bitwise operator support in the query builder; empty port in psql schema dumps', when: '2 PRs, 2022-23' },
+  { name: 'spot2', repo: 'spotorm/spot2', what: 'Entity memory leak fix, multiple unique keys, default values', when: '3 PRs, 2017-20' },
+  { name: 'hfig/MAPI', repo: 'hfig/MAPI', what: 'PSR-4 compliance, Symfony YAML upgrades', when: '3 PRs, 2020-24' },
+  { name: 'php-shellcommand', repo: 'mikehaertl/php-shellcommand', what: 'Allow stdin to be a stream', when: '2 PRs, 2018' },
+  { name: 'php-gettext', repo: 'php-gettext/Gettext', what: 'Option to leave string locations out', when: '1 PR, 2020' },
+  { name: 'phpbench', repo: 'phpbench/phpbench', what: 'Drop the abandoned webmozart/path-util dependency', when: '1 PR, 2022' },
+  { name: 'sendria', repo: 'msztolcman/sendria', what: 'Native aiosmtpd authentication', when: '1 PR, 2021' },
+].map((u) => ({ ...u, href: myPulls(u.repo) }));
+
+export const archive = [
+  { year: 2014, name: 'virtualnetwork', description: 'A small tool for understanding how networks work.', lang: 'Python, 3 stars' },
+  { year: 2014, name: 'simple_flooder', description: 'A tiny TCP flooder in C.', lang: 'C' },
+  { year: 2015, name: 'RODeco', description: 'Override any function inside a Python module at run time, when you do not like how it works.', lang: 'Python' },
+  { year: 2016, name: 'Pon3Ark', description: 'Extracts the ark data files of the mobile game My Little Pony.', lang: 'Python, 2 stars' },
+  { year: 2017, name: 'HearthPacks', description: 'Automated pack opening on HearthPwn.', lang: 'Python, 2 stars' },
+  {
+    year: 2019,
+    name: 'CelestiaSunrise',
+    description: 'Savegame editor for the same pony game. The most starred thing I ever wrote. In every sense of the term.',
+    lang: 'Python, 15 stars',
+  },
+  { year: 2019, name: 'Skynet', description: 'A Slack bot with a lot of opinions and very little restraint.', lang: 'JavaScript, private', private: true },
+  { year: 2026, name: 'python_rapidxml', description: 'Python bindings for RapidXml, a fast C++ XML parser. Old, and still maintained.', lang: 'C++, 6 stars' },
+].map((a) => ({ ...a, href: a.private ? undefined : gh(a.name) }));

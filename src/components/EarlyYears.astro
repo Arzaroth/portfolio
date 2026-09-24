@@ -1,0 +1,27 @@
+---
+import Pane from './Pane.astro';
+import { archive } from '../data/projects';
+---
+
+<Pane id="archive" title="The early years" lede="Sorted by last commit. Still online for whoever uses them.">
+  <ol class="archive">
+    {
+      archive.map((a, i) => (
+        <li class="rv" style={`--k:${3 + i}`}>
+          <span class="yr">{a.year}</span>
+          <span class="nm">
+            {a.href ? (
+              <a href={a.href} target="_blank" rel="noopener">
+                {a.name}
+              </a>
+            ) : (
+              a.name
+            )}
+          </span>
+          <span class="ds">{a.description}</span>
+          <span class="lg">{a.lang}</span>
+        </li>
+      ))
+    }
+  </ol>
+</Pane>

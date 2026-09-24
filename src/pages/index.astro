@@ -8,8 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<script>document.documentElement.classList.add('js');</script>
-<style>
+<script is:inline>document.documentElement.classList.add('js');</script>
+<style is:global>
 @property --glow { syntax: '<color>'; inherits: true; initial-value: transparent; }
 :root {
   --bg: #dde0e5;
@@ -762,7 +762,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--c, var(--c-blue
 </div>
 
 
-<script>
+<script is:inline>
 (function () {
   var bay = document.getElementById('bay');
   var side = document.getElementById('side');

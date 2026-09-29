@@ -10,6 +10,27 @@ CI and refuses a version with no dated section here.
 
 ## [Unreleased]
 
+### Added
+
+- A Claude Code server: c2c-conv, moved over from Apps, with resumove and t3cc.
+- remuda in the Gauges section, threaded to TokenGauge, which meters its logins. It ships
+  through selvedge too.
+- BlosSom among the apps, with a link to its site.
+- An Under wraps server, its LED dark, naming Magister and Rackmancy and nothing more.
+- rocket-vibe among the friends' projects, counted in commits, and weeNetsoul upstream.
+
+### Changed
+
+- The early years show each project as a range, from first to last commit, sorted by the
+  last one, without the star counts.
+- Contributions list the projects, with the number of pull requests and the years, and no
+  longer describe the changes.
+
+### Fixed
+
+- The browser's back and forward buttons move between the servers visited. Switching
+  server used to replace the history entry instead of adding one.
+
 ## [0.2.0] - 2026-09-24
 
 ### Added

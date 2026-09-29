@@ -15,7 +15,7 @@ export const RACK_UNITS = 42;
 
 export const servers: Server[] = [
   { id: 'about', name: 'Hello', top: 42, height: 2, color: 'cyan', ports: 2, blurb: '' },
-  { id: 'apps', name: 'Apps', top: 39, height: 3, color: 'blue', ports: 4, blurb: 'Nostragoalus, La Coincherie, Yaek, c2c-conv' },
+  { id: 'apps', name: 'Apps', top: 39, height: 3, color: 'blue', ports: 4, blurb: 'Nostragoalus, La Coincherie, Yaek, BlosSom, c2c-conv' },
   { id: 'gauges', name: 'Gauges', top: 35, height: 2, color: 'yellow', ports: 3, blurb: 'Desktop panels and the crate they share' },
   { id: 'workshop', name: 'Workbench', top: 29, height: 2, color: 'green', ports: 3, blurb: 'Tacite, Pouce Vert, Sheaf' },
   { id: 'ouroboros', name: 'ouroboros', top: 23, height: 4, color: 'red', ports: 6, blurb: 'Eight lines of Python that kept growing' },

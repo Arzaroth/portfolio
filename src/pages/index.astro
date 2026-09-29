@@ -17,7 +17,7 @@ import { apps, workbench } from '../data/projects';
     <Rack />
     <main class="stage" id="stage">
       <Hello />
-      <Pane id="apps" title="Apps people actually use" lede="Built for friends first, then opened up. Each one runs on the rack.">
+      <Pane id="apps" title="Apps people actually use" lede="Built for friends first, then opened up. Each one runs on the rack, or on your phone.">
         <div class="entries">
           {apps.map((p, i) => <Entry project={p} k={3 + i} />)}
         </div>

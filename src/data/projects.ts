@@ -25,21 +25,28 @@ export const apps: Project[] = [
     name: 'Nostragoalus',
     description:
       'A score-prediction game. Friends predict match scores, earn points for how close they get, and fight over per-competition and global leaderboards. Live crowd totals, bookmaker odds frozen at kickoff, one x2 joker per round, league chat. Football by default, and rugby union works too.',
-    meta: 'TypeScript, Node or Bun',
+    meta: 'TypeScript, Nuxt, Node or Bun',
     links: [{ label: 'Play', href: 'https://goal.arzaroth.com' }, source('Nostragoalus')],
   },
   {
     name: 'La Coincherie',
     description: 'Play coinche with your friends when you live 800 km apart. Cameras on, your house rules.',
-    meta: 'Card game, video',
+    meta: 'TypeScript, Svelte',
     links: [{ label: 'Sit at the table', href: 'https://coinche.arzaroth.com' }],
   },
   {
     name: 'Yaek',
     description:
       'Pulls Thai text apart so you can read what someone wrote to you. Offline dictionary, tones derived from the spelling, and no network request you did not ask for.',
-    meta: 'Offline reading tool',
+    meta: 'TypeScript, Expo, React Native',
     links: [{ label: 'Open Yaek', href: 'https://yaek.arzaroth.com' }],
+  },
+  {
+    name: 'BlosSom',
+    description:
+      'Scan a document with your phone, then share, save or print it as one PDF or as photos. No account, and nothing leaves the phone unless you send it.',
+    meta: 'TypeScript, Expo, React Native',
+    links: [{ label: 'Get BlosSom', href: 'https://blossom.arzaroth.com' }],
   },
   {
     name: 'c2c-conv',

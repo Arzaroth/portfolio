@@ -214,33 +214,29 @@ export const infrastructure: Project[] = [
 const myPulls = (repo: string) => `https://github.com/${repo}/pulls?q=is%3Apr+author%3AArzaroth`;
 
 export const friends = [
+  { name: 'doot', count: 23, unit: 'pull requests', when: '2026', href: myPulls('boubou666/doot') },
+  { name: 'butbutbut', count: 4, unit: 'pull requests', when: '2026', href: myPulls('boubou666/butbutbut') },
   {
-    name: 'doot',
-    pulls: 23,
-    description:
-      'A trumpet-playing skeleton that pops up at random on your screen from September 1st to October 31st. Among my contributions: native Wayland overlays, native audio output, encrypted achievement sync between machines, and the move to uv.',
-    href: myPulls('boubou666/doot'),
-  },
-  {
-    name: 'butbutbut',
-    pulls: 4,
-    description:
-      'A goal goes in, in Ligue 1, the Premier League, LaLiga, Serie A, the Bundesliga or a European cup, and the horn plays with the score on your screen. Among my contributions: native audio, a daemon that follows the session, and auto-update.',
-    href: myPulls('boubou666/butbutbut'),
+    name: 'rocket-vibe',
+    count: 233,
+    unit: 'commits',
+    when: '2026',
+    href: 'https://github.com/Guillaume69/rocket-vibe/commits?author=Arzaroth',
   },
 ];
 
 export const upstream = [
-  { name: 'authentik', repo: 'goauthentik/authentik', what: 'SCIM provider: Basic authentication mode', when: '1 PR, 2026' },
-  { name: 'ente', repo: 'ente/ente', what: 'Auth app: pin flutter_secure_storage_linux to 1.2.1 on Linux', when: '1 PR, 2026' },
-  { name: 'acme2certifier', repo: 'grindsa/acme2certifier', what: 'EJBCA handler: rewrite the certificate chain, optional username with CN append', when: '2 PRs, 2026' },
-  { name: 'laravel/framework', repo: 'laravel/framework', what: 'Better bitwise operator support in the query builder; empty port in psql schema dumps', when: '2 PRs, 2022-23' },
-  { name: 'spot2', repo: 'spotorm/spot2', what: 'Entity memory leak fix, multiple unique keys, default values', when: '3 PRs, 2017-20' },
-  { name: 'hfig/MAPI', repo: 'hfig/MAPI', what: 'PSR-4 compliance, Symfony YAML upgrades', when: '3 PRs, 2020-24' },
-  { name: 'php-shellcommand', repo: 'mikehaertl/php-shellcommand', what: 'Allow stdin to be a stream', when: '2 PRs, 2018' },
-  { name: 'php-gettext', repo: 'php-gettext/Gettext', what: 'Option to leave string locations out', when: '1 PR, 2020' },
-  { name: 'phpbench', repo: 'phpbench/phpbench', what: 'Drop the abandoned webmozart/path-util dependency', when: '1 PR, 2022' },
-  { name: 'sendria', repo: 'msztolcman/sendria', what: 'Native aiosmtpd authentication', when: '1 PR, 2021' },
+  { name: 'authentik', repo: 'goauthentik/authentik', when: '1 PR, 2026' },
+  { name: 'ente', repo: 'ente/ente', when: '1 PR, 2026' },
+  { name: 'acme2certifier', repo: 'grindsa/acme2certifier', when: '2 PRs, 2026' },
+  { name: 'laravel/framework', repo: 'laravel/framework', when: '2 PRs, 2022-23' },
+  { name: 'spot2', repo: 'spotorm/spot2', when: '3 PRs, 2017-20' },
+  { name: 'hfig/MAPI', repo: 'hfig/MAPI', when: '3 PRs, 2020-24' },
+  { name: 'php-shellcommand', repo: 'mikehaertl/php-shellcommand', when: '2 PRs, 2018' },
+  { name: 'php-gettext', repo: 'php-gettext/Gettext', when: '1 PR, 2020' },
+  { name: 'phpbench', repo: 'phpbench/phpbench', when: '1 PR, 2022' },
+  { name: 'sendria', repo: 'msztolcman/sendria', when: '1 PR, 2021' },
+  { name: 'weeNetsoul', repo: 'godric7/weeNetsoul', when: '2 PRs, 2014' },
 ].map((u) => ({ ...u, href: myPulls(u.repo) }));
 
 export const archive = [

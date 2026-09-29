@@ -3,31 +3,29 @@ import Pane from './Pane.astro';
 import { friends, upstream } from '../data/projects';
 ---
 
-<Pane
-  id="contributions"
-  title="Other people's code"
-  lede="A friend's desktop toys I contribute to, and patches sent upstream, mostly because a job needed them."
->
+<Pane id="contributions" title="Other people's code" lede="Friends' projects I contribute to, and patches sent upstream.">
   <div class="friends">
     {
       friends.map((f, i) => (
         <article class="entry rv" style={`--k:${3 + i}`}>
           <div class="count">
-            <span data-count={f.pulls}>{f.pulls}</span>
-            <small>pull requests</small>
+            <span data-count={f.count}>{f.count}</span>
+            <small>{f.unit}</small>
           </div>
           <h3>{f.name}</h3>
-          <p>{f.description}</p>
+          <div class="meta">{f.when}</div>
           <div class="links">
-            <a href={f.href} target="_blank" rel="noopener">My pull requests</a>
+            <a href={f.href} target="_blank" rel="noopener">
+              My {f.unit}
+            </a>
           </div>
         </article>
       ))
     }
   </div>
-  <div class="upstream-wrap rv" style="--k:5">
+  <div class="upstream-wrap rv" style="--k:6">
     <table class="upstream">
-      <caption>Landed upstream</caption>
+      <caption>Sent upstream</caption>
       <tbody>
         {
           upstream.map((u) => (
@@ -37,7 +35,6 @@ import { friends, upstream } from '../data/projects';
                   {u.name}
                 </a>
               </td>
-              <td>{u.what}</td>
               <td class="n">{u.when}</td>
             </tr>
           ))

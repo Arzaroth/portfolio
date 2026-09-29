@@ -23,7 +23,7 @@ export const servers: Server[] = [
   { id: 'sealed', name: 'Under wraps', top: 26, height: 2, color: 'slate', ports: 2, blurb: 'Two names, nothing more', darkLed: true },
   { id: 'ouroboros', name: 'ouroboros', top: 23, height: 4, color: 'red', ports: 6, blurb: 'Eight lines of Python that kept growing' },
   { id: 'selfhosted', name: 'Self-hosting', top: 18, height: 3, color: 'magenta', ports: 4, blurb: 'What runs on the rack' },
-  { id: 'contributions', name: 'Contributions', top: 14, height: 2, color: 'orange', ports: 2, blurb: "A friend's projects, and patches sent upstream" },
+  { id: 'contributions', name: 'Contributions', top: 14, height: 2, color: 'orange', ports: 3, blurb: "Friends' projects, and patches sent upstream" },
   { id: 'archive', name: 'Early years', top: 5, height: 4, color: 'grey', ports: 3, blurb: '2014 onwards, ponies included', oldLed: true },
 ];
 

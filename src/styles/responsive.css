@@ -16,7 +16,7 @@
   .pair .entry + .entry { padding-top: 16px; }
   .pair .entry:first-child::before { display: none; }
   .selvedge-in { grid-template-columns: 1fr; gap: 20px; }
-  .archive li { grid-template-columns: 52px minmax(0, 1fr); gap: 4px 12px; }
+  .archive li { grid-template-columns: 76px minmax(0, 1fr); gap: 4px 12px; }
   .archive .ds, .archive .lg { grid-column: 2; }
   .entry h3, .selvedge h3 { font-size: 30px; }
   .snake { display: none; }

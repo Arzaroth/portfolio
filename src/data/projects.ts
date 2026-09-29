@@ -240,17 +240,22 @@ export const upstream = [
 ].map((u) => ({ ...u, href: myPulls(u.repo) }));
 
 export const archive = [
-  { year: 2014, name: 'virtualnetwork', description: 'A small tool for understanding how networks work.', lang: 'Python, 3 stars' },
-  { year: 2014, name: 'simple_flooder', description: 'A tiny TCP flooder in C.', lang: 'C' },
-  { year: 2015, name: 'RODeco', description: 'Override any function inside a Python module at run time, when you do not like how it works.', lang: 'Python' },
-  { year: 2016, name: 'Pon3Ark', description: 'Extracts the ark data files of the mobile game My Little Pony.', lang: 'Python, 2 stars' },
-  { year: 2017, name: 'HearthPacks', description: 'Automated pack opening on HearthPwn.', lang: 'Python, 2 stars' },
+  { from: 2014, to: 2014, name: 'virtualnetwork', description: 'A small tool for understanding how networks work.', lang: 'Python' },
+  { from: 2014, to: 2014, name: 'simple_flooder', description: 'A tiny TCP flooder in C.', lang: 'C' },
+  { from: 2014, to: 2015, name: 'RODeco', description: 'Override any function inside a Python module at run time, when you do not like how it works.', lang: 'Python' },
+  { from: 2015, to: 2015, name: 'Pon3Ark', description: 'Extracts the ark data files of the mobile game My Little Pony.', lang: 'Python' },
   {
-    year: 2019,
+    from: 2014,
+    to: 2016,
     name: 'CelestiaSunrise',
     description: 'Savegame editor for the same pony game. The most starred thing I ever wrote. In every sense of the term.',
-    lang: 'Python, 15 stars',
+    lang: 'Python',
   },
-  { year: 2019, name: 'Skynet', description: 'A Slack bot with a lot of opinions and very little restraint.', lang: 'JavaScript, private', private: true },
-  { year: 2026, name: 'python_rapidxml', description: 'Python bindings for RapidXml, a fast C++ XML parser. Old, and still maintained.', lang: 'C++, 6 stars' },
-].map((a) => ({ ...a, href: a.private ? undefined : gh(a.name) }));
+  { from: 2016, to: 2017, name: 'HearthPacks', description: 'Automated pack opening on HearthPwn.', lang: 'Python' },
+  { from: 2018, to: 2026, name: 'Skynet', description: 'A Slack bot with a lot of opinions and very little restraint.', lang: 'JavaScript, private', private: true },
+  { from: 2015, to: 2026, name: 'python_rapidxml', description: 'Python bindings for RapidXml, a fast C++ XML parser. Old, and still maintained.', lang: 'C++' },
+].map((a) => ({
+  ...a,
+  years: a.from === a.to ? `${a.from}` : `${a.from}-${String(a.to).slice(2)}`,
+  href: a.private ? undefined : gh(a.name),
+}));

@@ -25,6 +25,7 @@ node tools/check_release.mjs
 [tasks.e2e]
 description = "Drive the built site in a desktop and a phone browser"
 depends = ["deps"]
+wait_for = ["check"]
 run = 'cd "{{config_root}}" && npx playwright install chromium && npm run e2e'
 
 [tasks.deploy]

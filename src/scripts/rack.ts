@@ -91,7 +91,7 @@ export function initRack() {
     }, 2600);
   }
 
-  function show(wanted: string, opts: { focus?: boolean } = {}) {
+  function show(wanted: string, opts: { focus?: boolean; history?: 'push' | 'replace' } = {}) {
     const id = order.includes(wanted) ? wanted : 'about';
     if (id === current) return;
     const prev = current ? document.getElementById(current) : null;
@@ -132,8 +132,10 @@ export function initRack() {
       prev.classList.add('leaving');
       setTimeout(swap, 160);
     } else swap();
+    if (location.hash === `#${id}`) return;
     try {
-      history.replaceState(null, '', `#${id}`);
+      if (opts.history === 'replace') history.replaceState(null, '', `#${id}`);
+      else history.pushState(null, '', `#${id}`);
     } catch {}
   }
 
@@ -167,10 +169,12 @@ export function initRack() {
   });
   addEventListener('resize', layoutWires);
   document.fonts?.ready.then(layoutWires);
-  addEventListener('hashchange', () => show(location.hash.slice(1)));
+  const follow = () => show(location.hash.slice(1), { history: 'replace' });
+  addEventListener('popstate', follow);
+  addEventListener('hashchange', follow);
 
   plugIn();
-  show(location.hash.slice(1) || 'about');
+  show(location.hash.slice(1) || 'about', { history: 'replace' });
   setTimeout(layoutWires, 1200);
   requestAnimationFrame(() => scrollTo(0, 0));
   addEventListener('load', () => {

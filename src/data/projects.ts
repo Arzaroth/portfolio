@@ -143,6 +143,8 @@ export const workbench: Project[] = [
   },
 ];
 
+export const sealed = ['Magister', 'Rackmancy'];
+
 export const ouroboros = {
   lede: 'What happens when a script that draws one small figure never gets told to stop. The first commit draws a lattice glyph in eight lines of Python. The latest one draws the same glyph.',
   firstLines: 8,

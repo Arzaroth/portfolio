@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-const order = ['about', 'apps', 'gauges', 'tools', 'workshop', 'ouroboros', 'selfhosted', 'contributions', 'archive'];
+const order = ['about', 'apps', 'gauges', 'tools', 'workshop', 'sealed', 'ouroboros', 'selfhosted', 'contributions', 'archive'];
 
 const visiblePanes = (page: Page) => page.locator('.pane:not([hidden])');
 

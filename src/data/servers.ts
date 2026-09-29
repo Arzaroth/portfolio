@@ -1,4 +1,4 @@
-export type Color = 'cyan' | 'blue' | 'yellow' | 'green' | 'red' | 'magenta' | 'orange' | 'grey' | 'violet';
+export type Color = 'cyan' | 'blue' | 'yellow' | 'green' | 'red' | 'magenta' | 'orange' | 'grey' | 'violet' | 'slate';
 
 export interface Server {
   id: string;
@@ -9,6 +9,7 @@ export interface Server {
   ports: number;
   blurb: string;
   oldLed?: boolean;
+  darkLed?: boolean;
 }
 
 export const RACK_UNITS = 42;
@@ -19,6 +20,7 @@ export const servers: Server[] = [
   { id: 'gauges', name: 'Gauges', top: 35, height: 2, color: 'yellow', ports: 3, blurb: 'Desktop panels, remuda, and the crate they share' },
   { id: 'tools', name: 'Claude Code', top: 32, height: 2, color: 'violet', ports: 4, blurb: 'c2c-conv, resumove, t3cc' },
   { id: 'workshop', name: 'Workbench', top: 29, height: 2, color: 'green', ports: 3, blurb: 'Tacite, Pouce Vert, Sheaf' },
+  { id: 'sealed', name: 'Under wraps', top: 26, height: 2, color: 'slate', ports: 2, blurb: 'Two names, nothing more', darkLed: true },
   { id: 'ouroboros', name: 'ouroboros', top: 23, height: 4, color: 'red', ports: 6, blurb: 'Eight lines of Python that kept growing' },
   { id: 'selfhosted', name: 'Self-hosting', top: 18, height: 3, color: 'magenta', ports: 4, blurb: 'What runs on the rack' },
   { id: 'contributions', name: 'Contributions', top: 14, height: 2, color: 'orange', ports: 2, blurb: "A friend's projects, and patches sent upstream" },

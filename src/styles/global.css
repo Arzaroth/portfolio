@@ -22,8 +22,10 @@
   --c-orange: #e8720c;
   --c-grey: #7d8694;
   --c-violet: #7446e0;
+  --c-slate: #4a515c;
   --led: #37e07a;
   --led-old: #ffd02a;
+  --led-dark: #2a2f37;
   --display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
   --body: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
@@ -52,6 +54,7 @@
     --c-orange: #ff9a3d;
     --c-grey: #9aa3b1;
     --c-violet: #a98bff;
+    --c-slate: #6b7482;
   }
 }
 :root[data-theme="dark"] {
@@ -76,6 +79,7 @@
   --c-orange: #ff9a3d;
   --c-grey: #9aa3b1;
   --c-violet: #a98bff;
+  --c-slate: #6b7482;
 }
 
 * { box-sizing: border-box; }

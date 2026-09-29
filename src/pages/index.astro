@@ -5,6 +5,7 @@ import Pane from '../components/Pane.astro';
 import Entry from '../components/Entry.astro';
 import Hello from '../components/Hello.astro';
 import Gauges from '../components/Gauges.astro';
+import Sealed from '../components/Sealed.astro';
 import Ouroboros from '../components/Ouroboros.astro';
 import SelfHosting from '../components/SelfHosting.astro';
 import Contributions from '../components/Contributions.astro';
@@ -37,6 +38,7 @@ import { apps, tools, workbench } from '../data/projects';
           {workbench.map((p, i) => <Entry project={p} k={3 + i} />)}
         </div>
       </Pane>
+      <Sealed />
       <Ouroboros />
       <SelfHosting />
       <Contributions />

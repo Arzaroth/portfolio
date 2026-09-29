@@ -11,6 +11,11 @@
   .dev.on { transform: none; }
   .stage { padding: 36px 16px 64px; }
 }
+@media (min-width: 960px) and (max-width: 1099px) {
+  .pair { grid-template-columns: 1fr; gap: 0; }
+  .pair .entry + .entry { padding-top: 16px; }
+  .pair .entry:first-child::before { display: none; }
+}
 @media (max-width: 640px) {
   .pair { grid-template-columns: 1fr; gap: 0; }
   .pair .entry + .entry { padding-top: 16px; }

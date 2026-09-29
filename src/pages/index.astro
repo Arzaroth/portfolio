@@ -9,7 +9,7 @@ import Ouroboros from '../components/Ouroboros.astro';
 import SelfHosting from '../components/SelfHosting.astro';
 import Contributions from '../components/Contributions.astro';
 import EarlyYears from '../components/EarlyYears.astro';
-import { apps, workbench } from '../data/projects';
+import { apps, tools, workbench } from '../data/projects';
 ---
 
 <Base>
@@ -23,6 +23,15 @@ import { apps, workbench } from '../data/projects';
         </div>
       </Pane>
       <Gauges />
+      <Pane
+        id="tools"
+        title="Around Claude Code"
+        lede="Small tools for the parts of Claude Code that get in the way: sharing a session, moving conversations around."
+      >
+        <div class="entries">
+          {tools.map((p, i) => <Entry project={p} k={3 + i} />)}
+        </div>
+      </Pane>
       <Pane id="workshop" title="On the workbench" lede="Not public yet. They will be when they are ready.">
         <div class="entries">
           {workbench.map((p, i) => <Entry project={p} k={3 + i} />)}

@@ -48,12 +48,29 @@ export const apps: Project[] = [
     meta: 'TypeScript, Expo, React Native',
     links: [{ label: 'Get BlosSom', href: 'https://blossom.arzaroth.com' }],
   },
+];
+
+export const tools: Project[] = [
   {
     name: 'c2c-conv',
     description:
       'Share one Claude Code session with a second person. They watch it live, and when you let them, they type into it as if they were you. The Cs in c2c could be Claude, Codex... or even clown. Ever heard of clown to clown conversation?',
     meta: 'TypeScript',
     links: [source('c2c-conv')],
+  },
+  {
+    name: 'resumove',
+    description:
+      'Moves a Claude Code conversation to another folder, so claude --resume finds it from there. It rewrites the recorded paths, and refuses to touch a conversation that is still open.',
+    meta: 'Python',
+    links: [source('resumove')],
+  },
+  {
+    name: 't3cc',
+    description:
+      "Moves conversation history between Claude Code and T3 Code, both ways, without the limits of T3's own importer. An imported thread resumes the same Claude session, so the model keeps its context.",
+    meta: 'Python',
+    links: [source('t3cc')],
   },
 ];
 

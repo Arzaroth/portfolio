@@ -23,8 +23,8 @@ CI and refuses a version with no dated section here.
 
 - The early years show each project as a range, from first to last commit, sorted by the
   last one, without the star counts.
-- Contributions list the projects, with the number of pull requests and the years, and no
-  longer describe the changes.
+- Contributions list the projects, with the number of pull requests (or commits) and the
+  years, and no longer describe the changes.
 
 ### Fixed
 

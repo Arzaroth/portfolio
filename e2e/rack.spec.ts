@@ -46,6 +46,26 @@ test('opens the server named in the link', async ({ page }) => {
   await expectFullCount(page);
 });
 
+test('the line count follows the latest ouroboros release', async ({ page }) => {
+  await page.route(latestRelease, (route) => route.fulfill({ json: { body: 'Prose.\n\nLOC: 31337\n' } }));
+  await page.goto('/#ouroboros');
+  await expect(page.locator('#ouroboros [data-count]')).toHaveText('31,337');
+  await expect(page.locator('#ouroboros .ouro-foot a')).toHaveText('Read all 31,337 lines');
+});
+
+test('the line count arriving after the pane settled still lands', async ({ page }) => {
+  let release!: () => void;
+  const held = new Promise<void>((r) => (release = r));
+  await page.route(latestRelease, async (route) => {
+    await held;
+    await route.fulfill({ json: { body: 'LOC: 31337' } });
+  });
+  await page.goto('/#ouroboros');
+  await expectFullCount(page);
+  release();
+  await expect(page.locator('#ouroboros [data-count]')).toHaveText('31,337');
+});
+
 test('an unknown link falls back to hello', async ({ page }) => {
   await page.goto('/#nothing-here');
   await expectOnly(page, 'about');

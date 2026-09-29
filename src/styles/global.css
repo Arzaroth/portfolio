@@ -54,7 +54,7 @@
     --c-orange: #ff9a3d;
     --c-grey: #9aa3b1;
     --c-violet: #a98bff;
-    --c-slate: #6b7482;
+    --c-slate: #8a93a1;
   }
 }
 :root[data-theme="dark"] {
@@ -79,7 +79,7 @@
   --c-orange: #ff9a3d;
   --c-grey: #9aa3b1;
   --c-violet: #a98bff;
-  --c-slate: #6b7482;
+  --c-slate: #8a93a1;
 }
 
 * { box-sizing: border-box; }

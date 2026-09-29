@@ -78,9 +78,16 @@ export const gauges: Project[] = [
   {
     name: 'TokenGauge',
     description:
-      'Shows usage limits, costs and token counts for Claude, Codex, Kimi, Grok, GLM and a few more. It predicts where each limit will be at reset and totals spend across all your machines.',
+      'Shows usage limits, costs and token counts for Claude, Codex, Kimi, Grok, GLM and a few more. It predicts where each limit will be at reset and totals spend across all your machines. With remuda, every stored login gets its own meter.',
     meta: 'Waybar, Plasma, GNOME, Quickshell, TUI',
     links: [source('TokenGauge')],
+  },
+  {
+    name: 'remuda',
+    description:
+      'A remuda is the herd of spare horses a rider picks a fresh mount from. This one holds Claude Code and Codex logins, and switches the one each CLI uses without logging out. History, settings and MCP logins stay shared, and a timer keeps the resting logins fresh. Its page shows the usage TokenGauge reads for the login in use.',
+    meta: 'CLI, systemd timer',
+    links: [source('remuda')],
   },
   {
     name: 'TailGauge',

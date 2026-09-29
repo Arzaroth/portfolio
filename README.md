@@ -22,6 +22,7 @@ Or with npm directly: `npm run dev`, `npm run check`, `npm test`, `npm run build
 - `src/data/projects.ts`: every piece of copy on the page.
 - `src/components/`: the rack and one component per section. `Pane.astro` wraps each section.
 - `src/scripts/rack.ts`: switching sections, patch cables, keyboard shortcuts.
+- `src/scripts/ouroboros.ts`: ouroboros's line count, read from its latest release notes.
 - `src/styles/`: one stylesheet per area. `responsive.css` loads last so its media queries win.
 - `test/`: unit tests for the rack layout. `e2e/`: Playwright, desktop and phone.
 

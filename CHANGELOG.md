@@ -10,6 +10,12 @@ CI and refuses a version with no dated section here.
 
 ## [Unreleased]
 
+### Changed
+
+- ouroboros's line count comes from the `LOC:` line of its latest release notes, read at
+  build time and again in the visitor's browser, so a new release shows without a
+  redeploy. The build keeps a last known count for when GitHub cannot be reached.
+
 ## [0.3.0] - 2026-09-29
 
 ### Added

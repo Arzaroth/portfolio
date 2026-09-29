@@ -91,9 +91,17 @@ export function initRack() {
     }, 2600);
   }
 
+  function record(id: string, mode: 'push' | 'replace' = 'push') {
+    if (location.hash === `#${id}`) return;
+    try {
+      if (mode === 'replace') history.replaceState(null, '', `#${id}`);
+      else history.pushState(null, '', `#${id}`);
+    } catch {}
+  }
+
   function show(wanted: string, opts: { focus?: boolean; history?: 'push' | 'replace' } = {}) {
     const id = order.includes(wanted) ? wanted : 'about';
-    if (id === current) return;
+    if (id === current) return record(id, 'replace');
     const prev = current ? document.getElementById(current) : null;
     const next = document.getElementById(id)!;
     current = id;
@@ -132,11 +140,7 @@ export function initRack() {
       prev.classList.add('leaving');
       setTimeout(swap, 160);
     } else swap();
-    if (location.hash === `#${id}`) return;
-    try {
-      if (opts.history === 'replace') history.replaceState(null, '', `#${id}`);
-      else history.pushState(null, '', `#${id}`);
-    } catch {}
+    record(id, opts.history);
   }
 
   const step = (by: number, from = current ?? 'about') =>

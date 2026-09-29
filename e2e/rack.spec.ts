@@ -41,6 +41,28 @@ test('an unknown link falls back to hello', async ({ page }) => {
   await expectOnly(page, 'about');
 });
 
+test('back and forward retrace the servers visited', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('.dev[data-to="gauges"]').click();
+  await expectOnly(page, 'gauges');
+  await page.locator('.dev[data-to="ouroboros"]').click();
+  await expectOnly(page, 'ouroboros');
+  await page.goBack();
+  await expectOnly(page, 'gauges');
+  await page.goBack();
+  await expectOnly(page, 'about');
+  await page.goForward();
+  await expectOnly(page, 'gauges');
+});
+
+test('an unknown link does not leave a dead entry behind', async ({ page }) => {
+  await page.goto('/#nothing-here');
+  await expect(page).toHaveURL(/#about$/);
+  await page.locator('.dev[data-to="apps"]').click();
+  await page.goBack();
+  await expectOnly(page, 'about');
+});
+
 test('next server walks the whole rack and wraps', async ({ page }) => {
   await page.goto('/');
   for (const id of [...order.slice(1), order[0]]) {

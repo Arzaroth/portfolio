@@ -1,8 +1,22 @@
 ---
 import Pane from './Pane.astro';
 import { ouroboros } from '../data/projects';
+import { latestLines } from '../scripts/ouroboros';
 
 const fmt = (n: number) => n.toLocaleString('en-US');
+
+async function buildLines() {
+  try {
+    const lines = await latestLines();
+    if (lines === undefined) throw new Error('no LOC line in the release notes');
+    return lines;
+  } catch (err) {
+    console.warn(`ouroboros: could not read the latest release (${err}), using ${ouroboros.lastKnownLines}`);
+    return ouroboros.lastKnownLines;
+  }
+}
+
+const lines = await buildLines();
 ---
 
 <Pane id="ouroboros" title="ouroboros">
@@ -16,7 +30,7 @@ const fmt = (n: number) => n.toLocaleString('en-US');
       </div>
       <div class="scale-row">
         <div>
-          <b data-count={ouroboros.lines} data-from={ouroboros.firstLines}>{fmt(ouroboros.lines)}</b><span>today, one file</span>
+          <b data-count={lines} data-from={ouroboros.firstLines}>{fmt(lines)}</b><span>today, one file</span>
         </div>
         <div class="bar full"></div>
       </div>
@@ -33,7 +47,15 @@ const fmt = (n: number) => n.toLocaleString('en-US');
     </ol>
     <div class="ouro-foot">
       <p>A differential fuzzer checks that every tier agrees.</p>
-      <a href={ouroboros.href} target="_blank" rel="noopener">Read all {fmt(ouroboros.lines)} lines</a>
+      <a href={ouroboros.href} target="_blank" rel="noopener">Read all <span data-lines>{fmt(lines)}</span> lines</a>
     </div>
   </div>
 </Pane>
+
+<script>
+  import { latestLines, showLines } from '../scripts/ouroboros';
+
+  latestLines()
+    .then((lines) => lines && showLines(document.getElementById('ouroboros')!, lines))
+    .catch(() => {});
+</script>

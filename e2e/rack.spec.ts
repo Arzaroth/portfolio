@@ -10,10 +10,20 @@ async function expectOnly(page: Page, id: string) {
   await expect(page.locator(`.dev[data-to="${id}"]`)).toHaveAttribute('aria-current', 'page');
 }
 
+const latestRelease = 'https://api.github.com/repos/Arzaroth/ouroboros/releases/latest';
+
+async function expectFullCount(page: Page) {
+  const counter = page.locator('#ouroboros [data-count]');
+  const lines = Number(await counter.getAttribute('data-count'));
+  expect(lines).toBeGreaterThan(25000);
+  await expect(counter).toHaveText(lines.toLocaleString('en-US'));
+}
+
 test.beforeEach(async ({ page }) => {
   page.on('pageerror', (e) => {
     throw e;
   });
+  await page.route(latestRelease, (route) => route.abort());
 });
 
 test('opens on the hello server', async ({ page }) => {
@@ -33,7 +43,7 @@ test('powers up the server that is clicked', async ({ page }) => {
 test('opens the server named in the link', async ({ page }) => {
   await page.goto('/#ouroboros');
   await expectOnly(page, 'ouroboros');
-  await expect(page.locator('#ouroboros [data-count]')).toHaveText('25,192');
+  await expectFullCount(page);
 });
 
 test('an unknown link falls back to hello', async ({ page }) => {
@@ -141,7 +151,7 @@ test('with reduced motion, everything is visible at once', async ({ browser }) =
   const context = await browser.newContext({ reducedMotion: 'reduce' });
   const page = await context.newPage();
   await page.goto('/#ouroboros');
-  await expect(page.locator('#ouroboros [data-count]')).toHaveText('25,192');
+  await expectFullCount(page);
   const opacity = await page.locator('#ouroboros .tiers li').last().evaluate((el) => getComputedStyle(el).opacity);
   expect(opacity).toBe('1');
   await context.close();

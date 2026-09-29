@@ -148,7 +148,7 @@ export const sealed = ['Magister', 'Rackmancy'];
 export const ouroboros = {
   lede: 'What happens when a script that draws one small figure never gets told to stop. The first commit draws a lattice glyph in eight lines of Python. The latest one draws the same glyph.',
   firstLines: 8,
-  lines: 25192,
+  lastKnownLines: 27759,
   tiers: [
     ['Reference', 'One digest per order. Every other tier is tested against it.'],
     ['A language for the glyph', 'A program computes the figure, through nineteen layers that include monads, a pass manager and an event-sourced rasteriser.'],

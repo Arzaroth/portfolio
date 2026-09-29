@@ -10,6 +10,8 @@ CI and refuses a version with no dated section here.
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-09-29
+
 ### Added
 
 - A Claude Code server: c2c-conv, moved over from Apps, with resumove and t3cc.
@@ -59,6 +61,7 @@ CI and refuses a version with no dated section here.
   desktop and a phone browser.
 - `tools/deploy.sh` publishes `dist/` to arzaroth.com.
 
-[Unreleased]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.2.0...HEAD
+[Unreleased]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.3.0...HEAD
+[0.3.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.2.0...v0.3.0
 [0.2.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.1.0...v0.2.0
 [0.1.0]: https://git.arzaroth.com/Arzaroth/portfolio/releases/tag/v0.1.0

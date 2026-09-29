@@ -10,19 +10,19 @@ const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const narrow = matchMedia('(max-width: 959px)');
 
 function countUp(el: HTMLElement) {
-  const to = Number(el.dataset.count);
+  const to = () => Number(el.dataset.count);
   const from = Number(el.dataset.from ?? 0);
   const fmt = (n: number) => n.toLocaleString('en-US');
   if (reduce) {
-    el.textContent = fmt(to);
+    el.textContent = fmt(to());
     return;
   }
-  const dur = to > 100 ? 1800 : 900;
+  const dur = to() > 100 ? 1800 : 900;
   let t0: number | undefined;
   const step = (t: number) => {
     t0 ??= t;
     const k = Math.min(1, (t - t0) / dur);
-    el.textContent = fmt(Math.round(from + (to - from) * (1 - (1 - k) ** 4)));
+    el.textContent = fmt(Math.round(from + (to() - from) * (1 - (1 - k) ** 4)));
     if (k < 1) requestAnimationFrame(step);
   };
   requestAnimationFrame(step);

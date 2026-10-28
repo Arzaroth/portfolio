@@ -70,6 +70,16 @@ test('the line count arriving after the workspace settled still lands', async ({
   await expect(page.locator('#ouroboros [data-count]')).toHaveText('31,337');
 });
 
+test('every window wears the colour of its workspace', async ({ page }) => {
+  await page.goto('/');
+  for (const id of order) {
+    const want = await page.locator(`.ws-btn[data-go="${id}"]`).evaluate((b) => getComputedStyle(b).getPropertyValue('--c').trim());
+    const got = await page.locator(`#${id} > .win`).evaluateAll((ws) => ws.map((w) => getComputedStyle(w).getPropertyValue('--acc').trim()));
+    expect(got.length).toBeGreaterThan(0);
+    for (const c of got) expect(c, id).toBe(want);
+  }
+});
+
 test('an unknown link falls back to hello', async ({ page }) => {
   await page.goto('/#nothing-here');
   await expectOnly(page, 'about');

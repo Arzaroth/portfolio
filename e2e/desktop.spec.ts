@@ -196,6 +196,15 @@ test('a terminal prints a sample of the program typed', async ({ page }) => {
   await expect(term.locator('.log')).toBeEmpty();
 });
 
+test('the rack in fastfetch has a unit per workspace, in its colour', async ({ page }) => {
+  await page.goto('/');
+  const units = page.locator('#about .fetch svg rect[rx="1.5"]');
+  await expect(units).toHaveCount(workspaces.length);
+  await expect(page.locator('#about .swatches i')).toHaveCount(workspaces.length);
+  const fills = await units.evaluateAll((rs) => rs.map((r) => r.getAttribute('fill')));
+  expect(fills).toEqual(workspaces.map((w) => `var(--${w.color})`));
+});
+
 test('tab completes the program name', async ({ page }) => {
   await page.goto('/#about');
   const cli = page.locator('#about .cli');

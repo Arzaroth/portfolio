@@ -112,6 +112,53 @@ test('the workspace list on hello opens each workspace', async ({ page }) => {
   await expect(page.locator('#contributions [data-count]').first()).toHaveText('23');
 });
 
+test('a terminal prints a sample of the program typed', async ({ page }) => {
+  await page.goto('/#tools');
+  await expectOnly(page, 'tools');
+  const term = page.locator('#tools .win', { hasText: 'resumove' }).first();
+  const cli = term.locator('.cli');
+  await cli.fill('resumove');
+  await cli.press('Enter');
+  await expect(term.locator('.log .out')).toContainText('rewrote 214 recorded paths');
+  await expect(term.locator('.rp .st')).toHaveText('\u2714');
+  await cli.fill('vim');
+  await cli.press('Enter');
+  await expect(term.locator('.log .out.err')).toHaveText('zsh: command not found: vim');
+  await expect(term.locator('.rp .st')).toHaveText('127 \u2718');
+  await cli.fill('clear');
+  await cli.press('Enter');
+  await expect(term.locator('.log')).toBeEmpty();
+});
+
+test('tab completes the program name', async ({ page }) => {
+  await page.goto('/#about');
+  const cli = page.locator('#about .cli');
+  await cli.fill('fast');
+  await cli.press('Tab');
+  await expect(cli).toHaveValue('fastfetch ');
+  await cli.press('Enter');
+  await expect(page.locator('#about .log dd').first()).toHaveText('CISO');
+});
+
+test('the gauges share one terminal, a tab each', async ({ page }) => {
+  await page.goto('/#gauges');
+  await expectOnly(page, 'gauges');
+  const tabs = page.locator('#gauges [role="tab"]');
+  await expect(tabs).toHaveText(['TokenGauge', 'remuda', 'TailGauge']);
+  await expect(page.locator('#gauges .panel:not([hidden])')).toHaveCount(1);
+  await expect(page.locator('#gauges .panel:not([hidden]) h2')).toHaveText('TokenGauge');
+  await tabs.nth(1).click();
+  await expect(tabs.nth(1)).toHaveAttribute('aria-selected', 'true');
+  await expect(page.locator('#gauges .panel:not([hidden]) h2')).toHaveText('remuda');
+  await page.keyboard.press('ArrowRight');
+  await expect(page.locator('#gauges .panel:not([hidden]) h2')).toHaveText('TailGauge');
+  await expect(tabs.nth(2)).toBeFocused();
+  const cli = page.locator('#gauges .panel:not([hidden]) .cli');
+  await cli.fill('tailgauge');
+  await cli.press('Enter');
+  await expect(page.locator('#gauges .panel:not([hidden]) .log .out')).toContainText('connected');
+});
+
 test.describe('desktop', () => {
   test.skip(({ isMobile }) => isMobile, 'tiling and keyboard are desktop only');
 
@@ -121,6 +168,47 @@ test.describe('desktop', () => {
       await page.keyboard.press(String(i + 1));
       await expectOnly(page, id);
     }
+  });
+
+  test('m swaps the focused window into the main tile, and l moves the focus', async ({ page }) => {
+    await page.goto('/#tools');
+    await expectOnly(page, 'tools');
+    const main = page.locator('#tools .win.master');
+    await expect(main).toHaveAttribute('aria-label', 'c2c-conv');
+    await page.keyboard.press('l');
+    await expect(page.locator('#tools .win.focus')).not.toHaveAttribute('aria-label', 'c2c-conv');
+    const picked = await page.locator('#tools .win.focus').getAttribute('aria-label');
+    await page.keyboard.press('m');
+    await expect(main).toHaveAttribute('aria-label', picked!);
+    await expect(page.locator('.bar-title b')).toHaveText(picked!);
+  });
+
+  test('typing in a terminal does not switch workspace', async ({ page }) => {
+    await page.goto('/#tools');
+    const cli = page.locator('#tools .cli').first();
+    await cli.click();
+    await page.keyboard.type('t3 2');
+    await expect(cli).toHaveValue('t3 2');
+    await expectOnly(page, 'tools');
+  });
+
+  test('every window edge lands on a screen pixel when the display is scaled', async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 1366, height: 768 }, deviceScaleFactor: 1.25 });
+    const page = await context.newPage();
+    await page.route(latestRelease, (route) => route.abort());
+    for (const id of order) {
+      await page.goto(`/#${id}`);
+      await expectOnly(page, id);
+      await page.waitForTimeout(600);
+      const edges = await page.locator(`#${id} > .win`).evaluateAll((ws) =>
+        ws.flatMap((w) => {
+          const r = w.getBoundingClientRect();
+          return [r.left, r.top, r.right, r.bottom].map((v) => v * devicePixelRatio);
+        }),
+      );
+      for (const e of edges) expect(Math.abs(e - Math.round(e)), `${id}: ${e}`).toBeLessThan(0.05);
+    }
+    await context.close();
   });
 
   test('the windows tile the desk without overlapping', async ({ page }) => {

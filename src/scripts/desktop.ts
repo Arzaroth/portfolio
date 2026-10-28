@@ -1,4 +1,5 @@
 import type { Tree } from '../data/desktop';
+import { HotkeyManager } from '@tanstack/hotkeys';
 import { tile } from './tile';
 
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -155,18 +156,35 @@ export function initDesktop() {
     else if (dir === 'r' && cur < spaces.length - 1) go(spaces[cur + 1].id);
   }
 
+  const visibleCli = (w: HTMLElement) =>
+    [...w.querySelectorAll<HTMLInputElement>('.cli')].find((c) => !c.closest('.panel[hidden]'));
+
+  const tabbed = new Map<HTMLElement, (by: number) => void>();
+  let under: HTMLElement | null = null;
+
   function initTabs(w: HTMLElement, s: Space) {
     const tabs = [...w.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
     const panels = tabs.map((t) => document.getElementById(t.getAttribute('aria-controls')!)!);
-    const select = (n: number, focus = false) => {
+    const body = w.querySelector<HTMLElement>('.body')!;
+    let at = 0;
+    const select = (n: number) => {
+      at = n;
       tabs.forEach((t, i) => {
         t.setAttribute('aria-selected', String(i === n));
         t.tabIndex = i === n ? 0 : -1;
         panels[i].hidden = i !== n;
       });
       w.dataset.label = tabs[n].textContent!.trim();
-      if (focus) tabs[n].focus();
+      body.scrollTop = body.scrollHeight;
       setFocus(s, s.wins.indexOf(w));
+    };
+    const step = (by: number) => {
+      const active = document.activeElement;
+      const typing = active?.matches('.cli') && w.contains(active);
+      const onTab = tabs.includes(active as HTMLButtonElement);
+      select((at + by + tabs.length) % tabs.length);
+      if (typing) visibleCli(w)?.focus({ preventScroll: true });
+      else if (onTab) tabs[at].focus();
     };
     tabs.forEach((t, i) => {
       t.addEventListener('click', () => select(i));
@@ -174,9 +192,10 @@ export function initDesktop() {
         const by = { ArrowLeft: -1, ArrowRight: 1 }[e.key];
         if (!by) return;
         e.preventDefault();
-        select((i + by + tabs.length) % tabs.length, true);
+        step(by);
       });
     });
+    tabbed.set(w, step);
     select(0);
   }
 
@@ -184,6 +203,18 @@ export function initDesktop() {
     s.wins.forEach((w, i) => {
       if (w.classList.contains('tabbed')) initTabs(w, s);
       w.addEventListener('pointerdown', () => setFocus(s, i));
+      w.addEventListener('pointerenter', (e) => {
+        if (e.pointerType !== 'mouse' || !wide.matches || s !== spaces[cur]) return;
+        under = w;
+        setFocus(s, i);
+        const cli = visibleCli(w);
+        const active = document.activeElement as HTMLElement | null;
+        if (cli) cli.focus({ preventScroll: true });
+        else if (active?.matches('.cli')) active.blur();
+      });
+      w.addEventListener('pointerleave', () => {
+        if (under === w) under = null;
+      });
       w.addEventListener('focusin', () => setFocus(s, i));
       w.querySelector('.chrome')!.addEventListener('dblclick', () => promote(s, i));
       w.querySelector('.promote')!.addEventListener('click', (e) => {
@@ -200,19 +231,25 @@ export function initDesktop() {
     go(t.dataset.go!);
   });
 
-  addEventListener('keydown', (e) => {
-    if (e.ctrlKey || e.altKey || e.metaKey) return;
-    if ((e.target as Element).closest('input, textarea, select')) return;
-    if ((e.target as Element).closest('[role="tab"]') && e.key.startsWith('Arrow')) return;
-    const k = e.key;
-    if (/^[1-9]$/.test(k) && spaces[+k - 1]) return go(spaces[+k - 1].id);
-    if (!wide.matches) return;
-    const dir = ({ h: 'l', ArrowLeft: 'l', l: 'r', ArrowRight: 'r', k: 'u', ArrowUp: 'u', j: 'd', ArrowDown: 'd' } as const)[k as 'h'];
-    if (dir) {
-      e.preventDefault();
-      moveFocus(dir);
-    } else if (k === 'm') promote(spaces[cur], spaces[cur].focus);
-  });
+  const keys = HotkeyManager.getInstance();
+  spaces.slice(0, 9).forEach((s, i) => keys.register({ key: String(i + 1), ctrl: true }, () => go(s.id)));
+  const onWide = (fn: () => void) => () => wide.matches && fn();
+  keys.register('H', onWide(() => moveFocus('l')));
+  keys.register('J', onWide(() => moveFocus('d')));
+  keys.register('K', onWide(() => moveFocus('u')));
+  keys.register('L', onWide(() => moveFocus('r')));
+  keys.register('M', onWide(() => promote(spaces[cur], spaces[cur].focus)));
+
+  const cycleTabs = (by: number) => (e: KeyboardEvent) => {
+    if (e.defaultPrevented) return;
+    const step = under && tabbed.get(under);
+    if (!step || !spaces[cur].el.contains(under)) return;
+    e.preventDefault();
+    step(by);
+  };
+  const free = { preventDefault: false, stopPropagation: false, ignoreInputs: false } as const;
+  keys.register('Tab', cycleTabs(1), free);
+  keys.register('Shift+Tab', cycleTabs(-1), free);
 
   let pending: number | undefined;
   addEventListener('resize', () => {

@@ -16,6 +16,7 @@ import { workspaces, colorVar } from '../data/desktop';
       <path d="M9.2 16.5h5.6" stroke="#1c1730" stroke-width="2"></path>
     </svg>
   </a>
+  <kbd class="mod" title="Hold ctrl and press a workspace's number">ctrl</kbd>
   <nav class="ws-list" aria-label="Workspaces">
     {
       workspaces.map((w, i) => (
@@ -29,9 +30,9 @@ import { workspaces, colorVar } from '../data/desktop';
   <div class="bar-title" aria-live="polite"></div>
   <div class="bar-right">
     <div class="keys" aria-hidden="true">
-      <span><kbd>1-9</kbd>workspace</span>
       <span><kbd>hjkl</kbd>focus</span>
       <span><kbd>m</kbd>swap to master</span>
+      <span><kbd>tab</kbd>next tab</span>
     </div>
     <span class="clock"></span>
   </div>

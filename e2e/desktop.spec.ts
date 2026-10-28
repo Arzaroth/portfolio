@@ -162,10 +162,11 @@ test('the gauges share one terminal, a tab each', async ({ page }) => {
 test.describe('desktop', () => {
   test.skip(({ isMobile }) => isMobile, 'tiling and keyboard are desktop only');
 
-  test('number keys walk every workspace', async ({ page }) => {
+  test('ctrl and a number walk every workspace', async ({ page }) => {
     await page.goto('/');
+    await expect(page.locator('.bar .mod')).toHaveText('ctrl');
     for (const [i, id] of order.entries()) {
-      await page.keyboard.press(String(i + 1));
+      await page.keyboard.press(`Control+${i + 1}`);
       await expectOnly(page, id);
     }
   });
@@ -183,13 +184,15 @@ test.describe('desktop', () => {
     await expect(page.locator('.bar-title b')).toHaveText(picked!);
   });
 
-  test('typing in a terminal does not switch workspace', async ({ page }) => {
+  test('typing in a terminal takes letters and digits, and ctrl still switches', async ({ page }) => {
     await page.goto('/#tools');
     const cli = page.locator('#tools .cli').first();
     await cli.click();
-    await page.keyboard.type('t3 2');
-    await expect(cli).toHaveValue('t3 2');
+    await page.keyboard.type('hjkl m 2');
+    await expect(cli).toHaveValue('hjkl m 2');
     await expectOnly(page, 'tools');
+    await page.keyboard.press('Control+2');
+    await expectOnly(page, 'apps');
   });
 
   test('every window edge lands on a screen pixel when the display is scaled', async ({ browser }) => {

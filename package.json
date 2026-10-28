@@ -15,6 +15,7 @@
     "e2e": "playwright test"
   },
   "dependencies": {
+    "@tanstack/hotkeys": "0.18.0",
     "astro": "^7.2.9"
   },
   "allowScripts": {

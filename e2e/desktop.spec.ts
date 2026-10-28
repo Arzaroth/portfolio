@@ -135,6 +135,19 @@ test('the ps2 games share one browser, a tab each under its disc', async ({ page
   expect(new Set(heights).size).toBe(1);
 });
 
+test('the rack in self-hosting is drawn in 3D, or falls back to the list', async ({ page }) => {
+  await page.goto('/#selfhosted');
+  await expectOnly(page, 'selfhosted');
+  const view = page.locator('#selfhosted .rackview');
+  await expect(view).toHaveClass(/\b(gl|no-gl)\b/);
+  const items = page.locator('#selfhosted .svcs li');
+  await expect(items).toHaveCount(21);
+  if ((await view.getAttribute('class'))!.includes('no-gl')) return;
+  await expect(page.locator('#selfhosted .rack3d canvas')).toBeVisible();
+  await items.filter({ hasText: 'Password vault' }).hover();
+  await expect(items.filter({ hasText: 'Password vault' })).toHaveClass(/\blit\b/);
+});
+
 test('an unknown link falls back to hello', async ({ page }) => {
   await page.goto('/#nothing-here');
   await expectOnly(page, 'about');

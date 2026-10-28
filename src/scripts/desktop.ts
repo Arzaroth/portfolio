@@ -1,6 +1,7 @@
 import type { Tree } from '../data/desktop';
 import { HotkeyManager } from '@tanstack/hotkeys';
 import { tile } from './tile';
+import { createFloating } from './floating';
 
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const wide = matchMedia('(min-width: 761px)');
@@ -55,7 +56,19 @@ export function initDesktop() {
 
   const find = (hash: string) => spaces.findIndex((s) => s.id === hash || s.aliases.includes(hash));
 
+  const floating = createFloating(desk, () => layout(spaces[cur]));
+  const toast = document.querySelector<HTMLElement>('.toast')!;
+  let toastTimer: number | undefined;
+  function notify(title: string, body: string) {
+    toast.querySelector('b')!.textContent = title;
+    toast.querySelector('span')!.textContent = body;
+    toast.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => (toast.hidden = true), 6000);
+  }
+
   function layout(s: Space) {
+    if (floating.active && s === spaces[cur]) return;
     if (!wide.matches) {
       for (const w of s.wins) {
         w.style.removeProperty('left');
@@ -112,6 +125,7 @@ export function initDesktop() {
     const next = at < 0 ? 0 : at;
     const s = spaces[next];
     if (next === cur) return record(s.id, 'replace');
+    floating.stop();
     const prev = cur;
     cur = next;
     spaces.forEach((sp, i) => {
@@ -239,6 +253,32 @@ export function initDesktop() {
   keys.register('K', onWide(() => moveFocus('u')));
   keys.register('L', onWide(() => moveFocus('r')));
   keys.register('M', onWide(() => promote(spaces[cur], spaces[cur].focus)));
+
+  const konami = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'B', 'A'] as const;
+  keys.register(
+    [...konami],
+    (e) => {
+      if (!wide.matches) return;
+      e.preventDefault();
+      const typed = e.target as HTMLInputElement;
+      if (typed.matches?.('.cli')) typed.value = typed.value.replace(/b$/i, '');
+      if (floating.active) return floating.stop();
+      if (reduce) return notify('Floating mode', 'It needs motion, and your system asks for less.');
+      floating.start(spaces[cur].el);
+      notify('Floating mode', 'Grab a window by its title bar and throw it. Esc tiles them back.');
+    },
+    { preventDefault: false, stopPropagation: false, ignoreInputs: false, timeout: 1500 },
+  );
+  keys.register(
+    'Escape',
+    (e) => {
+      if (!floating.active) return;
+      e.preventDefault();
+      floating.stop();
+      toast.hidden = true;
+    },
+    { preventDefault: false, stopPropagation: false },
+  );
 
   const cycleTabs = (by: number) => (e: KeyboardEvent) => {
     if (e.defaultPrevented) return;

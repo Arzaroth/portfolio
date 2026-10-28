@@ -323,6 +323,45 @@ test.describe('desktop', () => {
     await expectOnly(page, 'apps');
   });
 
+  const konami = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+
+  test('the Konami code lets the windows float, and Esc tiles them back', async ({ page }) => {
+    await page.goto('/#apps');
+    await expectOnly(page, 'apps');
+    await settled(page);
+    const tiled = () => page.locator('#apps > .win').evaluateAll((ws) => ws.map((w) => [w.style.left, w.style.top, w.style.width, w.style.height].join()));
+    const before = await tiled();
+    for (const k of konami) await page.keyboard.press(k);
+    await expect(page.locator('#apps')).toHaveClass(/\bfloating\b/);
+    await expect(page.locator('.toast')).toBeVisible();
+    await expect(page.locator('.toast b')).toHaveText('Floating mode');
+    await expect.poll(tiled).not.toEqual(before);
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#apps')).not.toHaveClass(/\bfloating\b/);
+    await expect(page.locator('.toast')).toBeHidden();
+    await expect.poll(tiled).toEqual(before);
+  });
+
+  test('another workspace ends floating mode', async ({ page }) => {
+    await page.goto('/#apps');
+    await settled(page);
+    for (const k of konami) await page.keyboard.press(k);
+    await expect(page.locator('#apps')).toHaveClass(/\bfloating\b/);
+    await page.keyboard.press('Control+3');
+    await expectOnly(page, 'gauges');
+    await expect(page.locator('.ws.floating')).toHaveCount(0);
+  });
+
+  test('the code typed in a terminal leaves its prompt clean', async ({ page }) => {
+    await page.goto('/#tools');
+    const cli = page.locator('#tools .cli').first();
+    await cli.click();
+    await cli.fill('t3');
+    for (const k of konami) await page.keyboard.press(k);
+    await expect(page.locator('#tools')).toHaveClass(/\bfloating\b/);
+    await expect(cli).toHaveValue('t3');
+  });
+
   test('the spinning disc never pushes a scrollbar out of its window', async ({ browser }) => {
     const context = await browser.newContext({ viewport: { width: 1100, height: 700 } });
     const page = await context.newPage();

@@ -20,7 +20,7 @@ export const workspaces: Workspace[] = [
   { id: 'workshop', label: 'workbench', color: 'sage', accent: 'teal', blurb: 'Tacite, Pouce Vert, Sheaf, and two sealed names', tree: ['v', 0.38, 0, ['h', 0.64, ['v', 0.5, 1, 2], 3]], aliases: ['sealed'] },
   { id: 'ouroboros', label: 'ouroboros', color: 'rose', accent: 'peach', blurb: 'Eight lines of Python that kept growing', tree: ['v', 0.46, 0, 1] },
   { id: 'recomp', label: 'ps2', color: 'orchid', accent: 'sky', blurb: 'PlayStation 2 games, recompiled to native code', tree: ['v', 0.42, 0, 1] },
-  { id: 'selfhosted', label: 'self-hosting', color: 'teal', accent: 'sky', blurb: 'What runs on the rack, and on the TV', tree: ['v', 0.42, 0, ['h', 0.42, ['v', 0.5, 3, 2], ['v', 0.5, 1, 4]]] },
+  { id: 'selfhosted', label: 'self-hosting', color: 'teal', accent: 'sky', blurb: 'What runs on the rack, and on the TV', tree: ['v', 0.5, 0, ['h', 0.42, ['v', 0.5, 3, 2], ['v', 0.5, 1, 4]]] },
   { id: 'contributions', label: 'contributions', color: 'clay', accent: 'gold', blurb: "Friends' projects, and patches sent upstream", tree: ['h', 0.4, 0, 1] },
   { id: 'archive', label: 'early years', color: 'ash', accent: 'lav', blurb: '2014 onwards, ponies included', tree: ['h', 0.19, 1, 0] },
 ];

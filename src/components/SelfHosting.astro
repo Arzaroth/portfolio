@@ -5,19 +5,16 @@ import Project from './Project.astro';
 import Shell from './Shell.astro';
 import { services, infrastructure, lumen } from '../data/projects';
 import { demos } from '../data/demos';
+import { rackUnits } from '../data/rack';
 
 const [deb, forgejo, dotfiles] = infrastructure;
 const roles = { plumbing: ['teal', 'Plumbing'], watch: ['rose', 'Keeping watch'], app: ['sky', 'My apps'] } as const;
 const host = (href: string) => href.replace('https://', '');
+const units = rackUnits(services);
 ---
 
 <Workspace id="selfhosted">
-  <Window kind="files" title="/srv on the rack">
-    <nav class="side" aria-hidden="true">
-      <div>home</div>
-      <div class="here" style="--c:var(--teal)">srv</div>
-      <div style="--c:var(--rose)">backups</div>
-    </nav>
+  <Window kind="files" title="/srv on the rack" class="srv">
     <div class="main">
       <h2>Self-hosted, by stubbornness</h2>
       <p class="lede">
@@ -27,16 +24,18 @@ const host = (href: string) => href.replace('https://', '');
       <div class="legend">
         {Object.entries(roles).map(([role, [c, name]]) => <span data-role={role} style={`--c:var(--${c})`}>{name}</span>)}
       </div>
-      <ul class="icons">
-        {
-          services.map(([name, role]) => (
-            <li class="svc" data-role={role} style={`--c:var(--${roles[role][0]})`}>
-              <i />
-              {name}
-            </li>
-          ))
-        }
-      </ul>
+      <div class="rackview">
+        <div class="rack3d" aria-hidden="true"></div>
+        <ul class="svcs">
+          {
+            units.map((u, i) => (
+              <li data-role={u.role} data-unit={i} style={`--c:var(--${roles[u.role][0]})`}>
+                {u.name}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </div>
   </Window>
   <Window kind="browser" title={deb.name} href={deb.links![0].href} host={host(deb.links![0].href)}>
@@ -65,3 +64,38 @@ const host = (href: string) => href.replace('https://', '');
     <Project project={lumen} />
   </Window>
 </Workspace>
+
+<script>
+  import { rackUnits } from '../data/rack';
+  import { services } from '../data/projects';
+
+  const ws = document.getElementById('selfhosted')!;
+  const view = ws.querySelector<HTMLElement>('.rackview')!;
+  const host = view.querySelector<HTMLElement>('.rack3d')!;
+  const items = [...view.querySelectorAll<HTMLElement>('.svcs li')];
+  let started = false;
+
+  const start = () => {
+    if (started || !ws.classList.contains('on')) return;
+    started = true;
+    import('../scripts/rack3d')
+      .then(({ mountRack }) => {
+        const light = (i: number | null) => items.forEach((li, n) => li.classList.toggle('lit', n === i));
+        const rack = mountRack(host, rackUnits(services), { plumbing: '--teal', watch: '--rose', app: '--sky' }, light);
+        items.forEach((li, n) => {
+          li.addEventListener('pointerenter', () => {
+            rack.highlight(n);
+            light(n);
+          });
+          li.addEventListener('pointerleave', () => {
+            rack.highlight(null);
+            light(null);
+          });
+        });
+        view.classList.add('gl');
+      })
+      .catch(() => view.classList.add('no-gl'));
+  };
+  new MutationObserver(start).observe(ws, { attributes: true, attributeFilter: ['class'] });
+  start();
+</script>

@@ -188,7 +188,7 @@ export const ouroboros = {
   href: gh('ouroboros'),
 };
 
-type Role = 'plumbing' | 'watch' | 'app';
+export type Role = 'plumbing' | 'watch' | 'app';
 
 export const services: [string, Role][] = [
   ['Git forge', 'plumbing'],

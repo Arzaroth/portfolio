@@ -89,3 +89,4 @@
 .spin svg { width: min(100%, 260px); height: auto; max-height: 100%; animation: disc 12s linear infinite; }
 @keyframes disc { to { rotate: 1turn; } }
 @media (max-width: 760px) { .spin svg { width: 160px; } }
+.panel > .hero { flex: none; height: clamp(160px, 30vh, 260px); max-height: none; }

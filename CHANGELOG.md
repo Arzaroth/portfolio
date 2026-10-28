@@ -17,6 +17,8 @@ CI and refuses a version with no dated section here.
   workspace, on ctrl and 0, for three PlayStation 2 games recompiled to native Linux
   programs, a tab each.
 - boubou's PS2Recomp fork among the friends' projects.
+- The rack in self-hosting, in 3D: a server per service, coloured by role, to turn by
+  dragging. A server under the pointer, or under its name in the list, slides out.
 - Something happens on the Konami code.
 - Terminal windows you can type in. Each program's name prints a sample of what it does,
   and the prompt is drawn after the owner's own.

@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { keyOf, workspaces } from '../src/data/desktop';
+import { keyOf, leaves, workspaces } from '../src/data/desktop';
 
 const order = workspaces.map((w) => w.id);
 
@@ -28,7 +28,7 @@ test.beforeEach(async ({ page }) => {
   page.on('pageerror', (e) => {
     throw e;
   });
-  await page.route(latestRelease, (route) => route.abort());
+  await page.route('https://api.github.com/**', (route) => route.abort());
 });
 
 test('opens on the hello workspace', async ({ page }) => {
@@ -86,6 +86,49 @@ test('every window wears the colour of its workspace', async ({ page }) => {
   }
 });
 
+test('the contribution counts follow GitHub', async ({ page }) => {
+  const pull = (repo: string, created: string, merged: string | null) => ({
+    repository_url: `https://api.github.com/repos/${repo}`,
+    created_at: created,
+    pull_request: { merged_at: merged },
+  });
+  await page.route('https://api.github.com/search/issues**', (route) =>
+    route.fulfill({
+      json: {
+        items: [
+          ...Array.from({ length: 30 }, () => pull('boubou666/doot', '2026-10-01T00:00:00Z', '2026-10-02T00:00:00Z')),
+          pull('hyprwm/hyprsunset', '2025-08-14T00:00:00Z', null),
+          pull('new/upstream', '2026-10-20T00:00:00Z', '2026-10-21T00:00:00Z'),
+        ],
+      },
+    }),
+  );
+  await page.route('https://api.github.com/repos/*/*/contributors**', (route) =>
+    route.fulfill({ json: [{ login: 'Arzaroth', contributions: 4242 }] }),
+  );
+  await page.goto('/#contributions');
+  await expectOnly(page, 'contributions');
+  await expect(page.locator('#contributions [data-repo="boubou666/doot"] [data-count]')).toHaveText('30');
+  await expect(page.locator('#contributions [data-repo="Guillaume69/rocket-vibe"] [data-count]')).toHaveText('4,242');
+  await expect(page.locator('#contributions .upstream .nm')).toHaveText(['upstream']);
+});
+
+test('the ps2 games share one browser, a tab each under its disc', async ({ page, isMobile }) => {
+  await page.goto('/#recomp');
+  await expectOnly(page, 'recomp');
+  if (!isMobile) {
+    await expect(page.locator('#recomp .win.master')).toHaveAttribute('aria-label', 'ps2recomp.md');
+    await expect(page.locator('#recomp .win.focus')).toHaveAttribute('aria-label', 'ps2recomp.md');
+  }
+  const tabs = page.locator('#recomp [role="tab"]');
+  await expect(tabs).toHaveCount(3);
+  const shown = page.locator('#recomp .panel:not([hidden])');
+  await expect(shown.locator('.disc code')).toHaveText('SLUS-21216');
+  await tabs.nth(2).click();
+  await expect(shown.locator('.disc code')).toHaveText('SLPS-25545');
+  await expect(shown.locator('h2')).toHaveText('Fighting for One Piece');
+});
+
 test('an unknown link falls back to hello', async ({ page }) => {
   await page.goto('/#nothing-here');
   await expectOnly(page, 'about');
@@ -125,7 +168,8 @@ test('the workspace list on hello opens each workspace', async ({ page }) => {
   await page.goto('/');
   await page.locator('#about .row[data-go="contributions"]').click();
   await expectOnly(page, 'contributions');
-  await expect(page.locator('#contributions [data-count]').first()).toHaveText('23');
+  const doot = page.locator('#contributions [data-repo="boubou666/doot"] [data-count]');
+  await expect(doot).toHaveText(Number(await doot.getAttribute('data-count')).toLocaleString('en-US'));
 });
 
 test('a terminal prints a sample of the program typed', async ({ page }) => {
@@ -264,10 +308,24 @@ test.describe('desktop', () => {
     await expectOnly(page, 'apps');
   });
 
+  test('the spinning disc never pushes a scrollbar out of its window', async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 1100, height: 700 } });
+    const page = await context.newPage();
+    await page.route('https://api.github.com/**', (route) => route.abort());
+    await page.goto('/#recomp');
+    await expectOnly(page, 'recomp');
+    const body = page.locator('#recomp .win.recomp .body');
+    for (let i = 0; i < 12; i++) {
+      expect(await body.evaluate((b) => b.scrollHeight - b.clientHeight)).toBeLessThanOrEqual(0);
+      await page.waitForTimeout(250);
+    }
+    await context.close();
+  });
+
   test('every window edge lands on a screen pixel when the display is scaled', async ({ browser }) => {
     const context = await browser.newContext({ viewport: { width: 1366, height: 768 }, deviceScaleFactor: 1.25 });
     const page = await context.newPage();
-    await page.route(latestRelease, (route) => route.abort());
+    await page.route('https://api.github.com/**', (route) => route.abort());
     for (const id of order) {
       await page.goto(`/#${id}`);
       await expectOnly(page, id);
@@ -288,6 +346,7 @@ test.describe('desktop', () => {
       await page.goto(`/#${id}`);
       await expectOnly(page, id);
       await settled(page);
+      await expect(page.locator(`#${id} > .win`)).toHaveCount(leaves(workspaces[order.indexOf(id)].tree).length);
       const boxes = await page.locator(`#${id} > .win`).evaluateAll((ws) =>
         ws.map((w) => {
           const r = w.getBoundingClientRect();
@@ -323,7 +382,7 @@ test.describe('phone', () => {
 test('with reduced motion, the counts land at once', async ({ browser }) => {
   const context = await browser.newContext({ reducedMotion: 'reduce' });
   const page = await context.newPage();
-  await page.route(latestRelease, (route) => route.abort());
+  await page.route('https://api.github.com/**', (route) => route.abort());
   await page.goto('/#ouroboros');
   await expectFullCount(page);
   await context.close();

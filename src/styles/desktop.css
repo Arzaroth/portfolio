@@ -51,7 +51,6 @@
 .js .ws:not(.on) { display: none; }
 
 .win {
-  --acc: var(--peach); --acc2: var(--rose);
   position: relative; padding: 2px; border-radius: calc(var(--r) + 2px);
   background: var(--line);
   box-shadow: 0 10px 30px -12px rgba(10, 6, 20, .55);

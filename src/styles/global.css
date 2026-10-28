@@ -21,6 +21,8 @@
   --lav: #b7a0f4;
   --clay: #e08c6c;
   --ash: #b9aec6;
+  --acc: var(--peach);
+  --acc2: var(--rose);
   --gap: 12px;
   --bar-h: 38px;
   --r: 12px;

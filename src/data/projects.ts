@@ -1,3 +1,5 @@
+import type { FriendSpec, Upstream } from '../scripts/github';
+
 export interface Link {
   label: string;
   href: string;
@@ -213,31 +215,44 @@ export const infrastructure: Project[] = [
 
 const myPulls = (repo: string) => `https://github.com/${repo}/pulls?q=is%3Apr+author%3AArzaroth`;
 
-export const friends = [
-  { name: 'doot', count: 23, unit: 'pull requests', when: '2026', href: myPulls('boubou666/doot') },
-  { name: 'butbutbut', count: 4, unit: 'pull requests', when: '2026', href: myPulls('boubou666/butbutbut') },
-  {
-    name: 'rocket-vibe',
-    count: 233,
-    unit: 'commits',
-    when: '2026',
-    href: 'https://github.com/Guillaume69/rocket-vibe/commits?author=Arzaroth',
-  },
+export const friends: FriendSpec[] = [
+  { name: 'doot', repo: 'boubou666/doot', by: 'pulls', count: 23, when: '2026' },
+  { name: 'butbutbut', repo: 'boubou666/butbutbut', by: 'pulls', count: 4, when: '2026' },
+  { name: 'rocket-vibe', repo: 'Guillaume69/rocket-vibe', by: 'commits', count: 1273, when: '2026' },
+  { name: 'PS2Recomp', repo: 'boubou666/PS2Recomp', by: 'commits', count: 181, when: '2026' },
 ];
 
-export const upstream = [
-  { name: 'authentik', repo: 'goauthentik/authentik', when: '1 PR, 2026' },
+export const friendHref = (f: FriendSpec) =>
+  f.by === 'pulls' ? myPulls(f.repo) : `https://github.com/${f.repo}/commits?author=Arzaroth`;
+
+export const friendUnit = (f: FriendSpec) => {
+  const unit = f.by === 'pulls' ? 'pull request' : 'commit';
+  return f.count === 1 ? unit : `${unit}s`;
+};
+
+export const notUpstream = ['hyprwm/hyprsunset', 'boubou666/desktop-overlay'];
+
+export const upstreamNames: Record<string, string> = {
+  'laravel/framework': 'laravel/framework',
+  'hfig/MAPI': 'hfig/MAPI',
+  'php-gettext/Gettext': 'php-gettext',
+};
+
+export const upstream: Upstream[] = [
   { name: 'ente', repo: 'ente/ente', when: '1 PR, 2026' },
+  { name: 'authentik', repo: 'goauthentik/authentik', when: '1 PR, 2026' },
   { name: 'acme2certifier', repo: 'grindsa/acme2certifier', when: '2 PRs, 2026' },
-  { name: 'laravel/framework', repo: 'laravel/framework', when: '2 PRs, 2022-23' },
-  { name: 'spot2', repo: 'spotorm/spot2', when: '3 PRs, 2017-20' },
   { name: 'hfig/MAPI', repo: 'hfig/MAPI', when: '3 PRs, 2020-24' },
-  { name: 'php-shellcommand', repo: 'mikehaertl/php-shellcommand', when: '2 PRs, 2018' },
-  { name: 'php-gettext', repo: 'php-gettext/Gettext', when: '1 PR, 2020' },
+  { name: 'laravel/framework', repo: 'laravel/framework', when: '2 PRs, 2022-23' },
   { name: 'phpbench', repo: 'phpbench/phpbench', when: '1 PR, 2022' },
   { name: 'sendria', repo: 'msztolcman/sendria', when: '1 PR, 2021' },
+  { name: 'php-gettext', repo: 'php-gettext/Gettext', when: '1 PR, 2020' },
+  { name: 'spot2', repo: 'spotorm/spot2', when: '3 PRs, 2017-20' },
+  { name: 'php-shellcommand', repo: 'mikehaertl/php-shellcommand', when: '2 PRs, 2018' },
   { name: 'weeNetsoul', repo: 'godric7/weeNetsoul', when: '2 PRs, 2014' },
-].map((u) => ({ ...u, href: myPulls(u.repo) }));
+];
+
+export const upstreamHref = (u: Upstream) => myPulls(u.repo);
 
 export const archive = [
   { from: 2014, to: 2014, name: 'virtualnetwork', description: 'A small tool for understanding how networks work.', lang: 'Python' },

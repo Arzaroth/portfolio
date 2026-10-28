@@ -1,7 +1,7 @@
 # portfolio
 
-Arzaroth's page at [arzaroth.com](https://arzaroth.com), laid out as a 42U rack. Each
-section is a server in the rack.
+Arzaroth's page at [arzaroth.com](https://arzaroth.com), laid out as a tiling desktop.
+Each part of the work is a workspace, and each project a window in it.
 
 ## Develop
 
@@ -18,17 +18,26 @@ Or with npm directly: `npm run dev`, `npm run check`, `npm test`, `npm run build
 
 ## Where things live
 
-- `src/data/servers.ts`: the rack. Each server's slot, height, cable colour and port count.
 - `src/data/projects.ts`: every piece of copy on the page.
-- `src/components/`: the rack and one component per section. `Pane.astro` wraps each section.
-- `src/scripts/rack.ts`: switching sections, patch cables, keyboard shortcuts.
+- `src/data/desktop.ts`: the workspaces, their colours, and the layout tree that splits each
+  one into tiles. A leaf is a window, numbered in the order the workspace's component
+  lists them.
+- `src/data/demos.ts`: what each terminal prints when its program's name is typed, and the
+  fastfetch lines.
+- `src/components/`: one component per workspace, plus `Window`, `Shell` (the prompt and
+  command line inside a terminal window) and `Panel` (one tab of a tabbed window).
+- `src/scripts/desktop.ts`: switching workspaces, tiling, focus, tabs and keyboard shortcuts.
+- `src/scripts/tile.ts`: turns a layout tree into tiles, edges snapped to device pixels.
+- `src/scripts/terminal.ts`: the command line in each terminal window.
 - `src/scripts/ouroboros.ts`: ouroboros's line count, read from its latest release notes.
-- `src/styles/`: one stylesheet per area. `responsive.css` loads last so its media queries win.
-- `test/`: unit tests for the rack layout. `e2e/`: Playwright, desktop and phone.
+- `src/styles/`: one stylesheet per area. The stacked layout is the default; the tiled
+  one needs JavaScript and a screen wider than 760 px. `responsive.css` loads last.
+- `test/`: unit tests for the layout trees and the terminal. `e2e/`: Playwright, desktop
+  and phone.
 
-Adding a section means adding a server to `servers.ts` and a `Pane` with the same `id` to
-`src/pages/index.astro`. The unit tests fail if the two disagree, if two servers share a
-unit, or if one sticks out of the rack.
+Adding a workspace means adding it to `desktop.ts` and a component with a matching
+`<Workspace id>` to `src/pages/index.astro`. The unit tests fail if a layout tree does not
+place each of the component's windows exactly once.
 
 ## Release and deploy
 

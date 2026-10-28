@@ -10,7 +10,19 @@ CI and refuses a version with no dated section here.
 
 ## [Unreleased]
 
+### Added
+
+- Terminal windows you can type in. Each program's name prints a sample of what it does,
+  and the prompt is drawn after the owner's own.
+
 ### Changed
+
+- The site is a tiling desktop instead of a rack. A bar holds one workspace per part of the
+  work, switched with 1 to 9, and each project is a window: a browser, a terminal, a file
+  manager or a note. h, j, k and l move the focus, and m swaps a window into the main
+  tile. The three gauges share one terminal, a tab each. On a phone, and without
+  JavaScript, the windows stack in one column.
+- The page is dark only.
 
 - ouroboros's line count comes from the `LOC:` line of its latest release notes, read at
   build time and again in the visitor's browser, so a new release shows without a

@@ -55,7 +55,7 @@ export const apps: Project[] = [
 export const lumen: Project = {
   name: 'Lumen',
   description:
-    "An Apple TV style home screen for Android TV and Google TV, with the scripts that debloat the TV and make Lumen its Home. Everything is reversible: packages are disabled, never uninstalled, and the TV's state is backed up first. The focused app's logo is rebuilt in lit 3D voxels under a night sky that turns at the Earth's real rate.",
+    "Swaps the home screen of an Android TV or Google TV for one that looks like the Apple TV's, and debloats the TV on the way. Everything can be undone: apps are disabled, never uninstalled, and the TV is backed up first. Behind the apps, the night sky turns at the Earth's real rate.",
   meta: 'Java, Android TV',
   links: [source('Lumen')],
 };
@@ -63,7 +63,7 @@ export const lumen: Project = {
 export const wyrmyon: Project = {
   name: 'wyrmyon',
   description:
-    'The magic-wormhole, with a wyrm in it. It speaks the magic-wormhole protocol, so it sends to and receives from the Python wormhole and every other client. When both ends run wyrmyon, the data moves over iroh instead: QUIC with hole-punching, one stream per file, verified and resumable. You never pick a protocol or a server.',
+    'Sends files and text from one machine to another with a short code, like magic-wormhole, and to anyone who uses it. When both ends run wyrmyon, the transfer goes over iroh instead: direct whenever the network allows, checked piece by piece, and resumed if it drops.',
   meta: 'Rust, iroh',
   links: [source('wyrmyon')],
 };
@@ -95,7 +95,7 @@ export const tools: Project[] = [
 export const skills: Project = {
   name: 'skills',
   description:
-    'The agent skills I use every day with Claude Code, published for anyone to install: staying with a pull request until it merges, working each round of review, merging a stack of dependent PRs, cutting releases, keeping docs in step with the code, a very strict code review, and timesheets rebuilt from session logs.',
+    'The agent skills I use every day with Claude Code, for anyone to install. They see a pull request through to the merge, work each round of review, merge stacked PRs, cut releases, keep the docs current, review code without mercy and rebuild timesheets.',
   meta: 'Claude Code, npx skills',
   links: [source('skills')],
 };
@@ -125,8 +125,8 @@ export const gauges: Project[] = [
 ];
 
 export const selvedge = {
-  description:
-    'A selvedge is the woven edge that stops cloth from unravelling. This crate stops a binary and the QML and JavaScript it feeds from drifting apart. Both ship in one archive and update together.',
+description:
+  'A selvedge is the woven edge that stops cloth from unravelling. This crate stops a binary and the QML and JavaScript it feeds from drifting apart. Both ship in one archive and update together.',
   duties: [
     'Fetches the latest release from GitHub',
     'Replaces the running binary in place',
@@ -230,13 +230,6 @@ export const infrastructure: Project[] = [
     links: [{ label: 'git.arzaroth.com', href: 'https://git.arzaroth.com/Arzaroth' }],
   },
   {
-    name: 'smith',
-    description:
-      "A Forgejo CLI with gh's command surface, so muscle memory carries over: smith pr checkout 42, smith run watch, smith issue list --label bug. Feature complete wherever Forgejo's API can back it. Written in Zig, mostly because why not.",
-    meta: 'Zig',
-    links: [source('smith')],
-  },
-  {
     name: 'dotfiles',
     description: 'Zsh, Emacs, tmux and prompt configuration as GNU Stow packages. Arch on the desk, Debian on the servers.',
     meta: 'Emacs Lisp, shell',
@@ -244,8 +237,16 @@ export const infrastructure: Project[] = [
   },
 ];
 
+export const smith: Project = {
+  name: 'smith',
+  description:
+    "A command-line client for Forgejo with gh's commands, so smith pr checkout 42 does what your fingers expect. It does everything gh does that Forgejo's API allows. Written in Zig, mostly because why not.",
+  meta: 'Zig',
+  links: [source('smith')],
+};
+
 export const recomp = {
-  lede: "Not emulators. Each port statically recompiles a game's own PlayStation 2 code to C++ and runs it as a native Linux program, on a reimplementation of the PS2 hardware. No game files are included: you need your own disc.",
+  lede: "Native Linux ports of PlayStation 2 games. Not emulators: each one turns the game's own code into C++ and runs it on a rewrite of the PS2 hardware. No game files included, you need your own disc.",
   engine: { name: 'PS2Recomp', href: 'https://github.com/boubou666/PS2Recomp' },
   ports: [
     {
@@ -254,7 +255,7 @@ export const recomp = {
       disc: 'SLUS-21216',
       status: 'Playable',
       description:
-        'Playable from start to finish in automated tests, now in human testing. Fights run at 60 frames per second with music and voices, every mode has been played through, and saves load back after a restart.',
+        'Plays from start to finish in automated tests, and humans are playing it now. Fights run at 60 frames per second with music and voices, and saves load back after a restart.',
       href: gh('SoulCaliburIII_Recomp'),
     },
     {
@@ -262,7 +263,8 @@ export const recomp = {
       tab: 'Smash Court Tennis 2',
       disc: 'SLUS-20933',
       status: 'Bring-up',
-      description: 'Boots, loads its IOP modules and code overlays, and reaches the main menu, its movie playing behind it.',
+      description:
+        'Boots, loads its modules and code overlays, and reaches the main menu.',
       href: gh('SmashCourtTennisProTournament2_Recomp'),
     },
     {
@@ -270,7 +272,8 @@ export const recomp = {
       tab: 'One Piece',
       disc: 'SLPS-25545',
       status: 'Bring-up',
-      description: 'From the title screen through character select into a 3D fight, Luffy against Ace, at about 54 frames per second on the CPU rasterizer.',
+      description:
+        'Gets from the title screen through character select into a 3D fight, Luffy against Ace, at about 54 frames per second.',
       href: gh('FightingForOnePiece_Recomp'),
     },
   ],

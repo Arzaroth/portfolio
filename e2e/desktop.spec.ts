@@ -204,7 +204,7 @@ test('the gauges share one terminal, a tab each', async ({ page }) => {
   await page.goto('/#gauges');
   await expectOnly(page, 'gauges');
   const tabs = page.locator('#gauges [role="tab"]');
-  await expect(tabs).toHaveText(['TokenGauge', 'remuda', 'TailGauge']);
+  await expect(tabs).toHaveText(['TokenGauge', 'remuda', 'TailGauge', 'smith', 'wyrmyon']);
   await expect(page.locator('#gauges .panel:not([hidden])')).toHaveCount(1);
   await expect(page.locator('#gauges .panel:not([hidden]) h2')).toHaveText('TokenGauge');
   await tabs.nth(1).click();
@@ -258,12 +258,12 @@ test.describe('desktop', () => {
     await expect(page.locator('#gauges .panel:not([hidden]) .cli')).toBeFocused();
     const gap = await gauges.locator('.body').evaluate((b) => b.scrollHeight - b.clientHeight - b.scrollTop);
     expect(gap).toBeLessThanOrEqual(1);
-    await page.keyboard.press('Tab');
-    await expect(shown).toHaveText('TailGauge');
-    await page.keyboard.press('Tab');
-    await expect(shown).toHaveText('TokenGauge');
+    for (const name of ['TailGauge', 'smith', 'wyrmyon', 'TokenGauge']) {
+      await page.keyboard.press('Tab');
+      await expect(shown).toHaveText(name);
+    }
     await page.keyboard.press('Shift+Tab');
-    await expect(shown).toHaveText('TailGauge');
+    await expect(shown).toHaveText('wyrmyon');
   });
 
   test('without the pointer on it, tab leaves the gauges window as usual', async ({ page }) => {

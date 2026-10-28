@@ -3,10 +3,10 @@ import Workspace from './Workspace.astro';
 import Window from './Window.astro';
 import Project from './Project.astro';
 import Shell from './Shell.astro';
-import { services, infrastructure } from '../data/projects';
+import { services, infrastructure, lumen } from '../data/projects';
 import { demos } from '../data/demos';
 
-const [deb, forgejo, smith, dotfiles] = infrastructure;
+const [deb, forgejo, dotfiles] = infrastructure;
 const roles = { plumbing: ['teal', 'Plumbing'], watch: ['rose', 'Keeping watch'], app: ['sky', 'My apps'] } as const;
 const host = (href: string) => href.replace('https://', '');
 ---
@@ -40,6 +40,12 @@ const host = (href: string) => href.replace('https://', '');
     </div>
   </Window>
   <Window kind="browser" title={deb.name} href={deb.links![0].href} host={host(deb.links![0].href)}>
+    <svg slot="hero" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+      <path d="M32 6 56 18v28L32 58 8 46V18Z"></path>
+      <path d="M8 18l24 12 24-12M32 30v28"></path>
+      <path d="m20 12 24 12v10" stroke-width="1.6" opacity=".6"></path>
+      <path d="M14 38v4l8 4v-4Z" fill="currentColor" stroke="none" opacity=".7"></path>
+    </svg>
     <Project project={deb} />
   </Window>
   <Window kind="browser" title="Forgejo" href={forgejo.links![0].href} host={host(forgejo.links![0].href)}>
@@ -50,9 +56,12 @@ const host = (href: string) => href.replace('https://', '');
       <Project project={dotfiles} />
     </Shell>
   </Window>
-  <Window kind="term" title="smith">
-    <Shell name="smith" path="~/src/portfolio" ran="smith pr list" hint="smith" demos={demos.smith}>
-      <Project project={smith} />
-    </Shell>
+  <Window kind="browser" title={lumen.name} href={lumen.links![0].href} host={host(lumen.links![0].href)}>
+    <svg slot="hero" viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+      <rect x="4" y="4" width="72" height="42" rx="4"></rect>
+      <path d="M30 56h20M40 46v10"></path>
+      <path d="m40 14 2.4 6.6 7 .3-5.5 4.3 1.9 6.8-5.8-3.9-5.8 3.9 1.9-6.8-5.5-4.3 7-.3Z" fill="currentColor" stroke="none"></path>
+    </svg>
+    <Project project={lumen} />
   </Window>
 </Workspace>

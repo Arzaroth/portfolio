@@ -4,26 +4,27 @@ import Window from './Window.astro';
 import Panel from './Panel.astro';
 import Shell from './Shell.astro';
 import Project from './Project.astro';
-import { gauges, selvedge, codegauge } from '../data/projects';
+import { gauges, selvedge, codegauge, smith, wyrmyon } from '../data/projects';
 import { demos } from '../data/demos';
 
 const forgejo = codegauge.links![0].href;
-const names = gauges.map((g) => g.name);
+const shells = [
+  ...gauges.map((g) => ({ project: g, path: `~/src/${g.name}`, ran: g.name.toLowerCase(), hint: g.name.toLowerCase(), demos: demos[g.name.toLowerCase()] })),
+  { project: smith, path: '~/src/portfolio', ran: 'smith pr list', hint: 'smith', demos: demos.smith },
+  { project: wyrmyon, path: '~/src/wyrmyon', ran: 'wyrm report.pdf', hint: 'wyrm', demos: demos.wyrmyon },
+];
 ---
 
 <Workspace id="gauges">
-  <Window kind="term" title="gauges" tabs={names} big>
+  <Window kind="term" title="toolbox" tabs={shells.map((s) => s.project.name)} big>
     {
-      gauges.map((g) => {
-        const cmd = g.name.toLowerCase();
-        return (
-          <Panel win="gauges" tab={g.name}>
-            <Shell name={g.name} path={`~/src/${g.name}`} ran={cmd} hint={cmd} demos={demos[cmd]}>
-              <Project project={g} big />
-            </Shell>
-          </Panel>
-        );
-      })
+      shells.map((s) => (
+        <Panel win="toolbox" tab={s.project.name}>
+          <Shell name={s.project.name} path={s.path} ran={s.ran} hint={s.hint} demos={s.demos}>
+            <Project project={s.project} big />
+          </Shell>
+        </Panel>
+      ))
     }
   </Window>
   <Window kind="notes" title="selvedge.md">

@@ -2,9 +2,7 @@
 import Workspace from './Workspace.astro';
 import Window from './Window.astro';
 import Project from './Project.astro';
-import Shell from './Shell.astro';
-import { apps, lumen, wyrmyon } from '../data/projects';
-import { demos } from '../data/demos';
+import { apps } from '../data/projects';
 
 const host = (href: string) => new URL(href).host;
 const [goal, coinche, yaek, blossom] = apps;
@@ -41,18 +39,5 @@ const home = (p: (typeof apps)[number]) => p.links![0].href;
       <path d="M24 26h16M24 32h16M24 38h10" stroke-width="1.6" opacity=".75"></path>
     </svg>
     <Project project={blossom} />
-  </Window>
-  <Window kind="browser" title={lumen.name} href={lumen.links![0].href} host={lumen.links![0].href.replace('https://', '')}>
-    <svg slot="hero" viewBox="0 0 80 60" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
-      <rect x="4" y="4" width="72" height="42" rx="4"></rect>
-      <path d="M30 56h20M40 46v10"></path>
-      <path d="m40 14 2.4 6.6 7 .3-5.5 4.3 1.9 6.8-5.8-3.9-5.8 3.9 1.9-6.8-5.5-4.3 7-.3Z" fill="currentColor" stroke="none"></path>
-    </svg>
-    <Project project={lumen} />
-  </Window>
-  <Window kind="term" title="wyrmyon">
-    <Shell name="wyrmyon" path="~/src/wyrmyon" ran="wyrm report.pdf" hint="wyrm" demos={demos.wyrmyon}>
-      <Project project={wyrmyon} />
-    </Shell>
   </Window>
 </Workspace>

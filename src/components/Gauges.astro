@@ -1,33 +1,40 @@
 ---
-import Pane from './Pane.astro';
-import Entry from './Entry.astro';
+import Workspace from './Workspace.astro';
+import Window from './Window.astro';
+import Panel from './Panel.astro';
+import Shell from './Shell.astro';
+import Project from './Project.astro';
 import { gauges, selvedge, codegauge } from '../data/projects';
+import { demos } from '../data/demos';
+
+const forgejo = codegauge.links![0].href;
+const names = gauges.map((g) => g.name);
 ---
 
-<Pane
-  id="gauges"
-  title="Three binaries, one edge"
-  lede="Rust binaries for the desktop. The two gauges draw panels on KDE Plasma, GNOME, Waybar and Quickshell, and remuda keeps your Claude Code and Codex logins. They are unrelated, but they install and update themselves the same way. That shared code is selvedge."
->
-  <div class="pair">
-    {gauges.map((g, i) => <Entry project={g} k={3 + i} />)}
-  </div>
-  <div class="selvedge rv" style="--k:6">
-    <div class="selvedge-in">
-      <div>
-        <h3>selvedge</h3>
-        <p>{selvedge.description}</p>
-        <div class="links" style="--c:var(--c-yellow); margin-top:14px">
-          <a href={selvedge.href} target="_blank" rel="noopener">Source</a>
-        </div>
-      </div>
-      <div>
-        <ul>
-          {selvedge.duties.map((d) => <li>{d}</li>)}
-        </ul>
-        <p class="lines-saved">Was <s>{selvedge.saved}</s> in each gauge.</p>
-      </div>
-    </div>
-  </div>
-  <Entry project={codegauge} k={7} class="aside-gauge" />
-</Pane>
+<Workspace id="gauges">
+  <Window kind="term" title="gauges" tabs={names} big>
+    {
+      gauges.map((g) => {
+        const cmd = g.name.toLowerCase();
+        return (
+          <Panel win="gauges" tab={g.name}>
+            <Shell name={g.name} path={`~/src/${g.name}`} ran={cmd} hint={cmd} demos={demos[cmd]}>
+              <Project project={g} big />
+            </Shell>
+          </Panel>
+        );
+      })
+    }
+  </Window>
+  <Window kind="notes" title="selvedge.md">
+    <h3>selvedge</h3>
+    <p class="lede">Three Rust binaries, unrelated, that install and update themselves the same way.</p>
+    <p>{selvedge.description}</p>
+    <ul class="duties">{selvedge.duties.map((d) => <li>{d}</li>)}</ul>
+    <p class="was">Was <s>{selvedge.saved}</s> in each gauge.</p>
+    <div class="links"><a class="btn" href={selvedge.href} target="_blank" rel="noopener">Source</a></div>
+  </Window>
+  <Window kind="browser" title={codegauge.name} href={forgejo} host={forgejo.replace('https://', '')}>
+    <Project project={codegauge} />
+  </Window>
+</Workspace>

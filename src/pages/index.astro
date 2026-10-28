@@ -1,48 +1,38 @@
 ---
 import Base from '../layouts/Base.astro';
-import Rack from '../components/Rack.astro';
-import Pane from '../components/Pane.astro';
-import Entry from '../components/Entry.astro';
+import Wall from '../components/Wall.astro';
+import Bar from '../components/Bar.astro';
 import Hello from '../components/Hello.astro';
+import Apps from '../components/Apps.astro';
 import Gauges from '../components/Gauges.astro';
-import Sealed from '../components/Sealed.astro';
+import Tools from '../components/Tools.astro';
+import Workbench from '../components/Workbench.astro';
 import Ouroboros from '../components/Ouroboros.astro';
 import SelfHosting from '../components/SelfHosting.astro';
 import Contributions from '../components/Contributions.astro';
 import EarlyYears from '../components/EarlyYears.astro';
-import { apps, tools, workbench } from '../data/projects';
 ---
 
 <Base>
-  <div class="app">
-    <Rack />
-    <main class="stage" id="stage">
-      <Hello />
-      <Pane id="apps" title="Apps people actually use" lede="Built for friends first, then opened up. Each one runs on the rack, or on your phone.">
-        <div class="entries">
-          {apps.map((p, i) => <Entry project={p} k={3 + i} />)}
-        </div>
-      </Pane>
-      <Gauges />
-      <Pane
-        id="tools"
-        title="Around Claude Code"
-        lede="Small tools for the parts of Claude Code that get in the way: sharing a session, moving conversations around."
-      >
-        <div class="entries">
-          {tools.map((p, i) => <Entry project={p} k={3 + i} />)}
-        </div>
-      </Pane>
-      <Pane id="workshop" title="On the workbench" lede="Not public yet. They will be when they are ready.">
-        <div class="entries">
-          {workbench.map((p, i) => <Entry project={p} k={3 + i} />)}
-        </div>
-      </Pane>
-      <Sealed />
-      <Ouroboros />
-      <SelfHosting />
-      <Contributions />
-      <EarlyYears />
-    </main>
-  </div>
+  <Wall />
+  <Bar />
+  <main class="desk" id="desk">
+    <Hello />
+    <Apps />
+    <Gauges />
+    <Tools />
+    <Workbench />
+    <Ouroboros />
+    <SelfHosting />
+    <Contributions />
+    <EarlyYears />
+  </main>
 </Base>
+
+<script>
+  import { initDesktop } from '../scripts/desktop';
+  import { initTerminals } from '../scripts/terminal';
+
+  initTerminals();
+  initDesktop();
+</script>

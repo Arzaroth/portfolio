@@ -1,27 +1,44 @@
 ---
-import Pane from './Pane.astro';
+import Workspace from './Workspace.astro';
+import Window from './Window.astro';
 import { archive } from '../data/projects';
+
+const byLast = [...archive].sort((a, b) => b.to - a.to || b.from - a.from);
 ---
 
-<Pane id="archive" title="The early years" lede="Sorted by last commit. Still online for whoever uses them.">
-  <ol class="archive">
-    {
-      archive.map((a, i) => (
-        <li class="rv" style={`--k:${3 + i}`}>
-          <span class="yr">{a.years}</span>
-          <span class="nm">
-            {a.href ? (
-              <a href={a.href} target="_blank" rel="noopener">
-                {a.name}
-              </a>
-            ) : (
-              a.name
-            )}
-          </span>
-          <span class="ds">{a.description}</span>
-          <span class="lg">{a.lang}</span>
-        </li>
-      ))
-    }
-  </ol>
-</Pane>
+<Workspace id="archive">
+  <Window kind="files" title="~/early-years">
+    <nav class="side" aria-hidden="true">
+      <div>home</div>
+      <div class="here" style="--c:var(--ash)">early-years</div>
+    </nav>
+    <div class="main">
+      <ul class="rows">
+        {
+          byLast.map((a) => (
+            <li class:list={['row', { locked: !a.href }]} style={`--c:${a.href ? 'var(--ash)' : 'var(--dim)'}`}>
+              <span class="fi" />
+              <span class="nm">
+                {a.href ? (
+                  <a href={a.href} target="_blank" rel="noopener">
+                    {a.name}
+                  </a>
+                ) : (
+                  a.name
+                )}
+              </span>
+              <span class="dt">
+                {a.years}, {a.lang}
+              </span>
+              <span class="ds">{a.description}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Window>
+  <Window kind="notes" title="early-years.md">
+    <h2>The early years</h2>
+    <p class="lede">2014 onwards, ponies included. Sorted by last commit, and still online for whoever uses them.</p>
+  </Window>
+</Workspace>

@@ -1,45 +1,43 @@
 ---
-import Pane from './Pane.astro';
+import Workspace from './Workspace.astro';
+import Window from './Window.astro';
 import { friends, upstream } from '../data/projects';
 ---
 
-<Pane id="contributions" title="Other people's code" lede="Friends' projects I contribute to, and patches sent upstream.">
-  <div class="friends">
-    {
-      friends.map((f, i) => (
-        <article class="entry rv" style={`--k:${3 + i}`}>
-          <div class="count">
-            <span data-count={f.count}>{f.count}</span>
-            <small>{f.unit}</small>
-          </div>
-          <h3>{f.name}</h3>
-          <div class="meta">{f.when}</div>
-          <div class="links">
-            <a href={f.href} target="_blank" rel="noopener">
-              My {f.unit}
-            </a>
-          </div>
-        </article>
-      ))
-    }
-  </div>
-  <div class="upstream-wrap rv" style="--k:6">
-    <table class="upstream">
-      <caption>Sent upstream</caption>
-      <tbody>
+<Workspace id="contributions">
+  <Window kind="notes" title="friends.md">
+    <h2>Other people's code</h2>
+    <p class="lede">Friends' projects I contribute to, and patches sent upstream.</p>
+    <div class="friends">
+      {
+        friends.map((f) => (
+          <a class="friend" href={f.href} target="_blank" rel="noopener">
+            <b data-count={f.count}>{f.count}</b>
+            <small>
+              {f.unit}, {f.when}
+            </small>
+            <span>{f.name}</span>
+          </a>
+        ))
+      }
+    </div>
+  </Window>
+  <Window kind="files" title="~/upstream">
+    <div class="main">
+      <h3>Sent upstream</h3>
+      <ul class="rows cols">
         {
           upstream.map((u) => (
-            <tr>
-              <td>
-                <a href={u.href} target="_blank" rel="noopener">
-                  {u.name}
-                </a>
-              </td>
-              <td class="n">{u.when}</td>
-            </tr>
+            <li class="row" style="--c:var(--clay)">
+              <span class="fi" />
+              <span class="nm">
+                <a href={u.href} target="_blank" rel="noopener">{u.name}</a>
+              </span>
+              <span class="dt">{u.when}</span>
+            </li>
           ))
         }
-      </tbody>
-    </table>
-  </div>
-</Pane>
+      </ul>
+    </div>
+  </Window>
+</Workspace>

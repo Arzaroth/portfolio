@@ -1,0 +1,61 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  name: string;
+  path?: string;
+  ran?: string;
+  hint?: string;
+  demos?: Record<string, string>;
+}
+
+const { name, path = '~', ran, hint, demos = {} } = Astro.props;
+---
+
+<div class="shell">
+  {
+    ran && (
+      <div class="prompt">
+        <span class="chev">&#x276f;</span> <span class="c">{ran}</span>
+      </div>
+    )
+  }
+  <slot />
+  <div class="log" aria-live="polite"></div>
+  <div class="live">
+    <div class="pl-line" aria-hidden="true">
+      <span class="pl">
+        <span class="sg os"><Icon name="arch" /></span>
+        <Icon name="sep" />
+        <span class="sg host">desk</span>
+        <Icon name="sep" />
+        <span class="sg path">{path}</span>
+      </span>
+      <span class="rp">
+        <span class="sg st ok">&#x2714;</span>
+        <Icon name="sep" />
+        <span class="sg tm"></span>
+      </span>
+    </div>
+    <label class="cmdline">
+      <span class="chev" aria-hidden="true">&#x276f;</span>
+      <input
+        class="cli"
+        type="text"
+        spellcheck="false"
+        autocomplete="off"
+        autocapitalize="off"
+        aria-label={`Type a command in ${name}`}
+        placeholder={hint ? `try ${hint}` : undefined}
+      />
+    </label>
+  </div>
+  {
+    Object.entries(demos).map(([cmd, html]) => (
+      <template data-cmd={cmd}>
+        <pre class="out" set:html={html} />
+      </template>
+    ))
+  }
+  <slot name="templates" />
+</div>

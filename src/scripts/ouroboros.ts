@@ -17,6 +17,6 @@ export function showLines(pane: HTMLElement, lines: number) {
   const counter = pane.querySelector<HTMLElement>('[data-count]')!;
   const settled = counter.textContent === fmt(Number(counter.dataset.count));
   counter.dataset.count = String(lines);
-  if (settled && !pane.hidden) counter.textContent = fmt(lines);
+  if (settled && pane.classList.contains('on')) counter.textContent = fmt(lines);
   pane.querySelectorAll('[data-lines]').forEach((el) => (el.textContent = fmt(lines)));
 }

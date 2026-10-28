@@ -1,0 +1,39 @@
+---
+import Workspace from './Workspace.astro';
+import Window from './Window.astro';
+import Project from './Project.astro';
+import { workbench, sealed } from '../data/projects';
+
+const [tacite, pouce, sheaf] = workbench;
+const slug = (n: string) => n.toLowerCase().replace(/\s+/g, '-');
+---
+
+<Workspace id="workshop">
+  <Window kind="notes" title={`${slug(sheaf.name)}.md`}>
+    <Project project={sheaf} big />
+  </Window>
+  <Window kind="notes" title={`${slug(tacite.name)}.md`}>
+    <Project project={tacite} />
+  </Window>
+  <Window kind="notes" title={`${slug(pouce.name)}.md`}>
+    <Project project={pouce} />
+  </Window>
+  <Window kind="files" title="~/sealed">
+    <div class="main">
+      <h3>Under wraps</h3>
+      <p class="lede">For now the names are all there is to know.</p>
+      <div class="sealed">
+        {
+          sealed.map((n) => (
+            <div>
+              <h3>{n}</h3>
+              <i style="width:94%" />
+              <i style="width:81%" />
+              <i style="width:58%" />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </Window>
+</Workspace>

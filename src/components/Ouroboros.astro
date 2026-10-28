@@ -1,5 +1,7 @@
 ---
-import Pane from './Pane.astro';
+import Workspace from './Workspace.astro';
+import Window from './Window.astro';
+import Icon from './Icon.astro';
 import { ouroboros } from '../data/projects';
 import { latestLines } from '../scripts/ouroboros';
 
@@ -17,40 +19,65 @@ async function buildLines() {
 }
 
 const lines = await buildLines();
+
+const tints = ['#ec8ba1', '#ef949a', '#f19c90', '#f3a46f', '#efb06c', '#ebba6b', '#e9c46b', '#e9c46b'];
+const R = 92;
+const C = 110;
+const at = (a: number, r = R) => [C + r * Math.cos(a), C + r * Math.sin(a)].map((v) => v.toFixed(1));
+const arcs = ouroboros.tiers.map((_, n) => {
+  const a0 = -Math.PI / 2 + (n * Math.PI) / 4 + 0.09;
+  const a1 = a0 + Math.PI / 4 - 0.18;
+  const [x0, y0] = at(a0);
+  const [x1, y1] = at(a1);
+  const [lx, ly] = at((a0 + a1) / 2, R - 30);
+  return { d: `M${x0} ${y0} A${R} ${R} 0 0 1 ${x1} ${y1}`, width: 3 + n * 1.6, tint: tints[n], lx, ly: (Number(ly) + 4).toFixed(1) };
+});
 ---
 
-<Pane id="ouroboros" title="ouroboros">
-  <div class="ouro rv" style="--k:2">
-    <svg class="snake" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="26"></circle></svg>
-    <p class="lede">{ouroboros.lede}</p>
-    <div class="scale" aria-label="Lines of code, drawn to scale">
-      <div class="scale-row">
-        <div><b>{ouroboros.firstLines}</b><span>first commit</span></div>
-        <div class="bar tiny"></div>
-      </div>
-      <div class="scale-row">
-        <div>
-          <b data-count={lines} data-from={ouroboros.firstLines}>{fmt(lines)}</b><span>today, one file</span>
-        </div>
-        <div class="bar full"></div>
+<Workspace id="ouroboros">
+  <Window kind="notes" title="ouroboros.md" class="ouro" big>
+    <h2>ouroboros</h2>
+    <p>{ouroboros.lede}</p>
+    <div class="growth" aria-label="Lines of code">
+      <div class="from"><b>{ouroboros.firstLines}</b><span>first commit</span></div>
+      <Icon name="arrow" />
+      <div class="to">
+        <b data-count={lines} data-from={ouroboros.firstLines}>{fmt(lines)}</b><span>at the last release, one file</span>
       </div>
     </div>
+    <p class="lede">A differential fuzzer checks that every tier agrees.</p>
+    <div class="links">
+      <a class="btn" href={ouroboros.href} target="_blank" rel="noopener">Read all <span data-lines>{fmt(lines)}</span> lines</a>
+    </div>
+    <div class="ring" aria-hidden="true">
+      <svg viewBox="0 0 220 220">
+        {
+          arcs.map((a, n) => (
+            <>
+              <path d={a.d} stroke={a.tint} stroke-width={a.width} stroke-linecap="round" fill="none" />
+              <text x={a.lx} y={a.ly} text-anchor="middle">{n + 1}</text>
+            </>
+          ))
+        }
+        <text class="mid" x="110" y="106" text-anchor="middle">eight tiers</text>
+        <text class="mid" x="110" y="124" text-anchor="middle">one glyph</text>
+      </svg>
+    </div>
+  </Window>
+  <Window kind="notes" title="tiers.md">
+    <h3>Eight tiers, one glyph</h3>
     <ol class="tiers">
       {
-        ouroboros.tiers.map(([name, text], i) => (
-          <li class="rv" style={`--k:${4 + i}`}>
+        ouroboros.tiers.map(([name, text]) => (
+          <li>
             <b>{name}</b>
             {text}
           </li>
         ))
       }
     </ol>
-    <div class="ouro-foot">
-      <p>A differential fuzzer checks that every tier agrees.</p>
-      <a href={ouroboros.href} target="_blank" rel="noopener">Read all <span data-lines>{fmt(lines)}</span> lines</a>
-    </div>
-  </div>
-</Pane>
+  </Window>
+</Workspace>
 
 <script>
   import { latestLines, showLines } from '../scripts/ouroboros';

@@ -1,24 +1,20 @@
 ---
-import Pane from './Pane.astro';
+import Workspace from './Workspace.astro';
+import Window from './Window.astro';
+import Fetch from './Fetch.astro';
+import Shell from './Shell.astro';
 import { elsewhere } from '../data/projects';
-import { servers, colorVar } from '../data/servers';
+import { workspaces, colorVar } from '../data/desktop';
 
-const name = 'Arzaroth';
-const others = servers.filter((s) => s.id !== 'about');
+const others = workspaces.slice(1);
 ---
 
-<Pane id="about">
-  <Fragment slot="head">
-    <h1 class="hello-name" aria-label={name}>
-      {[...name].map((ch, n) => <span style={`--n:${n}`}>{ch}</span>)}
-    </h1>
-    <div class="intro">
-      <p class="rv" style="--k:4">
-        I started in DevOps and ended up a CISO. I still write plenty of code, and most of it runs on my own machines.
-      </p>
-      <p class="rv" style="--k:5">I self-host whatever I can. That's part of why there's a 42U rack in my living room.</p>
-    </div>
-    <div class="elsewhere rv" style="--k:6">
+<Workspace id="about">
+  <Window kind="notes" title="hello.md" class="hello">
+    <h1><span>Arzaroth</span></h1>
+    <p>I started in DevOps and ended up a CISO. I still write plenty of code, and most of it runs on my own machines.</p>
+    <p>I self-host whatever I can. That's part of why there's a 42U rack in my living room.</p>
+    <div class="elsewhere">
       {
         elsewhere.map((l) => (
           <a href={l.href} target="_blank" rel="noopener">
@@ -28,15 +24,38 @@ const others = servers.filter((s) => s.id !== 'about');
         ))
       }
     </div>
-  </Fragment>
-  <div class="index">
-    {
-      others.map((s, i) => (
-        <button class="rv" style={`--k:${7 + i}; --c:${colorVar(s.color)}`} data-go={s.id}>
-          <b>{s.name}</b>
-          <small>{s.blurb}</small>
-        </button>
-      ))
-    }
-  </div>
-</Pane>
+    <p class="hint">
+      Each workspace up top holds one part of the work. Press <kbd>1</kbd> to <kbd>9</kbd> to jump between them, and type in
+      any terminal.
+    </p>
+  </Window>
+  <Window kind="term" title="fastfetch">
+    <Shell name="fastfetch" ran="fastfetch" hint="fastfetch">
+      <Fetch />
+      <template slot="templates" data-cmd="fastfetch"><Fetch /></template>
+    </Shell>
+  </Window>
+  <Window kind="files" title="~/workspaces">
+    <nav class="side" aria-hidden="true">
+      <div>home</div>
+      <div class="here" style="--c:var(--peach)">workspaces</div>
+      <div>rack</div>
+    </nav>
+    <div class="main">
+      <ul class="rows">
+        {
+          others.map((w, i) => (
+            <li>
+              <button class="row" type="button" data-go={w.id} style={`--c:${colorVar(w.color)}`}>
+                <span class="fi" />
+                <span class="nm">{w.label[0].toUpperCase() + w.label.slice(1)}</span>
+                <span class="dt">{i + 2}</span>
+                <span class="ds">{w.blurb}</span>
+              </button>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Window>
+</Workspace>

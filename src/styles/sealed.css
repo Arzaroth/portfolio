@@ -1,6 +1,0 @@
-.redacted { display: flex; flex-direction: column; gap: 9px; padding: 6px 0 4px; }
-.redacted i { display: block; width: var(--w); height: 15px; border-radius: 1px; background: var(--ink); opacity: .82; }
-.classified {
-  font-family: var(--mono); font-size: 11.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
-  padding: 3px 9px; border: 1.5px solid var(--c); border-radius: 3px; color: var(--c);
-}

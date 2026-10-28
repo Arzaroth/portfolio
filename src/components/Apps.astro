@@ -1,0 +1,43 @@
+---
+import Workspace from './Workspace.astro';
+import Window from './Window.astro';
+import Project from './Project.astro';
+import { apps } from '../data/projects';
+
+const host = (href: string) => new URL(href).host;
+const [goal, coinche, yaek, blossom] = apps;
+const home = (p: (typeof apps)[number]) => p.links![0].href;
+---
+
+<Workspace id="apps">
+  <Window kind="browser" title={goal.name} href={home(goal)} host={host(home(goal))} big>
+    <svg slot="hero" viewBox="0 0 80 56" fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="3" y="3" width="74" height="50" rx="3"></rect>
+      <path d="M40 3v50"></path>
+      <circle cx="40" cy="28" r="9"></circle>
+      <path d="M3 17h10v22H3M77 17H67v22h10"></path>
+    </svg>
+    <Project project={goal} big />
+  </Window>
+  <Window kind="browser" title={coinche.name} href={home(coinche)} host={host(home(coinche))}>
+    <svg slot="hero" viewBox="0 0 80 64" fill="currentColor">
+      <g transform="rotate(-14 30 40)"><rect x="12" y="10" width="30" height="42" rx="4" opacity=".35"></rect></g>
+      <g transform="rotate(8 50 40)"><rect x="36" y="10" width="30" height="42" rx="4" opacity=".55"></rect></g>
+      <rect x="24" y="8" width="30" height="44" rx="4" fill="var(--win-solid)" stroke="currentColor" stroke-width="2"></rect>
+      <path d="M39 22c-3-5-10-2-7 4l7 7 7-7c3-6-4-9-7-4Z"></path>
+    </svg>
+    <Project project={coinche} />
+  </Window>
+  <Window kind="browser" title={yaek.name} href={home(yaek)} host={host(home(yaek))}>
+    <span slot="hero" class="thai" lang="th">แยก</span>
+    <Project project={yaek} />
+  </Window>
+  <Window kind="browser" title={blossom.name} href={home(blossom)} host={host(home(blossom))}>
+    <svg slot="hero" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+      <path d="M6 18V8h10M48 8h10v10M58 46v10H48M16 56H6V46"></path>
+      <rect x="18" y="16" width="28" height="34" rx="2" stroke-width="1.8" opacity=".75"></rect>
+      <path d="M24 26h16M24 32h16M24 38h10" stroke-width="1.6" opacity=".75"></path>
+    </svg>
+    <Project project={blossom} />
+  </Window>
+</Workspace>

@@ -1,0 +1,13 @@
+---
+interface Props {
+  win: string;
+  tab: string;
+}
+
+const slug = (t: string) => `${Astro.props.win}-${t}`.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+const id = slug(Astro.props.tab);
+---
+
+<section class="panel" role="tabpanel" id={`panel-${id}`} aria-labelledby={`tab-${id}`} data-tab={Astro.props.tab}>
+  <slot />
+</section>

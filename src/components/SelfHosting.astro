@@ -1,30 +1,53 @@
 ---
-import Pane from './Pane.astro';
-import Entry from './Entry.astro';
+import Workspace from './Workspace.astro';
+import Window from './Window.astro';
+import Project from './Project.astro';
+import Shell from './Shell.astro';
 import { services, infrastructure } from '../data/projects';
+import { demos } from '../data/demos';
 
-const roleColor = { plumbing: undefined, watch: 'var(--c-red)', app: 'var(--c-blue)' } as const;
+const [deb, forgejo, dotfiles] = infrastructure;
+const roles = { plumbing: ['teal', 'Plumbing'], watch: ['rose', 'Keeping watch'], app: ['sky', 'My apps'] } as const;
+const host = (href: string) => href.replace('https://', '');
 ---
 
-<Pane
-  id="selfhosted"
-  title="Self-hosted, by stubbornness"
-  lede="If it can run at home, it runs at home. Every app on this page runs on the rack, next to the photos, passwords and documents the household uses every day."
->
-  <div class="patch rv" style="--k:3" aria-label="Services running on the rack">
-    <div class="patch-grid">
-      {
-        services.map(([name, role]) => (
-          <div class="port" style={roleColor[role] ? `--pc:${roleColor[role]}` : undefined}>
-            <i />
-            {name}
-          </div>
-        ))
-      }
+<Workspace id="selfhosted">
+  <Window kind="files" title="/srv on the rack">
+    <nav class="side" aria-hidden="true">
+      <div>home</div>
+      <div class="here" style="--c:var(--teal)">srv</div>
+      <div style="--c:var(--rose)">backups</div>
+    </nav>
+    <div class="main">
+      <h2>Self-hosted, by stubbornness</h2>
+      <p class="lede">
+        If it can run at home, it runs at home. Every app on this site runs on the rack, next to the photos, passwords and
+        documents the household uses every day.
+      </p>
+      <div class="legend">
+        {Object.entries(roles).map(([role, [c, name]]) => <span data-role={role} style={`--c:var(--${c})`}>{name}</span>)}
+      </div>
+      <ul class="icons">
+        {
+          services.map(([name, role]) => (
+            <li class="svc" data-role={role} style={`--c:var(--${roles[role][0]})`}>
+              <i />
+              {name}
+            </li>
+          ))
+        }
+      </ul>
     </div>
-    <div class="patch-foot">Magenta for plumbing, red for keeping watch, blue for apps</div>
-  </div>
-  <div class="entries">
-    {infrastructure.map((p, i) => <Entry project={p} k={4 + i} />)}
-  </div>
-</Pane>
+  </Window>
+  <Window kind="browser" title={deb.name} href={deb.links![0].href} host={host(deb.links![0].href)}>
+    <Project project={deb} />
+  </Window>
+  <Window kind="browser" title="Forgejo" href={forgejo.links![0].href} host={host(forgejo.links![0].href)}>
+    <Project project={forgejo} />
+  </Window>
+  <Window kind="term" title="dotfiles">
+    <Shell name="dotfiles" path="~/dotfiles" ran="stow */" hint="stow" demos={demos.dotfiles}>
+      <Project project={dotfiles} />
+    </Shell>
+  </Window>
+</Workspace>

@@ -1,0 +1,35 @@
+---
+import type { Project } from '../data/projects';
+
+interface Props {
+  project: Project;
+  big?: boolean;
+}
+
+const { project: p, big } = Astro.props;
+const Heading = big ? 'h2' : 'h3';
+---
+
+{p.wip && <span class="wip">In progress</span>}
+<Heading>{p.name}</Heading>
+<slot name="lede" />
+<p>{p.description}</p>
+<slot />
+{
+  p.meta && (
+    <div class="tags">
+      {p.meta.split(', ').map((t) => <span class="tag">{t}</span>)}
+    </div>
+  )
+}
+{
+  p.links && (
+    <div class="links">
+      {p.links.map((l, i) => (
+        <a class:list={['btn', { ghost: i > 0 }]} href={l.href} target="_blank" rel="noopener">
+          {l.label}
+        </a>
+      ))}
+    </div>
+  )
+}

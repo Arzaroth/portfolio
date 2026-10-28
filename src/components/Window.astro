@@ -1,0 +1,81 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  kind: 'browser' | 'term' | 'files' | 'notes';
+  title: string;
+  href?: string;
+  host?: string;
+  tabs?: string[];
+  big?: boolean;
+  class?: string;
+}
+
+const { kind, title, href, host, tabs, big, class: cls } = Astro.props;
+const icon = { term: 'term', files: 'folder', notes: 'note', browser: 'lock' } as const;
+const hero = Astro.slots.has('hero');
+const slug = (t: string) => `${title}-${t}`.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+---
+
+<article class:list={['win', kind, cls, { big, tabbed: tabs }]} aria-label={title} data-label={host ?? title} data-kind={kind}>
+  <div class="frame">
+    <header class="chrome">
+      {
+        kind === 'browser' ? (
+          <>
+            <Icon name="back" />
+            <Icon name="fwd" />
+            <a class="url" href={href} target="_blank" rel="noopener" tabindex="-1">
+              <Icon name="lock" />
+              {host}
+            </a>
+          </>
+        ) : (
+          <>
+            <Icon name={icon[kind]} />
+            {tabs ? (
+              <div class="tabs" role="tablist" aria-label={title}>
+                {tabs.map((t, i) => (
+                  <button
+                    class="tab"
+                    type="button"
+                    role="tab"
+                    id={`tab-${slug(t)}`}
+                    aria-controls={`panel-${slug(t)}`}
+                    aria-selected={i === 0 ? 'true' : 'false'}
+                    tabindex={i === 0 ? 0 : -1}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <span class="ttl">
+                <b>{title}</b>
+              </span>
+            )}
+          </>
+        )
+      }
+      <button class="promote" type="button" aria-label={`Swap ${title} into the main tile`} title="Swap to master (m)">
+        <Icon name="swap" />
+      </button>
+    </header>
+    <div class:list={['body', { paged: hero }]}>
+      {
+        hero ? (
+          <>
+            <div class="hero" aria-hidden="true">
+              <slot name="hero" />
+            </div>
+            <div class="pg">
+              <slot />
+            </div>
+          </>
+        ) : (
+          <slot />
+        )
+      }
+    </div>
+  </div>
+</article>

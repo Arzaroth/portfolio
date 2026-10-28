@@ -1,0 +1,28 @@
+---
+import Workspace from './Workspace.astro';
+import Window from './Window.astro';
+import Project from './Project.astro';
+import Shell from './Shell.astro';
+import { tools } from '../data/projects';
+import { demos } from '../data/demos';
+
+const [c2c, resumove, t3cc] = tools;
+---
+
+<Workspace id="tools">
+  <Window kind="term" title="c2c-conv">
+    <Shell name="c2c-conv" path="~/src/c2c-conv" ran="c2c-conv" hint="c2c-conv" demos={demos['c2c-conv']}>
+      <Project project={c2c} big />
+    </Shell>
+  </Window>
+  <Window kind="term" title="resumove">
+    <Shell name="resumove" path="~/src/resumove" ran="resumove" hint="resumove" demos={demos.resumove}>
+      <Project project={resumove} />
+    </Shell>
+  </Window>
+  <Window kind="term" title="t3cc">
+    <Shell name="t3cc" path="~/src/t3cc" ran="t3cc" hint="t3cc" demos={demos.t3cc}>
+      <Project project={t3cc} />
+    </Shell>
+  </Window>
+</Workspace>

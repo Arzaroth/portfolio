@@ -1,0 +1,20 @@
+---
+import { byId, colorVar } from '../data/desktop';
+
+interface Props {
+  id: string;
+}
+
+const ws = byId(Astro.props.id);
+---
+
+<section
+  class="ws"
+  id={ws.id}
+  aria-label={ws.label}
+  data-tree={JSON.stringify(ws.tree)}
+  data-aliases={ws.aliases?.join(' ')}
+  style={`--acc:${colorVar(ws.color)};--acc2:${colorVar(ws.accent)}`}
+>
+  <slot />
+</section>

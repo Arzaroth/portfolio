@@ -127,6 +127,12 @@ test('the ps2 games share one browser, a tab each under its disc', async ({ page
   await tabs.nth(2).click();
   await expect(shown.locator('.disc code')).toHaveText('SLPS-25545');
   await expect(shown.locator('h2')).toHaveText('Fighting for One Piece');
+  const heights = [];
+  for (let i = 0; i < 3; i++) {
+    await tabs.nth(i).click();
+    heights.push(await shown.locator('.hero').evaluate((e) => e.getBoundingClientRect().height));
+  }
+  expect(new Set(heights).size).toBe(1);
 });
 
 test('an unknown link falls back to hello', async ({ page }) => {

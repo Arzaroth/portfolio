@@ -29,6 +29,7 @@ Or with npm directly: `npm run dev`, `npm run check`, `npm test`, `npm run build
 - `src/scripts/desktop.ts`: switching workspaces, tiling, focus, tabs and keyboard shortcuts,
   registered through [TanStack Hotkeys](https://tanstack.com/hotkeys/latest).
 - `src/scripts/tile.ts`: turns a layout tree into tiles, edges snapped to device pixels.
+- `src/scripts/floating.ts`: the windows' physics when the Konami code sets them floating.
 - `src/scripts/terminal.ts`: the command line in each terminal window.
 - `src/scripts/ouroboros.ts`: ouroboros's line count, read from its latest release notes.
 - `src/scripts/github.ts`: the friends' counts and the patches sent upstream, from one search

@@ -17,6 +17,7 @@ CI and refuses a version with no dated section here.
   workspace, on ctrl and 0, for three PlayStation 2 games recompiled to native Linux
   programs, a tab each.
 - boubou's PS2Recomp fork among the friends' projects.
+- Something happens on the Konami code.
 - Terminal windows you can type in. Each program's name prints a sample of what it does,
   and the prompt is drawn after the owner's own.
 

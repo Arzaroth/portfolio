@@ -31,6 +31,10 @@ Or with npm directly: `npm run dev`, `npm run check`, `npm test`, `npm run build
 - `src/scripts/tile.ts`: turns a layout tree into tiles, edges snapped to device pixels.
 - `src/scripts/terminal.ts`: the command line in each terminal window.
 - `src/scripts/ouroboros.ts`: ouroboros's line count, read from its latest release notes.
+- `src/scripts/github.ts`: the friends' counts and the patches sent upstream, from one search
+  for my pull requests and the contributors list of each friend's project counted in
+  commits. `projects.ts` lists the friends, the repositories to leave out, and the counts
+  to show when GitHub cannot be reached.
 - `src/styles/`: one stylesheet per area. The stacked layout is the default; the tiled
   one needs JavaScript and a screen wider than 760 px. `responsive.css` loads last.
 - `test/`: unit tests for the layout trees and the terminal. `e2e/`: Playwright, desktop

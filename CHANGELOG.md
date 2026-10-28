@@ -12,6 +12,11 @@ CI and refuses a version with no dated section here.
 
 ### Added
 
+- New projects: Lumen, a home screen for Android TV, in self-hosting; smith and wyrmyon
+  as tabs of the toolbox terminal; skills among the Claude Code tools; and a ps2
+  workspace, on ctrl and 0, for three PlayStation 2 games recompiled to native Linux
+  programs, a tab each.
+- boubou's PS2Recomp fork among the friends' projects.
 - Terminal windows you can type in. Each program's name prints a sample of what it does,
   and the prompt is drawn after the owner's own.
 
@@ -24,6 +29,10 @@ CI and refuses a version with no dated section here.
   terminal, a tab each, walked with tab and shift tab while the pointer is on it. On a
   phone, and without JavaScript, the windows stack in one column.
 - The page is dark only.
+- The friends' counts and the patches sent upstream come from GitHub, when the site is
+  built and again in the visitor's browser, so a new pull request shows without a
+  redeploy. The counts in `projects.ts` stand in when GitHub cannot be reached.
+  rocket-vibe now shows 1,273 commits.
 
 - ouroboros's line count comes from the `LOC:` line of its latest release notes, read at
   build time and again in the visitor's browser, so a new release shows without a

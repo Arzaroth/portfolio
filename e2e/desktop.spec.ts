@@ -171,6 +171,59 @@ test.describe('desktop', () => {
     }
   });
 
+  test('the window under the pointer takes the focus, and its terminal the keyboard', async ({ page }) => {
+    await page.goto('/#tools');
+    await expectOnly(page, 'tools');
+    await page.waitForTimeout(600);
+    const t3cc = page.locator('#tools .win[aria-label="t3cc"]');
+    await t3cc.hover();
+    await expect(t3cc).toHaveClass(/\bfocus\b/);
+    await expect(t3cc.locator('.cli')).toBeFocused();
+    await expect(page.locator('.bar-title b')).toHaveText('t3cc');
+    await page.keyboard.type('t3cc');
+    await page.keyboard.press('Enter');
+    await expect(t3cc.locator('.log .out')).toContainText('imported 12 threads');
+  });
+
+  test('tab and shift tab move between the gauge tabs, each shown from its bottom', async ({ page }) => {
+    await page.goto('/#gauges');
+    await expectOnly(page, 'gauges');
+    await page.waitForTimeout(600);
+    const gauges = page.locator('#gauges .win.tabbed');
+    await gauges.hover();
+    const shown = page.locator('#gauges .panel:not([hidden]) h2');
+    await expect(shown).toHaveText('TokenGauge');
+    await page.keyboard.press('Tab');
+    await expect(shown).toHaveText('remuda');
+    await expect(page.locator('#gauges .panel:not([hidden]) .cli')).toBeFocused();
+    const gap = await gauges.locator('.body').evaluate((b) => b.scrollHeight - b.clientHeight - b.scrollTop);
+    expect(gap).toBeLessThanOrEqual(1);
+    await page.keyboard.press('Tab');
+    await expect(shown).toHaveText('TailGauge');
+    await page.keyboard.press('Tab');
+    await expect(shown).toHaveText('TokenGauge');
+    await page.keyboard.press('Shift+Tab');
+    await expect(shown).toHaveText('TailGauge');
+  });
+
+  test('without the pointer on it, tab leaves the gauges window as usual', async ({ page }) => {
+    await page.goto('/#gauges');
+    await page.locator('#gauges [role="tab"]').first().focus();
+    await page.keyboard.press('Tab');
+    await expect(page.locator('#gauges .panel:not([hidden]) h2')).toHaveText('TokenGauge');
+    await expect(page.locator('#gauges [role="tab"]').first()).not.toBeFocused();
+  });
+
+  test('tab completes a name before it changes tab', async ({ page }) => {
+    await page.goto('/#gauges');
+    await page.waitForTimeout(600);
+    await page.locator('#gauges .win.tabbed').hover();
+    await page.keyboard.type('token');
+    await page.keyboard.press('Tab');
+    await expect(page.locator('#gauges .panel:not([hidden]) .cli')).toHaveValue('tokengauge ');
+    await expect(page.locator('#gauges .panel:not([hidden]) h2')).toHaveText('TokenGauge');
+  });
+
   test('m swaps the focused window into the main tile, and l moves the focus', async ({ page }) => {
     await page.goto('/#tools');
     await expectOnly(page, 'tools');

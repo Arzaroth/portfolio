@@ -26,7 +26,8 @@ Or with npm directly: `npm run dev`, `npm run check`, `npm test`, `npm run build
   fastfetch lines.
 - `src/components/`: one component per workspace, plus `Window`, `Shell` (the prompt and
   command line inside a terminal window) and `Panel` (one tab of a tabbed window).
-- `src/scripts/desktop.ts`: switching workspaces, tiling, focus, tabs and keyboard shortcuts.
+- `src/scripts/desktop.ts`: switching workspaces, tiling, focus, tabs and keyboard shortcuts,
+  registered through [TanStack Hotkeys](https://tanstack.com/hotkeys/latest).
 - `src/scripts/tile.ts`: turns a layout tree into tiles, edges snapped to device pixels.
 - `src/scripts/terminal.ts`: the command line in each terminal window.
 - `src/scripts/ouroboros.ts`: ouroboros's line count, read from its latest release notes.

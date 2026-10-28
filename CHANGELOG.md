@@ -10,6 +10,8 @@ CI and refuses a version with no dated section here.
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-28
+
 ### Added
 
 - New projects: Lumen, a home screen for Android TV, in self-hosting; smith and wyrmyon
@@ -26,11 +28,11 @@ CI and refuses a version with no dated section here.
 ### Changed
 
 - The site is a tiling desktop instead of a rack. A bar holds one workspace per part of the
-  work, switched with ctrl and 1 to 9, and each project is a window: a browser, a
+  work, switched with ctrl and 1 to 9 or 0, and each project is a window: a browser, a
   terminal, a file manager or a note. The focus follows the pointer, h, j, k and l move it
-  from the keyboard, and m swaps a window into the main tile. The three gauges share one
-  terminal, a tab each, walked with tab and shift tab while the pointer is on it. On a
-  phone, and without JavaScript, the windows stack in one column.
+  from the keyboard, and m swaps a window into the main tile. The gauges, smith and wyrmyon
+  share one terminal in the toolbox, a tab each, walked with tab and shift tab while the
+  pointer is on it. On a phone, and without JavaScript, the windows stack in one column.
 - The page is dark only.
 - The friends' counts and the patches sent upstream come from GitHub, when the site is
   built and again in the visitor's browser, so a new pull request shows without a
@@ -92,7 +94,8 @@ CI and refuses a version with no dated section here.
   desktop and a phone browser.
 - `tools/deploy.sh` publishes `dist/` to arzaroth.com.
 
-[Unreleased]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.3.0...HEAD
+[Unreleased]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.4.0...HEAD
+[0.4.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.3.0...v0.4.0
 [0.3.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.2.0...v0.3.0
 [0.2.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.1.0...v0.2.0
 [0.1.0]: https://git.arzaroth.com/Arzaroth/portfolio/releases/tag/v0.1.0

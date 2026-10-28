@@ -167,7 +167,7 @@ export function initDesktop() {
     const panels = tabs.map((t) => document.getElementById(t.getAttribute('aria-controls')!)!);
     const body = w.querySelector<HTMLElement>('.body')!;
     let at = 0;
-    const select = (n: number) => {
+    const select = (n: number, quiet = false) => {
       at = n;
       tabs.forEach((t, i) => {
         t.setAttribute('aria-selected', String(i === n));
@@ -175,8 +175,8 @@ export function initDesktop() {
         panels[i].hidden = i !== n;
       });
       w.dataset.label = tabs[n].textContent!.trim();
-      body.scrollTop = body.scrollHeight;
-      setFocus(s, s.wins.indexOf(w));
+      body.scrollTop = w.classList.contains('term') ? body.scrollHeight : 0;
+      if (!quiet) setFocus(s, s.wins.indexOf(w));
     };
     const step = (by: number) => {
       const active = document.activeElement;
@@ -196,7 +196,7 @@ export function initDesktop() {
       });
     });
     tabbed.set(w, step);
-    select(0);
+    select(0, true);
   }
 
   spaces.forEach((s) => {
@@ -232,7 +232,7 @@ export function initDesktop() {
   });
 
   const keys = HotkeyManager.getInstance();
-  spaces.slice(0, 9).forEach((s, i) => keys.register({ key: String(i + 1), ctrl: true }, () => go(s.id)));
+  spaces.slice(0, 10).forEach((s, i) => keys.register({ key: String((i + 1) % 10), ctrl: true }, () => go(s.id)));
   const onWide = (fn: () => void) => () => wide.matches && fn();
   keys.register('H', onWide(() => moveFocus('l')));
   keys.register('J', onWide(() => moveFocus('d')));

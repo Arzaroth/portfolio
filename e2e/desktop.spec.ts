@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
+import { keyOf, workspaces } from '../src/data/desktop';
 
-const order = ['about', 'apps', 'gauges', 'tools', 'workshop', 'ouroboros', 'selfhosted', 'contributions', 'archive'];
+const order = workspaces.map((w) => w.id);
 
 async function expectOnly(page: Page, id: string) {
   await expect(page.locator('.ws.on')).toHaveCount(1);
@@ -8,6 +9,11 @@ async function expectOnly(page: Page, id: string) {
   await expect(page.locator(`#${id} .win`).first()).toBeVisible();
   await expect(page.locator(`.ws-btn[data-go="${id}"]`)).toHaveAttribute('aria-current', 'page');
 }
+
+const settled = (page: Page) =>
+  page.waitForFunction(() =>
+    document.getAnimations().every((a) => a.effect?.getTiming().iterations === Infinity || a.playState !== 'running'),
+  );
 
 const latestRelease = 'https://api.github.com/repos/Arzaroth/ouroboros/releases/latest';
 
@@ -176,7 +182,7 @@ test.describe('desktop', () => {
     await page.goto('/');
     await expect(page.locator('.bar .mod')).toHaveText('ctrl');
     for (const [i, id] of order.entries()) {
-      await page.keyboard.press(`Control+${i + 1}`);
+      await page.keyboard.press(`Control+${keyOf(i)}`);
       await expectOnly(page, id);
     }
   });
@@ -265,7 +271,7 @@ test.describe('desktop', () => {
     for (const id of order) {
       await page.goto(`/#${id}`);
       await expectOnly(page, id);
-      await page.waitForTimeout(600);
+      await settled(page);
       const edges = await page.locator(`#${id} > .win`).evaluateAll((ws) =>
         ws.flatMap((w) => {
           const r = w.getBoundingClientRect();
@@ -281,7 +287,7 @@ test.describe('desktop', () => {
     for (const id of order) {
       await page.goto(`/#${id}`);
       await expectOnly(page, id);
-      await page.waitForTimeout(600);
+      await settled(page);
       const boxes = await page.locator(`#${id} > .win`).evaluateAll((ws) =>
         ws.map((w) => {
           const r = w.getBoundingClientRect();

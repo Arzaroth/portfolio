@@ -52,6 +52,22 @@ export const apps: Project[] = [
   },
 ];
 
+export const lumen: Project = {
+  name: 'Lumen',
+  description:
+    "An Apple TV style home screen for Android TV and Google TV, with the scripts that debloat the TV and make Lumen its Home. Everything is reversible: packages are disabled, never uninstalled, and the TV's state is backed up first. The focused app's logo is rebuilt in lit 3D voxels under a night sky that turns at the Earth's real rate.",
+  meta: 'Java, Android TV',
+  links: [source('Lumen')],
+};
+
+export const wyrmyon: Project = {
+  name: 'wyrmyon',
+  description:
+    'The magic-wormhole, with a wyrm in it. It speaks the magic-wormhole protocol, so it sends to and receives from the Python wormhole and every other client. When both ends run wyrmyon, the data moves over iroh instead: QUIC with hole-punching, one stream per file, verified and resumable. You never pick a protocol or a server.',
+  meta: 'Rust, iroh',
+  links: [source('wyrmyon')],
+};
+
 export const tools: Project[] = [
   {
     name: 'c2c-conv',
@@ -75,6 +91,14 @@ export const tools: Project[] = [
     links: [source('t3cc')],
   },
 ];
+
+export const skills: Project = {
+  name: 'skills',
+  description:
+    'The agent skills I use every day with Claude Code, published for anyone to install: staying with a pull request until it merges, working each round of review, merging a stack of dependent PRs, cutting releases, keeping docs in step with the code, a very strict code review, and timesheets rebuilt from session logs.',
+  meta: 'Claude Code, npx skills',
+  links: [source('skills')],
+};
 
 export const gauges: Project[] = [
   {
@@ -206,12 +230,51 @@ export const infrastructure: Project[] = [
     links: [{ label: 'git.arzaroth.com', href: 'https://git.arzaroth.com/Arzaroth' }],
   },
   {
+    name: 'smith',
+    description:
+      "A Forgejo CLI with gh's command surface, so muscle memory carries over: smith pr checkout 42, smith run watch, smith issue list --label bug. Feature complete wherever Forgejo's API can back it. Written in Zig, mostly because why not.",
+    meta: 'Zig',
+    links: [source('smith')],
+  },
+  {
     name: 'dotfiles',
     description: 'Zsh, Emacs, tmux and prompt configuration as GNU Stow packages. Arch on the desk, Debian on the servers.',
     meta: 'Emacs Lisp, shell',
     links: [source('dotfiles')],
   },
 ];
+
+export const recomp = {
+  lede: "Not emulators. Each port statically recompiles a game's own PlayStation 2 code to C++ and runs it as a native Linux program, on a reimplementation of the PS2 hardware. No game files are included: you need your own disc.",
+  engine: { name: 'PS2Recomp', href: 'https://github.com/boubou666/PS2Recomp' },
+  ports: [
+    {
+      name: 'Soulcalibur III',
+      tab: 'Soulcalibur III',
+      disc: 'SLUS-21216',
+      status: 'Playable',
+      description:
+        'Playable from start to finish in automated tests, now in human testing. Fights run at 60 frames per second with music and voices, every mode has been played through, and saves load back after a restart.',
+      href: gh('SoulCaliburIII_Recomp'),
+    },
+    {
+      name: 'Smash Court Tennis Pro Tournament 2',
+      tab: 'Smash Court Tennis 2',
+      disc: 'SLUS-20933',
+      status: 'Bring-up',
+      description: 'Boots, loads its IOP modules and code overlays, and reaches the main menu, its movie playing behind it.',
+      href: gh('SmashCourtTennisProTournament2_Recomp'),
+    },
+    {
+      name: 'Fighting for One Piece',
+      tab: 'One Piece',
+      disc: 'SLPS-25545',
+      status: 'Bring-up',
+      description: 'From the title screen through character select into a 3D fight, Luffy against Ace, at about 54 frames per second on the CPU rasterizer.',
+      href: gh('FightingForOnePiece_Recomp'),
+    },
+  ],
+};
 
 const myPulls = (repo: string) => `https://github.com/${repo}/pulls?q=is%3Apr+author%3AArzaroth`;
 

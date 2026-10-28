@@ -60,6 +60,20 @@ claude --resume now finds it from the new folder`,
 ${tint('g', 'imported 12 threads')}
 each thread resumes its Claude session, context included`,
   },
+  wyrmyon: {
+    wyrm: `Sending report.pdf ${dim('(2.4 MB)')}
+Wormhole code is: ${tint('y', '7-guitarist-revenge')}
+${dim('On the other computer, run:')} wyrm 7-guitarist-revenge
+
+${dim('peer is a wyrm, switching to iroh:')} ${tint('g', 'direct')}
+${tint('c', bar(100, 20))} 100%  ${tint('g', 'verified')}`,
+  },
+  smith: {
+    smith: `${dim('Showing 2 of 2 open pull requests in Arzaroth/portfolio')}
+
+${tint('g', '#12')}  The site becomes a tiling desktop   ${tint('c', 'feature/tiling-desktop')}   ${dim('about 1 hour ago')}
+${tint('g', '#11')}  The line count follows releases    ${tint('c', 'feature/ouroboros-live')}   ${dim('about 2 days ago')}`,
+  },
   dotfiles: {
     stow: `${dim('linked')} zsh, emacs, tmux, oh-my-posh
 ${tint('g', 'all packages in place')}`,

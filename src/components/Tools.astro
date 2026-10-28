@@ -3,7 +3,7 @@ import Workspace from './Workspace.astro';
 import Window from './Window.astro';
 import Project from './Project.astro';
 import Shell from './Shell.astro';
-import { tools } from '../data/projects';
+import { tools, skills } from '../data/projects';
 import { demos } from '../data/demos';
 
 const [c2c, resumove, t3cc] = tools;
@@ -24,5 +24,8 @@ const [c2c, resumove, t3cc] = tools;
     <Shell name="t3cc" path="~/src/t3cc" ran="t3cc" hint="t3cc" demos={demos.t3cc}>
       <Project project={t3cc} />
     </Shell>
+  </Window>
+  <Window kind="notes" title="skills.md">
+    <Project project={skills} />
   </Window>
 </Workspace>

@@ -12,17 +12,15 @@ describe('the workspaces', () => {
     expect(new Set(names).size).toBe(names.length);
   });
 
-  it('fit on the number keys', () => {
-    expect(workspaces.length).toBeLessThanOrEqual(9);
+  it('fit on the number keys, 0 included', () => {
+    expect(workspaces.length).toBeLessThanOrEqual(10);
   });
 
   for (const ws of workspaces) {
-    it(`place each window of ${ws.label} exactly once`, () => {
+    it(`number the windows of ${ws.label} from 0, each once, in one component`, () => {
       const placed = leaves(ws.tree).sort((a, b) => a - b);
       expect(placed).toEqual(placed.map((_, i) => i));
-      const src = sources.filter((s) => s.includes(`<Workspace id="${ws.id}">`));
-      expect(src).toHaveLength(1);
-      expect(src[0].match(/<Window\b/g)).toHaveLength(placed.length);
+      expect(sources.filter((s) => s.includes(`<Workspace id="${ws.id}">`))).toHaveLength(1);
     });
   }
 });

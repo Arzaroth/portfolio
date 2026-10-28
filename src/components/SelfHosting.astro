@@ -6,7 +6,7 @@ import Shell from './Shell.astro';
 import { services, infrastructure } from '../data/projects';
 import { demos } from '../data/demos';
 
-const [deb, forgejo, dotfiles] = infrastructure;
+const [deb, forgejo, smith, dotfiles] = infrastructure;
 const roles = { plumbing: ['teal', 'Plumbing'], watch: ['rose', 'Keeping watch'], app: ['sky', 'My apps'] } as const;
 const host = (href: string) => href.replace('https://', '');
 ---
@@ -48,6 +48,11 @@ const host = (href: string) => href.replace('https://', '');
   <Window kind="term" title="dotfiles">
     <Shell name="dotfiles" path="~/dotfiles" ran="stow */" hint="stow" demos={demos.dotfiles}>
       <Project project={dotfiles} />
+    </Shell>
+  </Window>
+  <Window kind="term" title="smith">
+    <Shell name="smith" path="~/src/portfolio" ran="smith pr list" hint="smith" demos={demos.smith}>
+      <Project project={smith} />
     </Shell>
   </Window>
 </Workspace>

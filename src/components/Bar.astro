@@ -1,5 +1,5 @@
 ---
-import { workspaces, colorVar } from '../data/desktop';
+import { workspaces, colorVar, keyOf } from '../data/desktop';
 ---
 
 <header class="bar">
@@ -20,8 +20,8 @@ import { workspaces, colorVar } from '../data/desktop';
   <nav class="ws-list" aria-label="Workspaces">
     {
       workspaces.map((w, i) => (
-        <a class="ws-btn" href={`#${w.id}`} data-go={w.id} style={`--c:${colorVar(w.color)}`} aria-label={`Workspace ${i + 1}, ${w.label}`}>
-          <i>{i + 1}</i>
+        <a class="ws-btn" href={`#${w.id}`} data-go={w.id} style={`--c:${colorVar(w.color)}`} aria-label={`Workspace ${keyOf(i)}, ${w.label}`}>
+          <i>{keyOf(i)}</i>
           <span>{w.label}</span>
         </a>
       ))

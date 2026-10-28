@@ -70,3 +70,22 @@
   .fetch svg { width: 74px; }
   .sealed { grid-template-columns: 1fr 1fr; }
 }
+
+.disc { display: flex; flex-direction: column; align-items: center; gap: 12px; color: var(--acc); }
+.disc svg { width: 96px; height: 96px; min-height: 0; max-width: none; }
+.disc code { font: 600 13px/1 var(--mono); letter-spacing: .08em; }
+.status { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 12px; font: 500 11.5px/1 var(--mono); color: var(--gold); }
+.status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 22%, transparent); }
+.status.ok { color: var(--sage); }
+.recomp .body { display: flex; flex-direction: column; }
+.recomp .body > * { flex: none; }
+.ports { list-style: none; margin: 18px 0 0; padding: 0; }
+.ports li { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 14px; align-items: baseline; padding: 10px 0; border-top: 1px solid var(--line); }
+.ports a { font-weight: 600; text-decoration: none; }
+.ports a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.ports code { font: 500 12px var(--mono); color: var(--dim); letter-spacing: .06em; }
+.ports .status { margin: 0; }
+.recomp .body > .spin { flex: 1 1 auto; min-height: 0; display: grid; place-items: center; padding: 18px 0 4px; color: var(--acc); overflow: hidden; contain: paint; }
+.spin svg { width: min(100%, 260px); height: auto; max-height: 100%; animation: disc 12s linear infinite; }
+@keyframes disc { to { rotate: 1turn; } }
+@media (max-width: 760px) { .spin svg { width: 160px; } }

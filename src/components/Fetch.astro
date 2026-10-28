@@ -2,16 +2,16 @@
 import { fetchRows } from '../data/demos';
 import { workspaces, colorVar } from '../data/desktop';
 
-const leds = ['peach', 'sky', 'gold', 'lav', 'sage', 'rose', 'teal', 'clay'];
+const height = 12 + workspaces.length * 10;
 ---
 
 <div class="fetch">
-  <svg viewBox="0 0 60 92" aria-hidden="true">
-    <rect x="2" y="2" width="56" height="88" rx="5" fill="none" stroke="var(--dim)" stroke-width="2"></rect>
+  <svg viewBox={`0 0 60 ${height}`} aria-hidden="true">
+    <rect x="2" y="2" width="56" height={height - 4} rx="5" fill="none" stroke="var(--dim)" stroke-width="2"></rect>
     {
-      leds.map((c, n) => (
+      workspaces.map((w, n) => (
         <>
-          <rect x="8" y={8 + n * 10} width="44" height="7" rx="1.5" fill={`var(--${c})`} opacity=".85" />
+          <rect x="8" y={8 + n * 10} width="44" height="7" rx="1.5" fill={colorVar(w.color)} opacity=".85" />
           <circle cx="46" cy={11.5 + n * 10} r="1.4" fill="var(--win-solid)" />
         </>
       ))
@@ -29,5 +29,5 @@ const leds = ['peach', 'sky', 'gold', 'lav', 'sage', 'rose', 'teal', 'clay'];
   </dl>
 </div>
 <div class="swatches" aria-hidden="true">
-  {workspaces.slice(0, 8).map((w) => <i style={`background:${colorVar(w.color)}`} />)}
+  {workspaces.map((w) => <i style={`background:${colorVar(w.color)}`} />)}
 </div>

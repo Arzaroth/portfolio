@@ -246,7 +246,7 @@ export const smith: Project = {
 };
 
 export const recomp = {
-  lede: "Native Linux ports of PlayStation 2 games. Not emulators: each one turns the game's own code into C++ and runs it on a rewrite of the PS2 hardware. No game files included, you need your own disc.",
+  lede: "Native Linux ports of PlayStation 2 games. Not emulators: each one turns the game's own code into C++ and runs it on a rewrite of the PS2 hardware, the graphics drawn with OpenGL. No game files included, you need your own disc.",
   engine: { name: 'PS2Recomp', href: 'https://github.com/boubou666/PS2Recomp' },
   ports: [
     {
@@ -255,25 +255,25 @@ export const recomp = {
       disc: 'SLUS-21216',
       status: 'Playable',
       description:
-        'Plays from start to finish in automated tests, and humans are playing it now. Fights run at 60 frames per second with music and voices, and saves load back after a restart.',
+        'Plays from start to finish in automated tests, and humans are playing it now. Fights run at about 58 frames per second with music and voices, drawn with OpenGL, at twice the resolution if you ask, and saves load back after a restart.',
       href: gh('SoulCaliburIII_Recomp'),
     },
     {
       name: 'Smash Court Tennis Pro Tournament 2',
       tab: 'Smash Court Tennis 2',
       disc: 'SLUS-20933',
-      status: 'Bring-up',
+      status: 'Playable',
       description:
-        'Boots, loads its modules and code overlays, and reaches the main menu.',
+        'Exhibition and World Tournament matches play, with music and sound effects, drawn with OpenGL at twice the resolution of the PS2. The memory card and the other modes are next.',
       href: gh('SmashCourtTennisProTournament2_Recomp'),
     },
     {
       name: 'Fighting for One Piece',
       tab: 'One Piece',
       disc: 'SLPS-25545',
-      status: 'Bring-up',
+      status: 'Playable',
       description:
-        'Gets from the title screen through character select into a 3D fight, Luffy against Ace, at about 54 frames per second.',
+        'Fights against the CPU play at a steady 60 frames per second, special moves and their cut-ins included, with music and sound effects, drawn with OpenGL at twice the resolution of the PS2. The movies are skipped for now.',
       href: gh('FightingForOnePiece_Recomp'),
     },
   ],

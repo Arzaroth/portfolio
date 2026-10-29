@@ -10,6 +10,8 @@ CI and refuses a version with no dated section here.
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-10-29
+
 ### Changed
 
 - All three PS2 ports are playable: Smash Court Tennis Pro Tournament 2 and Fighting for
@@ -99,7 +101,8 @@ CI and refuses a version with no dated section here.
   desktop and a phone browser.
 - `tools/deploy.sh` publishes `dist/` to arzaroth.com.
 
-[Unreleased]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.4.0...HEAD
+[Unreleased]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.4.1...HEAD
+[0.4.1]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.4.0...v0.4.1
 [0.4.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.3.0...v0.4.0
 [0.3.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.2.0...v0.3.0
 [0.2.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.1.0...v0.2.0

@@ -10,6 +10,11 @@ CI and refuses a version with no dated section here.
 
 ## [Unreleased]
 
+### Changed
+
+- All three PS2 ports are playable: Smash Court Tennis Pro Tournament 2 and Fighting for
+  One Piece left bring-up, and every port now draws with OpenGL.
+
 ## [0.4.0] - 2026-10-28
 
 ### Added

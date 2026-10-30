@@ -109,3 +109,18 @@
   .rackview { grid-template-columns: 1fr; }
   .rack3d { min-height: 380px; }
 }
+
+.js .ring .arc { stroke-dasharray: 1 1; stroke-dashoffset: 1; transition: filter .25s, stroke-width .25s; }
+.js #ouroboros.on .ring .arc { animation: arc-in .55s cubic-bezier(.3, .7, .2, 1) both; animation-delay: calc(var(--n) * 110ms + 150ms); }
+@keyframes arc-in { from { stroke-dashoffset: 1; opacity: 0; } 20% { opacity: 1; } to { stroke-dashoffset: 0; opacity: 1; } }
+.ring .arc.lit { filter: brightness(1.25) drop-shadow(0 0 6px rgba(255, 210, 180, .55)); }
+.ring text.lit { fill: var(--fg); }
+.ring .head { opacity: 0; transform-box: view-box; transform-origin: 50% 50%; rotate: -90deg; }
+.ring .tail { fill: none; stroke: #ffd9c2; stroke-width: 6; stroke-linecap: round; opacity: var(--o); }
+.ring .eye { fill: #fff3e8; filter: drop-shadow(0 0 4px #ffd0b0) drop-shadow(0 0 10px rgba(236, 139, 161, .8)); }
+.js #ouroboros.on .ring .head { animation: head-in .5s ease 1.15s forwards, orbit 9s linear 1.15s infinite; }
+@keyframes head-in { to { opacity: 1; } }
+@keyframes orbit { from { rotate: -90deg; } to { rotate: 270deg; } }
+@media (prefers-reduced-motion: reduce) {
+  .js .ring .arc { stroke-dashoffset: 0; }
+}

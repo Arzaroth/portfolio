@@ -389,24 +389,41 @@ test.describe('desktop', () => {
 
   const open = (page: Page) => page.locator('.ws.on > .win:not(.pane-hidden)');
 
-  test('j and k open and close the windows one by one, and carry on across workspaces', async ({ page }) => {
+  test('the first view opens on the main window, and a workspace reached directly opens whole', async ({ page }) => {
     await page.goto('/#tools');
     await expectOnly(page, 'tools');
     await expect(open(page)).toHaveCount(1);
+    await page.keyboard.press('Control+7');
+    await expectOnly(page, 'recomp');
+    await expect(open(page)).toHaveCount(2);
+    await page.locator('.ws-btn[data-go="apps"]').click();
+    await expectOnly(page, 'apps');
+    await expect(open(page)).toHaveCount(4);
+  });
+
+  test('j and k open and close the windows one by one, and carry on across workspaces', async ({ page }) => {
+    await page.goto('/#tools');
+    await expectOnly(page, 'tools');
     await expect(page.locator('.steps i')).toHaveCount(4);
+    await openAll(page);
+    for (const n of [3, 2, 1]) {
+      await page.keyboard.press('k');
+      await expect(open(page)).toHaveCount(n);
+      await expect(page.locator('.steps i.on')).toHaveCount(n);
+    }
+    await page.keyboard.press('k');
+    await expectOnly(page, 'gauges');
+    await expect(open(page)).toHaveCount(3);
+    await page.keyboard.press('j');
+    await expectOnly(page, 'tools');
+    await expect(open(page)).toHaveCount(1);
     for (const n of [2, 3, 4]) {
       await page.keyboard.press('j');
       await expect(open(page)).toHaveCount(n);
-      await expect(page.locator('.steps i.on')).toHaveCount(n);
     }
     await page.keyboard.press('j');
     await expectOnly(page, 'workshop');
     await expect(open(page)).toHaveCount(1);
-    await page.keyboard.press('k');
-    await expectOnly(page, 'tools');
-    await expect(open(page)).toHaveCount(4);
-    await page.keyboard.press('k');
-    await expect(open(page)).toHaveCount(3);
   });
 
   test('the wheel over the wallpaper opens and closes the windows', async ({ page }) => {
@@ -443,7 +460,7 @@ test.describe('desktop', () => {
   test('tabbing into a closed window opens it', async ({ page }) => {
     await page.goto('/#about');
     await expectOnly(page, 'about');
-    await expect(open(page)).toHaveCount(1);
+    await expect(page.locator('#about .win[aria-label="~/workspaces"]')).toHaveClass(/pane-hidden/);
     await page.locator('#about .row[data-go="apps"]').focus();
     await expect(page.locator('#about .win[aria-label="~/workspaces"]')).not.toHaveClass(/pane-hidden/);
   });

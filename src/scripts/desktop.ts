@@ -154,7 +154,7 @@ export function initDesktop() {
     } catch {}
   }
 
-  function go(wanted: string, mode: 'push' | 'replace' = 'push', reveal: 'first' | 'all' = 'first') {
+  function go(wanted: string, mode: 'push' | 'replace' = 'push', reveal: 'first' | 'all' = 'all') {
     const at = find(wanted);
     const next = at < 0 ? 0 : at;
     const s = spaces[next];
@@ -398,6 +398,6 @@ export function initDesktop() {
   setInterval(tick, 15000);
 
   spaces.forEach(layout);
-  go(location.hash.slice(1) || 'about', 'replace');
+  go(location.hash.slice(1) || 'about', 'replace', 'first');
   requestAnimationFrame(() => scrollTo(0, 0));
 }

@@ -12,11 +12,14 @@ CI and refuses a version with no dated section here.
 
 ### Changed
 
+- ouroboros's ring draws itself tier by tier, then a snake's head circles it, chasing its
+  tail. A tier under the pointer lights its arc.
 - Scrolling, or j and k, opens and closes a workspace's windows one by one, then carries on
   to the next workspace, on its main window. A notch of the wheel or a trackpad swipe opens
-  one window, and dots in the bar count the windows open. The first view opens on the main
-  window; a workspace reached directly opens whole. h and l still move the focus. On a
-  phone and with reduced motion, every window shows at once.
+  one window, and dots in the bar count the windows open. A tabbed window's tabs come one
+  step at a time too. The first view opens on the main window; a workspace reached
+  directly opens whole. h and l still move the focus. On a phone and with reduced motion,
+  every window shows at once.
 
 ## [0.4.1] - 2026-10-29
 

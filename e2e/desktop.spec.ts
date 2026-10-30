@@ -64,6 +64,16 @@ test('an old link to the sealed names opens the workbench', async ({ page }) => 
   await expect(page.locator('#workshop .sealed h3')).toHaveText(['Magister', 'Rackmancy']);
 });
 
+test('a tier under the pointer lights its arc on the ring', async ({ page }) => {
+  await page.goto('/#ouroboros');
+  await expectOnly(page, 'ouroboros');
+  await openAll(page);
+  await expect(page.locator('#ouroboros .ring .arc')).toHaveCount(8);
+  await page.locator('#ouroboros .tiers li').nth(4).hover();
+  await expect(page.locator('#ouroboros .ring .arc[data-tier="4"]')).toHaveClass(/\blit\b/);
+  await expect(page.locator('#ouroboros .ring .arc.lit')).toHaveCount(1);
+});
+
 test('the line count follows the latest ouroboros release', async ({ page }) => {
   await page.route(latestRelease, (route) => route.fulfill({ json: { body: 'Prose.\n\nLOC: 31337\n' } }));
   await page.goto('/#ouroboros');
@@ -425,6 +435,35 @@ test.describe('desktop', () => {
     await page.keyboard.press('j');
     await expectOnly(page, 'workshop');
     await expect(open(page)).toHaveCount(1);
+  });
+
+  test('stepping walks the tabs of a tabbed window before the next window', async ({ page }) => {
+    await page.goto('/#apps');
+    await expectOnly(page, 'apps');
+    await openAll(page);
+    await page.keyboard.press('j');
+    await expectOnly(page, 'gauges');
+    const shown = page.locator('#gauges .panel:not([hidden]) h2');
+    await expect(shown).toHaveText('TokenGauge');
+    for (const name of ['remuda', 'TailGauge', 'smith', 'wyrmyon']) {
+      await page.keyboard.press('j');
+      await expect(shown).toHaveText(name);
+    }
+    await expect(open(page)).toHaveCount(1);
+    await page.keyboard.press('j');
+    await expect(open(page)).toHaveCount(2);
+    await page.keyboard.press('k');
+    await page.keyboard.press('k');
+    await expect(shown).toHaveText('smith');
+    await expect(open(page)).toHaveCount(1);
+  });
+
+  test('a workspace reached directly shows every step done', async ({ page }) => {
+    await page.goto('/#about');
+    await page.keyboard.press('Control+3');
+    await expectOnly(page, 'gauges');
+    await expect(page.locator('.steps i')).toHaveCount(7);
+    await expect(page.locator('.steps i:not(.on)')).toHaveCount(0);
   });
 
   test('the wheel over the wallpaper opens and closes the windows', async ({ page }) => {

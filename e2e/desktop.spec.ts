@@ -131,6 +131,7 @@ test('the ps2 games share one browser, a tab each under its disc', async ({ page
   await openAll(page);
   const tabs = page.locator('#recomp [role="tab"]');
   await expect(tabs).toHaveCount(3);
+  await tabs.nth(0).click();
   const shown = page.locator('#recomp .panel:not([hidden])');
   await expect(shown.locator('.disc code')).toHaveText('SLUS-21216');
   await tabs.nth(2).click();
@@ -525,7 +526,7 @@ test.describe('desktop', () => {
         }),
       );
       for (const [i, a] of boxes.entries()) {
-        expect(a.r - a.l).toBeGreaterThan(200);
+        expect(a.r - a.l, `${id}: window ${i} width`).toBeGreaterThan(200);
         for (const b of boxes.slice(i + 1)) {
           const apart = a.r <= b.l + 0.5 || b.r <= a.l + 0.5 || a.b <= b.t + 0.5 || b.b <= a.t + 0.5;
           expect(apart, `${id}: windows overlap`).toBe(true);

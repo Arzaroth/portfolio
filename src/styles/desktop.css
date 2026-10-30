@@ -159,3 +159,4 @@
 .steps { display: none; gap: 5px; align-items: center; }
 .steps i { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.14); transition: background .25s, transform .25s; }
 .steps i.on { background: var(--c, var(--fg)); }
+.steps i.tab { width: 4px; height: 4px; margin-left: -2px; }

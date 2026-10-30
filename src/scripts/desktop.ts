@@ -109,22 +109,51 @@ export function initDesktop() {
   function paintSteps(s: Space) {
     steps.hidden = !progressive();
     steps.style.setProperty('--c', buttons[cur].style.getPropertyValue('--c'));
-    steps.innerHTML = s.wins.map((_, i) => `<i class="${i < s.shown ? 'on' : ''}"></i>`).join('');
+    steps.innerHTML = s.order
+      .map((wi, pos) => {
+        const t = tabsOf.get(s.wins[wi]);
+        const open = pos < s.shown;
+        const passed = open && pos < s.shown - 1;
+        const own = `<i class="${open ? 'on' : ''}"></i>`;
+        if (!t) return own;
+        return own + Array.from({ length: t.count - 1 }, (_, n) => `<i class="tab${passed || (open && n < t.at()) ? ' on' : ''}"></i>`).join('');
+      })
+      .join('');
+  }
+
+  function lastTabs(s: Space) {
+    return tabsOf.get(s.wins[s.order[s.shown - 1]]);
   }
 
   function stepPanes(by: 1 | -1) {
     const s = spaces[cur];
     const n = s.wins.length;
-    if (by > 0 && s.shown < n) {
+    const t = lastTabs(s);
+    if (by > 0 && t && t.at() < t.count - 1) {
+      t.select(t.at() + 1);
+      setFocus(s, s.order[s.shown - 1]);
+    } else if (by < 0 && t && t.at() > 0) {
+      t.select(t.at() - 1);
+      setFocus(s, s.order[s.shown - 1]);
+    } else if (by > 0 && s.shown < n) {
       s.shown++;
+      lastTabs(s)?.select(0, true);
       layout(s);
       setFocus(s, s.order[s.shown - 1]);
     } else if (by < 0 && s.shown > 1) {
       s.shown--;
       if (s.order.indexOf(s.focus) >= s.shown) setFocus(s, s.order[s.shown - 1]);
       layout(s);
-    } else if (by > 0 && cur < spaces.length - 1) go(spaces[cur + 1].id, 'push', 'first');
-    else if (by < 0 && cur > 0) go(spaces[cur - 1].id, 'push', 'all');
+    } else if (by > 0 && cur < spaces.length - 1) {
+      for (const w of spaces[cur + 1].wins) tabsOf.get(w)?.select(0, true);
+      go(spaces[cur + 1].id, 'push', 'first');
+    } else if (by < 0 && cur > 0) {
+      for (const w of spaces[cur - 1].wins) {
+        const tabs = tabsOf.get(w);
+        tabs?.select(tabs.count - 1, true);
+      }
+      go(spaces[cur - 1].id, 'push', 'all');
+    }
   }
 
   function setFocus(s: Space, i: number) {
@@ -211,6 +240,7 @@ export function initDesktop() {
     [...w.querySelectorAll<HTMLInputElement>('.cli')].find((c) => !c.closest('.panel[hidden]'));
 
   const tabbed = new Map<HTMLElement, (by: number) => void>();
+  const tabsOf = new Map<HTMLElement, { count: number; at: () => number; select: (n: number, quiet?: boolean) => void }>();
   let under: HTMLElement | null = null;
 
   function initTabs(w: HTMLElement, s: Space) {
@@ -228,6 +258,7 @@ export function initDesktop() {
       w.dataset.label = tabs[n].textContent!.trim();
       body.scrollTop = w.classList.contains('term') ? body.scrollHeight : 0;
       if (!quiet) setFocus(s, s.wins.indexOf(w));
+      if (s === spaces[cur]) paintSteps(s);
     };
     const step = (by: number) => {
       const active = document.activeElement;
@@ -247,6 +278,7 @@ export function initDesktop() {
       });
     });
     tabbed.set(w, step);
+    tabsOf.set(w, { count: tabs.length, at: () => at, select });
     select(0, true);
   }
 

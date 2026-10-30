@@ -28,7 +28,9 @@ Or with npm directly: `npm run dev`, `npm run check`, `npm test`, `npm run build
   command line inside a terminal window) and `Panel` (one tab of a tabbed window).
 - `src/scripts/desktop.ts`: switching workspaces, tiling, focus, tabs and keyboard shortcuts,
   registered through [TanStack Hotkeys](https://tanstack.com/hotkeys/latest).
-- `src/scripts/tile.ts`: turns a layout tree into tiles, edges snapped to device pixels.
+- `src/scripts/tile.ts`: turns a layout tree into tiles, edges snapped to device pixels. It
+  can leave windows out, their share of each split going to their neighbour, which is how
+  the windows of a workspace open one by one.
 - `src/data/rack.ts` and `src/scripts/rack3d.ts`: the 3D rack in self-hosting, a server per
   service, drawn with three.js once that workspace opens.
 - `src/scripts/floating.ts`: the windows' physics when the Konami code sets them floating.

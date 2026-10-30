@@ -12,10 +12,11 @@ CI and refuses a version with no dated section here.
 
 ### Changed
 
-- A workspace opens on its main window. Scrolling, or j and k, opens and closes the others
-  one by one, then carries on to the next workspace, with dots in the bar counting the
-  windows open. h and l still move the focus. On a phone and with reduced motion, every
-  window shows at once.
+- Scrolling, or j and k, opens and closes a workspace's windows one by one, then carries on
+  to the next workspace, on its main window. A notch of the wheel or a trackpad swipe opens
+  one window, and dots in the bar count the windows open. The first view opens on the main
+  window; a workspace reached directly opens whole. h and l still move the focus. On a
+  phone and with reduced motion, every window shows at once.
 
 ## [0.4.1] - 2026-10-29
 

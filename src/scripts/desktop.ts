@@ -342,6 +342,8 @@ export function initDesktop() {
   let pull = 0;
   let quiet = 0;
   let nativeAt = 0;
+  let lastWheel = 0;
+  let stepped = false;
   const scrollsInside = (target: EventTarget | null, dir: number) => {
     for (let el = target instanceof Element ? target : null; el && el !== desk; el = el.parentElement) {
       if (!(el instanceof HTMLElement) || el.scrollHeight <= el.clientHeight + 1) continue;
@@ -358,24 +360,32 @@ export function initDesktop() {
       const dir = Math.sign(e.deltaY);
       if (!dir) return;
       const now = performance.now();
+      const sameGesture = now - lastWheel < 150;
+      lastWheel = now;
+      if (!sameGesture) {
+        stepped = false;
+        pull = 0;
+      }
       if (scrollsInside(e.target, dir)) {
         nativeAt = now;
-        pull = 0;
         return;
       }
       e.preventDefault();
-      if (now - nativeAt < 400) {
+      if (now - nativeAt < 300) {
         nativeAt = now;
         return;
       }
-      if (now < quiet) {
-        quiet = Math.max(quiet, now + 150);
+      const notch = e.deltaMode !== 0 || Math.abs(e.deltaY) >= 50;
+      if (notch) {
+        if (now < quiet) return;
+        quiet = now + 120;
+        stepPanes(dir > 0 ? 1 : -1);
         return;
       }
-      pull += e.deltaY * (e.deltaMode === 1 ? 40 : 1);
+      if (stepped) return;
+      pull += e.deltaY;
       if (Math.abs(pull) >= 60) {
-        pull = 0;
-        quiet = now + 450;
+        stepped = true;
         stepPanes(dir > 0 ? 1 : -1);
       }
     },

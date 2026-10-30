@@ -387,6 +387,79 @@ test.describe('desktop', () => {
     await expect(cli).toHaveValue('t3');
   });
 
+  const open = (page: Page) => page.locator('.ws.on > .win:not(.pane-hidden)');
+
+  test('j and k open and close the windows one by one, and carry on across workspaces', async ({ page }) => {
+    await page.goto('/#tools');
+    await expectOnly(page, 'tools');
+    await expect(open(page)).toHaveCount(1);
+    await expect(page.locator('.steps i')).toHaveCount(4);
+    for (const n of [2, 3, 4]) {
+      await page.keyboard.press('j');
+      await expect(open(page)).toHaveCount(n);
+      await expect(page.locator('.steps i.on')).toHaveCount(n);
+    }
+    await page.keyboard.press('j');
+    await expectOnly(page, 'workshop');
+    await expect(open(page)).toHaveCount(1);
+    await page.keyboard.press('k');
+    await expectOnly(page, 'tools');
+    await expect(open(page)).toHaveCount(4);
+    await page.keyboard.press('k');
+    await expect(open(page)).toHaveCount(3);
+  });
+
+  test('the wheel over the wallpaper opens and closes the windows', async ({ page }) => {
+    await page.goto('/#selfhosted');
+    await expectOnly(page, 'selfhosted');
+    await settled(page);
+    await page.mouse.move(700, 30);
+    await page.mouse.wheel(0, 150);
+    await expect(open(page)).toHaveCount(2);
+    await page.waitForTimeout(600);
+    await page.mouse.wheel(0, -150);
+    await expect(open(page)).toHaveCount(1);
+  });
+
+  test('the wheel scrolls a long window before it steps', async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 1280, height: 560 } });
+    const page = await context.newPage();
+    await page.route('https://api.github.com/**', (route) => route.abort());
+    await page.goto('/#ouroboros');
+    await expectOnly(page, 'ouroboros');
+    await openAll(page);
+    await settled(page);
+    const tiers = page.locator('#ouroboros .win[aria-label="tiers.md"] .body');
+    expect(await tiers.evaluate((b) => b.scrollHeight - b.clientHeight)).toBeGreaterThan(0);
+    await tiers.hover();
+    await page.mouse.wheel(0, 120);
+    await expect.poll(() => tiers.evaluate((b) => b.scrollTop)).toBeGreaterThan(0);
+    await page.waitForTimeout(500);
+    await expectOnly(page, 'ouroboros');
+    await expect(page.locator('#ouroboros > .win.pane-hidden')).toHaveCount(0);
+    await context.close();
+  });
+
+  test('tabbing into a closed window opens it', async ({ page }) => {
+    await page.goto('/#about');
+    await expectOnly(page, 'about');
+    await expect(open(page)).toHaveCount(1);
+    await page.locator('#about .row[data-go="apps"]').focus();
+    await expect(page.locator('#about .win[aria-label="~/workspaces"]')).not.toHaveClass(/pane-hidden/);
+  });
+
+  test('floating mode opens every window, and closes again the ones that were closed', async ({ page }) => {
+    await page.goto('/#apps');
+    await expectOnly(page, 'apps');
+    await page.keyboard.press('j');
+    await expect(open(page)).toHaveCount(2);
+    for (const k of ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a']) await page.keyboard.press(k);
+    await expect(page.locator('#apps')).toHaveClass(/\bfloating\b/);
+    await expect(page.locator('#apps > .win.pane-hidden')).toHaveCount(0);
+    await page.keyboard.press('Escape');
+    await expect(open(page)).toHaveCount(2);
+  });
+
   test('the spinning disc never pushes a scrollbar out of its window', async ({ browser }) => {
     const context = await browser.newContext({ viewport: { width: 1100, height: 700 } });
     const page = await context.newPage();
@@ -458,6 +531,17 @@ test.describe('phone', () => {
     await page.locator('.ws-btn[data-go="archive"]').click();
     await expectOnly(page, 'archive');
   });
+});
+
+test('every window shows at once on a phone and with reduced motion', async ({ browser, isMobile }) => {
+  const context = await browser.newContext(isMobile ? {} : { reducedMotion: 'reduce', viewport: { width: 1440, height: 900 } });
+  const page = await context.newPage();
+  await page.route('https://api.github.com/**', (route) => route.abort());
+  await page.goto('/#selfhosted');
+  await expect(page.locator('#selfhosted > .win')).toHaveCount(5);
+  await expect(page.locator('#selfhosted > .win.pane-hidden')).toHaveCount(0);
+  await expect(page.locator('.steps')).toBeHidden();
+  await context.close();
 });
 
 test('with reduced motion, the counts land at once', async ({ browser }) => {

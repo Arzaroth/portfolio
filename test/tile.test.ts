@@ -37,4 +37,20 @@ describe('tiling', () => {
       }
     }
   });
+
+  it('gives a hidden window\'s share of a split to its neighbour', () => {
+    const tree = ['v', 0.5, 0, ['h', 0.5, 1, 2]] as const;
+    const all = tile(tree as never, area, 12);
+    const two = tile(tree as never, area, 12, Math.round, (p) => p < 2);
+    expect([...two.keys()].sort()).toEqual([0, 1]);
+    expect(two.get(0)).toEqual(all.get(0));
+    expect(two.get(1)).toEqual({ x: all.get(1)!.x, y: area.y, w: all.get(1)!.w, h: area.h });
+  });
+
+  it('lets a window shown alone fill the desk', () => {
+    for (const ws of workspaces) {
+      const one = tile(ws.tree, area, 12, Math.round, (p) => p === 0);
+      expect([...one.values()]).toEqual([area]);
+    }
+  });
 });

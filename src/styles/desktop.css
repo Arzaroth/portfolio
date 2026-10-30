@@ -103,7 +103,7 @@
   .js .ws.on { transform: none; visibility: visible; opacity: 1; transition: transform .55s var(--ease), opacity .3s ease, visibility 0s; }
   .js .win {
     position: absolute;
-    transition: left .5s var(--ease), top .5s var(--ease), width .5s var(--ease), height .5s var(--ease), rotate .5s var(--ease), box-shadow .3s;
+    transition: left .5s var(--ease), top .5s var(--ease), width .5s var(--ease), height .5s var(--ease), rotate .5s var(--ease), opacity .3s ease, scale .45s var(--ease), box-shadow .3s;
   }
   .js .ws.on .win { animation: pop .5s var(--ease) both; animation-delay: calc(var(--i) * 45ms); }
   .js .ws.on .win.focus { animation: pop .5s var(--ease) both, spin 7s linear infinite; animation-delay: calc(var(--i) * 45ms), 0s; }
@@ -111,6 +111,9 @@
   .js .body { flex: 1; min-height: 0; overflow: auto; }
   .js .promote { display: grid; }
   .js .win.master .promote { visibility: hidden; }
+  .js .win.pane-hidden { opacity: 0; scale: .94; pointer-events: none; }
+  .js .ws.on .win.pane-hidden { animation: none; }
+  .js .steps:not([hidden]) { display: flex; }
 }
 @keyframes pop { from { opacity: 0; scale: .92; } to { opacity: 1; scale: 1; } }
 
@@ -152,3 +155,7 @@
   60% { opacity: 0; transform: translate(-260px, 380px); }
   100% { opacity: 0; transform: translate(-260px, 380px); }
 }
+
+.steps { display: none; gap: 5px; align-items: center; }
+.steps i { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.14); transition: background .25s, transform .25s; }
+.steps i.on { background: var(--c, var(--fg)); }

@@ -15,6 +15,7 @@ interface Space {
   wins: HTMLElement[];
   order: number[];
   focus: number;
+  shown: number;
 }
 
 function countUp(el: HTMLElement) {
@@ -50,13 +51,21 @@ export function initDesktop() {
       wins,
       order: wins.map((_, i) => i),
       focus: 0,
+      shown: 1,
     };
   });
   let cur = -1;
 
   const find = (hash: string) => spaces.findIndex((s) => s.id === hash || s.aliases.includes(hash));
 
-  const floating = createFloating(desk, () => layout(spaces[cur]));
+  const progressive = () => wide.matches && !reduce;
+  const open = (s: Space) => (progressive() ? s.shown : s.wins.length);
+  const steps = document.querySelector<HTMLElement>('.steps')!;
+  let floatShown = 1;
+  const floating = createFloating(desk, () => {
+    spaces[cur].shown = floatShown;
+    layout(spaces[cur]);
+  });
   const toast = document.querySelector<HTMLElement>('.toast')!;
   let toastTimer: number | undefined;
   function notify(title: string, body: string) {
@@ -83,14 +92,39 @@ export function initDesktop() {
     const snap = (v: number) => Math.round(v * dpr) / dpr;
     const gap = snap(GAP);
     const box = desk.getBoundingClientRect();
-    const rects = tile(s.tree, { x: box.left + gap, y: box.top, w: box.width - gap * 2, h: box.height - gap }, gap, snap);
-    let slot = 0;
-    for (const [pos, r] of rects) {
-      const w = s.wins[s.order[pos]];
+    const area = { x: box.left + gap, y: box.top, w: box.width - gap * 2, h: box.height - gap };
+    const k = open(s);
+    const rects = tile(s.tree, area, gap, snap, (p) => p < k);
+    s.order.forEach((wi, pos) => {
+      const w = s.wins[wi];
+      const r = pos < k ? rects.get(pos)! : tile(s.tree, area, gap, snap, (p) => p < k || p === pos).get(pos)!;
       Object.assign(w.style, { left: `${r.x - box.left}px`, top: `${r.y - box.top}px`, width: `${r.w}px`, height: `${r.h}px` });
-      w.style.setProperty('--i', String(slot++));
+      w.style.setProperty('--i', String(Math.min(pos, k)));
       w.classList.toggle('master', pos === 0);
-    }
+      w.classList.toggle('pane-hidden', pos >= k);
+    });
+    if (s === spaces[cur]) paintSteps(s);
+  }
+
+  function paintSteps(s: Space) {
+    steps.hidden = !progressive();
+    steps.style.setProperty('--c', buttons[cur].style.getPropertyValue('--c'));
+    steps.innerHTML = s.wins.map((_, i) => `<i class="${i < s.shown ? 'on' : ''}"></i>`).join('');
+  }
+
+  function stepPanes(by: 1 | -1) {
+    const s = spaces[cur];
+    const n = s.wins.length;
+    if (by > 0 && s.shown < n) {
+      s.shown++;
+      layout(s);
+      setFocus(s, s.order[s.shown - 1]);
+    } else if (by < 0 && s.shown > 1) {
+      s.shown--;
+      if (s.order.indexOf(s.focus) >= s.shown) setFocus(s, s.order[s.shown - 1]);
+      layout(s);
+    } else if (by > 0 && cur < spaces.length - 1) go(spaces[cur + 1].id, 'push', 'first');
+    else if (by < 0 && cur > 0) go(spaces[cur - 1].id, 'push', 'all');
   }
 
   function setFocus(s: Space, i: number) {
@@ -120,7 +154,7 @@ export function initDesktop() {
     } catch {}
   }
 
-  function go(wanted: string, mode: 'push' | 'replace' = 'push') {
+  function go(wanted: string, mode: 'push' | 'replace' = 'push', reveal: 'first' | 'all' = 'first') {
     const at = find(wanted);
     const next = at < 0 ? 0 : at;
     const s = spaces[next];
@@ -128,6 +162,8 @@ export function initDesktop() {
     floating.stop();
     const prev = cur;
     cur = next;
+    s.shown = reveal === 'all' ? s.wins.length : 1;
+    if (s.order.indexOf(s.focus) >= open(s)) s.focus = s.order[0];
     spaces.forEach((sp, i) => {
       sp.el.classList.toggle('on', i === next);
       sp.el.classList.toggle('before', i < next);
@@ -154,6 +190,7 @@ export function initDesktop() {
     let best = -1;
     let bd = Infinity;
     s.wins.forEach((w, i) => {
+      if (w.classList.contains('pane-hidden')) return;
       const r = w.getBoundingClientRect();
       const dx = r.left + r.width / 2 - cx;
       const dy = r.top + r.height / 2 - cy;
@@ -229,7 +266,14 @@ export function initDesktop() {
       w.addEventListener('pointerleave', () => {
         if (under === w) under = null;
       });
-      w.addEventListener('focusin', () => setFocus(s, i));
+      w.addEventListener('focusin', () => {
+        const pos = s.order.indexOf(i);
+        if (s === spaces[cur] && pos >= open(s)) {
+          s.shown = pos + 1;
+          layout(s);
+        }
+        setFocus(s, i);
+      });
       w.querySelector('.chrome')!.addEventListener('dblclick', () => promote(s, i));
       w.querySelector('.promote')!.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -249,8 +293,8 @@ export function initDesktop() {
   spaces.slice(0, 10).forEach((s, i) => keys.register({ key: String((i + 1) % 10), ctrl: true }, () => go(s.id)));
   const onWide = (fn: () => void) => () => wide.matches && fn();
   keys.register('H', onWide(() => moveFocus('l')));
-  keys.register('J', onWide(() => moveFocus('d')));
-  keys.register('K', onWide(() => moveFocus('u')));
+  keys.register('J', onWide(() => (progressive() ? stepPanes(1) : moveFocus('d'))));
+  keys.register('K', onWide(() => (progressive() ? stepPanes(-1) : moveFocus('u'))));
   keys.register('L', onWide(() => moveFocus('r')));
   keys.register('M', onWide(() => promote(spaces[cur], spaces[cur].focus)));
 
@@ -264,7 +308,11 @@ export function initDesktop() {
       if (typed.matches?.('.cli')) typed.value = typed.value.replace(/b$/i, '');
       if (floating.active) return floating.stop();
       if (reduce) return notify('Floating mode', 'It needs motion, and your system asks for less.');
-      floating.start(spaces[cur].el);
+      const s = spaces[cur];
+      floatShown = s.shown;
+      s.shown = s.wins.length;
+      layout(s);
+      floating.start(s.el);
       notify('Floating mode', 'Grab a window by its title bar and throw it. Esc tiles them back.');
     },
     { preventDefault: false, stopPropagation: false, ignoreInputs: false, timeout: 1500 },
@@ -290,6 +338,49 @@ export function initDesktop() {
   const free = { preventDefault: false, stopPropagation: false, ignoreInputs: false } as const;
   keys.register('Tab', cycleTabs(1), free);
   keys.register('Shift+Tab', cycleTabs(-1), free);
+
+  let pull = 0;
+  let quiet = 0;
+  let nativeAt = 0;
+  const scrollsInside = (target: EventTarget | null, dir: number) => {
+    for (let el = target instanceof Element ? target : null; el && el !== desk; el = el.parentElement) {
+      if (!(el instanceof HTMLElement) || el.scrollHeight <= el.clientHeight + 1) continue;
+      const y = getComputedStyle(el).overflowY;
+      if (y !== 'auto' && y !== 'scroll') continue;
+      if (dir > 0 ? el.scrollTop + el.clientHeight < el.scrollHeight - 1 : el.scrollTop > 0) return true;
+    }
+    return false;
+  };
+  addEventListener(
+    'wheel',
+    (e) => {
+      if (!progressive() || floating.active || e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+      const dir = Math.sign(e.deltaY);
+      if (!dir) return;
+      const now = performance.now();
+      if (scrollsInside(e.target, dir)) {
+        nativeAt = now;
+        pull = 0;
+        return;
+      }
+      e.preventDefault();
+      if (now - nativeAt < 400) {
+        nativeAt = now;
+        return;
+      }
+      if (now < quiet) {
+        quiet = Math.max(quiet, now + 150);
+        return;
+      }
+      pull += e.deltaY * (e.deltaMode === 1 ? 40 : 1);
+      if (Math.abs(pull) >= 60) {
+        pull = 0;
+        quiet = now + 450;
+        stepPanes(dir > 0 ? 1 : -1);
+      }
+    },
+    { passive: false },
+  );
 
   let pending: number | undefined;
   addEventListener('resize', () => {

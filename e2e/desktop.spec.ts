@@ -15,6 +15,14 @@ const settled = (page: Page) =>
     document.getAnimations().every((a) => a.effect?.getTiming().iterations === Infinity || a.playState !== 'running'),
   );
 
+async function openAll(page: Page) {
+  if (!(await page.locator('.steps').isVisible())) return;
+  await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
+  const left = (await page.locator('.steps i').count()) - (await page.locator('.steps i.on').count());
+  for (let i = 0; i < left; i++) await page.keyboard.press('j');
+  await expect(page.locator('.ws.on > .win.pane-hidden')).toHaveCount(0);
+}
+
 const latestRelease = 'https://api.github.com/repos/Arzaroth/ouroboros/releases/latest';
 
 async function expectFullCount(page: Page) {
@@ -120,6 +128,7 @@ test('the ps2 games share one browser, a tab each under its disc', async ({ page
     await expect(page.locator('#recomp .win.master')).toHaveAttribute('aria-label', 'ps2recomp.md');
     await expect(page.locator('#recomp .win.focus')).toHaveAttribute('aria-label', 'ps2recomp.md');
   }
+  await openAll(page);
   const tabs = page.locator('#recomp [role="tab"]');
   await expect(tabs).toHaveCount(3);
   const shown = page.locator('#recomp .panel:not([hidden])');
@@ -185,6 +194,7 @@ test('an unknown hash typed on hello is put back to hello', async ({ page }) => 
 
 test('the workspace list on hello opens each workspace', async ({ page }) => {
   await page.goto('/');
+  await openAll(page);
   await page.locator('#about .row[data-go="contributions"]').click();
   await expectOnly(page, 'contributions');
   const doot = page.locator('#contributions [data-repo="boubou666/doot"] [data-count]');
@@ -262,6 +272,7 @@ test.describe('desktop', () => {
   test('the window under the pointer takes the focus, and its terminal the keyboard', async ({ page }) => {
     await page.goto('/#tools');
     await expectOnly(page, 'tools');
+    await openAll(page);
     await page.waitForTimeout(600);
     const t3cc = page.locator('#tools .win[aria-label="t3cc"]');
     await t3cc.hover();
@@ -315,6 +326,7 @@ test.describe('desktop', () => {
   test('m swaps the focused window into the main tile, and l moves the focus', async ({ page }) => {
     await page.goto('/#tools');
     await expectOnly(page, 'tools');
+    await openAll(page);
     const main = page.locator('#tools .win.master');
     await expect(main).toHaveAttribute('aria-label', 'c2c-conv');
     await page.keyboard.press('l');
@@ -396,6 +408,7 @@ test.describe('desktop', () => {
     for (const id of order) {
       await page.goto(`/#${id}`);
       await expectOnly(page, id);
+      await openAll(page);
       await settled(page);
       const edges = await page.locator(`#${id} > .win`).evaluateAll((ws) =>
         ws.flatMap((w) => {
@@ -412,6 +425,7 @@ test.describe('desktop', () => {
     for (const id of order) {
       await page.goto(`/#${id}`);
       await expectOnly(page, id);
+      await openAll(page);
       await settled(page);
       await expect(page.locator(`#${id} > .win`)).toHaveCount(leaves(workspaces[order.indexOf(id)].tree).length);
       const boxes = await page.locator(`#${id} > .win`).evaluateAll((ws) =>

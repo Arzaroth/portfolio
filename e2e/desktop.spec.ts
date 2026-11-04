@@ -23,6 +23,18 @@ async function openAll(page: Page) {
   await expect(page.locator('.ws.on > .win.pane-hidden')).toHaveCount(0);
 }
 
+const wheel = (page: Page, events: [number, number][], over = '.bar') =>
+  page.evaluate(
+    async ({ events, over }) => {
+      const target = document.querySelector(over)!;
+      for (const [dy, wait] of events) {
+        target.dispatchEvent(new WheelEvent('wheel', { deltaY: dy, deltaMode: 0, bubbles: true, cancelable: true }));
+        await new Promise((r) => setTimeout(r, wait));
+      }
+    },
+    { events, over },
+  );
+
 const latestRelease = 'https://api.github.com/repos/Arzaroth/ouroboros/releases/latest';
 
 async function expectFullCount(page: Page) {
@@ -464,9 +476,15 @@ test.describe('desktop', () => {
     await expectOnly(page, 'gauges');
     await expect(page.locator('.steps i')).toHaveCount(7);
     await expect(page.locator('.steps i:not(.on)')).toHaveCount(0);
+    await page.keyboard.press('Control+7');
+    await expectOnly(page, 'recomp');
+    await expect(page.locator('.steps i')).toHaveCount(4);
+    await expect(page.locator('.steps i:not(.on)')).toHaveCount(0);
+    await page.keyboard.press('j');
+    await expectOnly(page, 'selfhosted');
   });
 
-  test('the wheel over the wallpaper opens and closes the windows', async ({ page }) => {
+  test('the wheel over the bar opens and closes the windows', async ({ page }) => {
     await page.goto('/#selfhosted');
     await expectOnly(page, 'selfhosted');
     await settled(page);
@@ -476,6 +494,27 @@ test.describe('desktop', () => {
     await page.waitForTimeout(600);
     await page.mouse.wheel(0, -150);
     await expect(open(page)).toHaveCount(1);
+  });
+
+  test('one fast trackpad flick steps once, however large its deltas', async ({ page }) => {
+    await page.goto('/#tools');
+    await expectOnly(page, 'tools');
+    const flick = Array.from({ length: 24 }, (_, i): [number, number] => [Math.round(110 * (1 - i / 24)) + 4, 16]);
+    await wheel(page, flick);
+    await page.waitForTimeout(200);
+    await expectOnly(page, 'tools');
+    await expect(open(page)).toHaveCount(2);
+    await wheel(page, flick);
+    await page.waitForTimeout(200);
+    await expect(open(page)).toHaveCount(3);
+  });
+
+  test('slow small wheel ticks still step', async ({ page }) => {
+    await page.goto('/#tools');
+    await expectOnly(page, 'tools');
+    await settled(page);
+    await wheel(page, [[20, 250], [20, 250], [20, 250]]);
+    await expect(open(page)).toHaveCount(4);
   });
 
   test('the wheel scrolls a long window before it steps', async ({ browser }) => {
@@ -491,7 +530,9 @@ test.describe('desktop', () => {
     await tiers.hover();
     await page.mouse.wheel(0, 120);
     await expect.poll(() => tiers.evaluate((b) => b.scrollTop)).toBeGreaterThan(0);
-    await page.waitForTimeout(500);
+    for (let i = 0; i < 8; i++) await page.mouse.wheel(0, 400);
+    await expect.poll(() => tiers.evaluate((b) => b.scrollHeight - b.clientHeight - b.scrollTop)).toBeLessThanOrEqual(1);
+    await page.waitForTimeout(300);
     await expectOnly(page, 'ouroboros');
     await expect(page.locator('#ouroboros > .win.pane-hidden')).toHaveCount(0);
     await context.close();
@@ -513,8 +554,42 @@ test.describe('desktop', () => {
     for (const k of ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a']) await page.keyboard.press(k);
     await expect(page.locator('#apps')).toHaveClass(/\bfloating\b/);
     await expect(page.locator('#apps > .win.pane-hidden')).toHaveCount(0);
+    await page.locator('#apps .win').nth(3).locator('.chrome').click();
+    await page.mouse.move(700, 25);
     await page.keyboard.press('Escape');
     await expect(open(page)).toHaveCount(2);
+    await expect(page.locator('#apps > .win.focus')).not.toHaveClass(/pane-hidden/);
+  });
+
+  test('widening the window never leaves the keyboard in a closed one', async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 700, height: 900 } });
+    const page = await context.newPage();
+    await page.route('https://api.github.com/**', (route) => route.abort());
+    await page.goto('/#tools');
+    await expectOnly(page, 'tools');
+    await page.locator('#tools .win[aria-label="t3cc"] .cli').focus();
+    await page.setViewportSize({ width: 1440, height: 900 });
+    const t3cc = page.locator('#tools .win[aria-label="t3cc"]');
+    await expect(t3cc).not.toHaveClass(/pane-hidden/);
+    await expect(t3cc.locator('.cli')).toBeFocused();
+    await context.close();
+  });
+
+  test('ctrl on the workspace already shown opens it whole', async ({ page }) => {
+    await page.goto('/#tools');
+    await expectOnly(page, 'tools');
+    await expect(open(page)).toHaveCount(1);
+    await page.keyboard.press('Control+4');
+    await expect(open(page)).toHaveCount(4);
+  });
+
+  test('closed windows are hidden from screen readers until they open', async ({ page }) => {
+    await page.goto('/#tools');
+    await expectOnly(page, 'tools');
+    await expect(page.locator('#tools > .win[aria-hidden="true"]')).toHaveCount(3);
+    await page.keyboard.press('j');
+    await expect(page.locator('#tools > .win[aria-hidden="true"]')).toHaveCount(2);
+    await expect(page.locator('.steps-say')).toHaveText('Opened resumove');
   });
 
   test('the spinning disc never pushes a scrollbar out of its window', async ({ browser }) => {

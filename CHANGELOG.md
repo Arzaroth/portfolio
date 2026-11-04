@@ -10,6 +10,8 @@ CI and refuses a version with no dated section here.
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-04
+
 ### Changed
 
 - ouroboros's ring draws itself tier by tier, then a snake's head circles it, chasing its
@@ -112,7 +114,8 @@ CI and refuses a version with no dated section here.
   desktop and a phone browser.
 - `tools/deploy.sh` publishes `dist/` to arzaroth.com.
 
-[Unreleased]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.4.1...HEAD
+[Unreleased]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.5.0...HEAD
+[0.5.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.4.1...v0.5.0
 [0.4.1]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.4.0...v0.4.1
 [0.4.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.3.0...v0.4.0
 [0.3.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.2.0...v0.3.0

@@ -160,3 +160,10 @@
 .steps i { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.14); transition: background .25s, transform .25s; }
 .steps i.on { background: var(--c, var(--fg)); }
 .steps i.tab { width: 4px; height: 4px; margin-left: -2px; }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.still-hint { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .step-hint { display: none; }
+  .still-hint { display: inline; }
+}

@@ -11,7 +11,10 @@ const Heading = big ? 'h2' : 'h3';
 ---
 
 {p.wip && <span class="wip">In progress</span>}
-<Heading>{p.name}</Heading>
+<Heading class:list={{ 'with-icon': p.icon }}>
+  {p.icon && <img class="project-icon" src={p.icon} alt="" width="32" height="32" decoding="async" />}
+  {p.name}
+</Heading>
 <slot name="lede" />
 <p>{p.description}</p>
 <slot />

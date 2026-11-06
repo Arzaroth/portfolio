@@ -45,6 +45,8 @@ button { font: inherit; color: inherit; }
 h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -.01em; line-height: 1.15; }
 h2 { font-size: 25px; letter-spacing: -.02em; }
 h3 { font-size: 17px; }
+.with-icon { display: flex; align-items: center; gap: .5em; }
+.project-icon { flex: none; width: 1.4em; height: 1.4em; object-fit: contain; }
 p { margin: 0; max-width: 64ch; }
 h2 + p, h3 + p, p + p { margin-top: .7em; }
 .lede { color: var(--muted); }

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="PouceVert">
+  <defs><linearGradient id="tile" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7f3e4"/><stop offset="1" stop-color="#e7e0c8"/></linearGradient></defs>
+  <rect width="64" height="64" rx="14" fill="url(#tile)"/>
+  <rect x=".5" y=".5" width="63" height="63" rx="13.5" fill="none" stroke="#fff" stroke-opacity=".08"/>
+  <rect x="11" y="31" width="10" height="23" rx="3" fill="#2d5a3a"/>
+  <path d="M24 31 32 16c1-3 8-3 8 3l-2 9h12c3 0 5 2.500 4.500 5l-3 17c-.500 2.500-2.500 4-5 4H24z" fill="#46a35c"/>
+  <path d="M38 12C39 5 46 3 54 4c0 8-5 12-13 11" fill="#7bcf63"/><path d="M38 17c2-5 7-8 12-10" fill="none" stroke="#2d5a3a" stroke-width="1.500" stroke-linecap="round"/>
+</svg>

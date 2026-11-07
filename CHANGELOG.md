@@ -14,6 +14,11 @@ CI and refuses a version with no dated section here.
 
 - Projects show their icon beside their name.
 
+### Fixed
+
+- Contributions no longer lists MarcDownHQ and TheBozos repositories as upstream, and
+  older contributions no longer fall off the list.
+
 ## [0.5.0] - 2026-11-04
 
 ### Changed

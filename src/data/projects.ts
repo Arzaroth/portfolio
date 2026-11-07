@@ -305,7 +305,6 @@ export const friends: FriendSpec[] = [
   { name: 'doot', repo: 'boubou666/doot', by: 'pulls', count: 23, when: '2026' },
   { name: 'butbutbut', repo: 'boubou666/butbutbut', by: 'pulls', count: 4, when: '2026' },
   { name: 'rocket-vibe', repo: 'Guillaume69/rocket-vibe', by: 'commits', count: 1567, when: '2026' },
-  { name: 'PS2Recomp', repo: 'boubou666/PS2Recomp', by: 'commits', count: 181, when: '2026' },
 ];
 
 export const friendHref = (f: FriendSpec) =>

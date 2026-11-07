@@ -167,6 +167,35 @@ test('the ps2 games share one browser, a tab each under its disc', async ({ page
   expect(new Set(heights).size).toBe(1);
 });
 
+test('the rack panels stop the hover reaching the servers behind them', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'needs a mouse');
+  await page.goto('/#selfhosted');
+  await expectOnly(page, 'selfhosted');
+  const view = page.locator('#selfhosted .rackview');
+  await expect(view).toHaveClass(/\b(gl|no-gl)\b/);
+  test.skip((await view.getAttribute('class'))!.includes('no-gl'), 'no WebGL here');
+  const box = (await view.locator('canvas').boundingBox())!;
+  const tip = page.locator('.rack-tip');
+  const hovered = async () => {
+    let found = 0;
+    for (let x = box.x + 4; x < box.x + box.width - 4; x += 12) {
+      await page.mouse.move(x, box.y + box.height * 0.32);
+      if (await tip.isVisible()) found++;
+    }
+    await page.mouse.move(box.x + 2, box.y + 2);
+    return found;
+  };
+  const front = await hovered();
+  expect(front).toBeGreaterThan(0);
+  const start = { x: box.x + box.width / 2, y: box.y + box.height * 0.92 };
+  await page.mouse.move(start.x, start.y);
+  await page.mouse.down();
+  await page.mouse.move(start.x - box.width * 1.5, start.y, { steps: 4 });
+  await page.mouse.up();
+  await page.waitForTimeout(1000);
+  expect(await hovered()).toBeLessThan(front / 2);
+});
+
 test('the rack in self-hosting is drawn in 3D, or falls back to the list', async ({ page }) => {
   await page.goto('/#selfhosted');
   await expectOnly(page, 'selfhosted');

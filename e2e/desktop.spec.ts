@@ -143,6 +143,14 @@ test('the contribution counts follow GitHub', async ({ page }) => {
   await expect(page.locator('#contributions .upstream .nm')).toHaveText(['upstream']);
 });
 
+test('early years opens its introduction before the list', async ({ page, isMobile }) => {
+  await page.goto('/#archive');
+  await expectOnly(page, 'archive');
+  await expect(page.locator('#archive > .win').first()).toHaveAttribute('aria-label', 'early-years.md');
+  if (isMobile) return;
+  await expect(page.locator('#archive .win.master')).toHaveAttribute('aria-label', 'early-years.md');
+});
+
 test('the ps2 games share one browser, a tab each under its disc', async ({ page, isMobile }) => {
   await page.goto('/#recomp');
   await expectOnly(page, 'recomp');

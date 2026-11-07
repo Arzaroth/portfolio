@@ -131,7 +131,7 @@ export function mountRack(host: HTMLElement, units: Unit[], tint: Record<Role, s
     const r = renderer.domElement.getBoundingClientRect();
     pointer.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
     ray.setFromCamera(pointer, camera);
-    const hit = ray.intersectObjects(servers.map((s) => s.group), true)[0];
+    const hit = ray.intersectObjects(scene.children, true)[0];
     const i = hit ? servers.findIndex((s) => s.group === hit.object.parent) : -1;
     highlight(i < 0 ? null : i);
     onHover(i < 0 ? null : i);

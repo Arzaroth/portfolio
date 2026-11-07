@@ -10,6 +10,10 @@ CI and refuses a version with no dated section here.
 
 ## [Unreleased]
 
+### Added
+
+- Projects show their icon beside their name.
+
 ## [0.5.0] - 2026-11-04
 
 ### Changed

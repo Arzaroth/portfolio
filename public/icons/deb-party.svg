@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="deb.arzaroth.com">
+  <defs><linearGradient id="tile" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6d2a8c"/><stop offset="1" stop-color="#3a1353"/></linearGradient></defs>
+  <rect width="64" height="64" rx="14" fill="url(#tile)"/>
+  <rect x=".5" y=".5" width="63" height="63" rx="13.5" fill="none" stroke="#fff" stroke-opacity=".08"/>
+  <path d="M15 34 7 25h19l6 9zM49 34l8-9H38l-6 9z" fill="#b98a55"/>
+  <rect x="14" y="33" width="36" height="22" rx="2.500" fill="#d9a968"/>
+  <rect x="28" y="33" width="8" height="22" fill="#f4dfba"/>
+  <rect x="17" y="13" width="5" height="3" rx="1" fill="#ffd23f" transform="rotate(-25 19 14)"/>
+  <rect x="42" y="9" width="5" height="3" rx="1" fill="#3fe0c5" transform="rotate(30 44 10)"/>
+  <rect x="30" y="17" width="5" height="3" rx="1" fill="#ff6b9a" transform="rotate(15 32 18)"/>
+  <circle cx="27" cy="9" r="2" fill="#3fe0c5"/><circle cx="37" cy="23" r="1.800" fill="#ffd23f"/><circle cx="52" cy="18" r="2" fill="#ff6b9a"/><circle cx="12" cy="20" r="1.800" fill="#fff"/>
+</svg>

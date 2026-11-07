@@ -7,6 +7,7 @@ export interface Link {
 
 export interface Project {
   name: string;
+  icon?: string;
   description: string;
   meta?: string;
   links?: Link[];
@@ -25,6 +26,7 @@ export const elsewhere = [
 export const apps: Project[] = [
   {
     name: 'Nostragoalus',
+    icon: '/icons/nostragoalus.svg',
     description:
       'A score-prediction game. Friends predict match scores, earn points for how close they get, and fight over per-competition and global leaderboards. Live crowd totals, bookmaker odds frozen at kickoff, one x2 joker per round, league chat. Football by default, and rugby union works too.',
     meta: 'TypeScript, Nuxt, Node or Bun',
@@ -32,12 +34,14 @@ export const apps: Project[] = [
   },
   {
     name: 'La Coincherie',
+    icon: '/icons/coincherie.svg',
     description: 'Play coinche with your friends when you live 800 km apart. Cameras on, your house rules.',
     meta: 'TypeScript, Svelte',
     links: [{ label: 'Sit at the table', href: 'https://coinche.arzaroth.com' }],
   },
   {
     name: 'Yaek',
+    icon: '/icons/yaek.svg',
     description:
       'Pulls Thai text apart so you can read what someone wrote to you. Offline dictionary, tones derived from the spelling, and no network request you did not ask for.',
     meta: 'TypeScript, Expo, React Native',
@@ -45,6 +49,7 @@ export const apps: Project[] = [
   },
   {
     name: 'BlosSom',
+    icon: '/icons/blossom.png',
     description:
       'Scan a document with your phone, then share, save or print it as one PDF or as photos. No account, and nothing leaves the phone unless you send it.',
     meta: 'TypeScript, Expo, React Native',
@@ -54,6 +59,7 @@ export const apps: Project[] = [
 
 export const lumen: Project = {
   name: 'Lumen',
+  icon: '/icons/lumen.svg',
   description:
     "Swaps the home screen of an Android TV or Google TV for one that looks like the Apple TV's, and debloats the TV on the way. Everything can be undone: apps are disabled, never uninstalled, and the TV is backed up first. Behind the apps, the night sky turns at the Earth's real rate.",
   meta: 'Java, Android TV',
@@ -62,6 +68,7 @@ export const lumen: Project = {
 
 export const wyrmyon: Project = {
   name: 'wyrmyon',
+  icon: '/icons/wyrmyon.png',
   description:
     'Sends files and text from one machine to another with a short code, like magic-wormhole, and to anyone who uses it. When both ends run wyrmyon, the transfer goes over iroh instead: direct whenever the network allows, checked piece by piece, and resumed if it drops.',
   meta: 'Rust, iroh',
@@ -71,6 +78,7 @@ export const wyrmyon: Project = {
 export const tools: Project[] = [
   {
     name: 'c2c-conv',
+    icon: '/icons/c2c-conv.svg',
     description:
       'Share one Claude Code session with a second person. They watch it live, and when you let them, they type into it as if they were you. The Cs in c2c could be Claude, Codex... or even clown. Ever heard of clown to clown conversation?',
     meta: 'TypeScript',
@@ -78,6 +86,7 @@ export const tools: Project[] = [
   },
   {
     name: 'resumove',
+    icon: '/icons/resumove.svg',
     description:
       'Moves a Claude Code conversation to another folder, so claude --resume finds it from there. It rewrites the recorded paths, and refuses to touch a conversation that is still open.',
     meta: 'Python',
@@ -85,6 +94,7 @@ export const tools: Project[] = [
   },
   {
     name: 't3cc',
+    icon: '/icons/t3cc.svg',
     description:
       "Moves conversation history between Claude Code and T3 Code, both ways, without the limits of T3's own importer. An imported thread resumes the same Claude session, so the model keeps its context.",
     meta: 'Python',
@@ -94,6 +104,7 @@ export const tools: Project[] = [
 
 export const skills: Project = {
   name: 'skills',
+  icon: '/icons/skills.svg',
   description:
     'The agent skills I use every day with Claude Code, for anyone to install. They see a pull request through to the merge, work each round of review, merge stacked PRs, cut releases, keep the docs current, review code without mercy and rebuild timesheets.',
   meta: 'Claude Code, npx skills',
@@ -103,6 +114,7 @@ export const skills: Project = {
 export const gauges: Project[] = [
   {
     name: 'TokenGauge',
+    icon: '/icons/tokengauge.svg',
     description:
       'Shows usage limits, costs and token counts for Claude, Codex, Kimi, Grok, GLM and a few more. It predicts where each limit will be at reset and totals spend across all your machines. With remuda, every stored login gets its own meter.',
     meta: 'Waybar, Plasma, GNOME, Quickshell, TUI',
@@ -110,6 +122,7 @@ export const gauges: Project[] = [
   },
   {
     name: 'remuda',
+    icon: '/icons/remuda.svg',
     description:
       'A remuda is the herd of spare horses a rider picks a fresh mount from. This one holds Claude Code and Codex logins, and switches the one each CLI uses without logging out. History, settings and MCP logins stay shared, and a timer keeps the resting logins fresh. Its page shows the usage TokenGauge reads for the login in use.',
     meta: 'CLI, systemd timer',
@@ -117,6 +130,7 @@ export const gauges: Project[] = [
   },
   {
     name: 'TailGauge',
+    icon: '/icons/tailgauge.svg',
     description:
       "Puts Tailscale and NetBird in your panel, and switches between them when both are installed. Turn the VPN on and off, and copy any machine's address. Tailscale also gets exit nodes, Mullvad regions and Taildrop. On NetBird you can join and leave networks. There's no daemon, it calls each provider's CLI.",
     meta: 'Plasma, GNOME, Quickshell, TUI',
@@ -139,6 +153,7 @@ description:
 
 export const codegauge: Project = {
   name: 'CodeGauge',
+  icon: '/icons/codegauge.svg',
   description:
     "Same family name, different job. It walks a repository's git history, counts every line once per day, and charts production code against test code over time. The dashboard is built into one static binary, and git doesn't need to be installed.",
   meta: 'Rust, gitoxide',
@@ -148,6 +163,7 @@ export const codegauge: Project = {
 export const workbench: Project[] = [
   {
     name: 'Tacite',
+    icon: '/icons/tacite.svg',
     description:
       'Tracks contracts, subscriptions and warranties. It works out the legal deadlines, warns you while you can still act, and drafts the cancellation or warranty letter.',
     meta: 'TypeScript, Fastify, Postgres',
@@ -155,6 +171,7 @@ export const workbench: Project[] = [
   },
   {
     name: 'Pouce Vert',
+    icon: '/icons/poucevert.svg',
     description:
       'A plant care app for the phone. Care sheets for common houseplants, pet toxicity with sources, watering reminders, and a diagnosis from a photo of the sad leaf.',
     meta: 'Expo, React Native',
@@ -217,6 +234,7 @@ export const services: [string, Role][] = [
 export const infrastructure: Project[] = [
   {
     name: 'DEB Party',
+    icon: '/icons/deb-party.svg',
     description:
       'Turns a short list of GitHub projects into a tidy .deb mini-mirror. Picks the right release asset, repackages bare binaries, prunes old versions and publishes through Aptly. The gauges ship through it.',
     meta: 'Python, Aptly',
@@ -231,6 +249,7 @@ export const infrastructure: Project[] = [
   },
   {
     name: 'dotfiles',
+    icon: '/icons/dotfiles.svg',
     description: 'Zsh, Emacs, tmux and prompt configuration as GNU Stow packages. Arch on the desk, Debian on the servers.',
     meta: 'Emacs Lisp, shell',
     links: [source('dotfiles')],
@@ -239,6 +258,7 @@ export const infrastructure: Project[] = [
 
 export const smith: Project = {
   name: 'smith',
+  icon: '/icons/smith.svg',
   description:
     "A command-line client for Forgejo with gh's commands, so smith pr checkout 42 does what your fingers expect. It does everything gh does that Forgejo's API allows. Written in Zig, mostly because why not.",
   meta: 'Zig',

@@ -258,7 +258,7 @@ export const infrastructure: Project[] = [
 
 export const smith: Project = {
   name: 'smith',
-  icon: '/icons/smith.svg',
+  icon: '/icons/smith.png',
   description:
     "A command-line client for Forgejo with gh's commands, so smith pr checkout 42 does what your fingers expect. It does everything gh does that Forgejo's API allows. Written in Zig, mostly because why not.",
   meta: 'Zig',

@@ -14,6 +14,10 @@ CI and refuses a version with no dated section here.
 
 - Projects show their icon beside their name.
 
+### Fixed
+
+- The rack's panels stop the hover, so a server behind one no longer slides out.
+
 ## [0.5.0] - 2026-11-04
 
 ### Changed

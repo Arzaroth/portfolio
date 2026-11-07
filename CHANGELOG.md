@@ -19,6 +19,10 @@ CI and refuses a version with no dated section here.
 
 - The ps2 workspace presents The Bozos and BozoEngine, and the ports link to their repositories under The Bozos.
 
+### Fixed
+
+- The rack's panels stop the hover, so a server behind one no longer slides out.
+
 ## [0.5.0] - 2026-11-04
 
 ### Changed

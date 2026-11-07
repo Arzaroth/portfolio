@@ -147,20 +147,22 @@ test('the ps2 games share one browser, a tab each under its disc', async ({ page
   await page.goto('/#recomp');
   await expectOnly(page, 'recomp');
   if (!isMobile) {
-    await expect(page.locator('#recomp .win.master')).toHaveAttribute('aria-label', 'ps2recomp.md');
-    await expect(page.locator('#recomp .win.focus')).toHaveAttribute('aria-label', 'ps2recomp.md');
+    await expect(page.locator('#recomp .win.master')).toHaveAttribute('aria-label', 'the-bozos.md');
+    await expect(page.locator('#recomp .win.focus')).toHaveAttribute('aria-label', 'the-bozos.md');
   }
   await openAll(page);
   const tabs = page.locator('#recomp [role="tab"]');
-  await expect(tabs).toHaveCount(3);
+  await expect(tabs).toHaveCount(4);
   await tabs.nth(0).click();
   const shown = page.locator('#recomp .panel:not([hidden])');
   await expect(shown.locator('.disc code')).toHaveText('SLUS-21216');
   await tabs.nth(2).click();
   await expect(shown.locator('.disc code')).toHaveText('SLPS-25545');
   await expect(shown.locator('h2')).toHaveText('Fighting for One Piece');
+  await tabs.nth(3).click();
+  await expect(shown.locator('h2')).toHaveText('Champions of Norrath');
   const heights = [];
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 4; i++) {
     await tabs.nth(i).click();
     heights.push(await shown.locator('.hero').evaluate((e) => e.getBoundingClientRect().height));
   }
@@ -478,7 +480,7 @@ test.describe('desktop', () => {
     await expect(page.locator('.steps i:not(.on)')).toHaveCount(0);
     await page.keyboard.press('Control+7');
     await expectOnly(page, 'recomp');
-    await expect(page.locator('.steps i')).toHaveCount(4);
+    await expect(page.locator('.steps i')).toHaveCount(5);
     await expect(page.locator('.steps i:not(.on)')).toHaveCount(0);
     await page.keyboard.press('j');
     await expectOnly(page, 'selfhosted');

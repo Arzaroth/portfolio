@@ -89,7 +89,8 @@
 .status.ok { color: var(--sage); }
 .recomp .body { display: flex; flex-direction: column; }
 .recomp .body > * { flex: none; }
-.ports { list-style: none; margin: 18px 0 0; padding: 0; }
+.ports-title { margin: 18px 0 8px; font: 500 12px var(--mono); color: var(--dim); letter-spacing: .06em; text-transform: uppercase; }
+.ports { list-style: none; margin: 0; padding: 0; }
 .ports li { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 14px; align-items: baseline; padding: 10px 0; border-top: 1px solid var(--line); }
 .ports a { font-weight: 600; text-decoration: none; }
 .ports a:hover { text-decoration: underline; text-underline-offset: 3px; }

@@ -9,13 +9,17 @@ const host = (href: string) => href.replace('https://', '');
 ---
 
 <Workspace id="recomp">
-  <Window kind="notes" title="ps2recomp.md" class="recomp">
+  <Window kind="notes" title="the-bozos.md" class="recomp">
     <h2>PS2, recompiled</h2>
     <p>{recomp.lede}</p>
     <p class="lede">
-      The ports are built on PS2Recomp, and I work on{' '}
-      <a href={recomp.engine.href} target="_blank" rel="noopener">boubou's fork of it</a> too.
+      I make them with boubou as{' '}
+      <a href={recomp.group.href} target="_blank" rel="noopener">{recomp.group.name}</a>. Our own engine is{' '}
+      <a href={recomp.engine.href} target="_blank" rel="noopener">{recomp.engine.name}</a>, a static recompiler and a
+      runtime that answers the game's calls natively, with no PS2 hardware at any level. Champions of Norrath already
+      runs on it, and the other games are moving over.
     </p>
+    <h3 class="ports-title">My games</h3>
     <ul class="ports">
       {
         recomp.ports.map((p) => (
@@ -27,6 +31,9 @@ const host = (href: string) => href.replace('https://', '');
         ))
       }
     </ul>
+    <div class="links">
+      <a class="btn" href={recomp.watcher.href} target="_blank" rel="noopener">Every port on {recomp.watcher.name}</a>
+    </div>
     <div class="spin" aria-hidden="true">
       <svg viewBox="0 0 64 64">
         <circle cx="32" cy="32" r="29" fill="none" stroke="currentColor" stroke-width="1.2"></circle>
@@ -62,9 +69,7 @@ const host = (href: string) => href.replace('https://', '');
             <h2>{p.name}</h2>
             <p>{p.description}</p>
             <div class="tags">
-              <span class="tag">C++</span>
-              <span class="tag">PS2Recomp</span>
-              <span class="tag">Linux</span>
+              {p.tags.map((t) => <span class="tag">{t}</span>)}
             </div>
             <div class="links">
               <a class="btn" href={p.href} target="_blank" rel="noopener">Source</a>

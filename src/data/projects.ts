@@ -15,6 +15,7 @@ export interface Project {
 }
 
 const gh = (repo: string) => `https://github.com/Arzaroth/${repo}`;
+const bozos = (repo: string) => `https://github.com/TheBozos/${repo}`;
 const source = (repo: string): Link => ({ label: 'Source', href: gh(repo) });
 
 export const elsewhere = [
@@ -276,7 +277,7 @@ export const recomp = {
       status: 'Playable',
       description:
         'Plays from start to finish in automated tests, and humans are playing it now. Fights run at about 58 frames per second with music and voices, drawn with OpenGL, at twice the resolution if you ask, and saves load back after a restart.',
-      href: gh('SoulCaliburIII_Recomp'),
+      href: bozos('SoulCaliburIII_Recomp'),
     },
     {
       name: 'Smash Court Tennis Pro Tournament 2',
@@ -285,7 +286,7 @@ export const recomp = {
       status: 'Playable',
       description:
         'Exhibition and World Tournament matches play, with music and sound effects, drawn with OpenGL at twice the resolution of the PS2. The memory card and the other modes are next.',
-      href: gh('SmashCourtTennisProTournament2_Recomp'),
+      href: bozos('SmashCourtTennisProTournament2_Recomp'),
     },
     {
       name: 'Fighting for One Piece',
@@ -294,7 +295,7 @@ export const recomp = {
       status: 'Playable',
       description:
         'Fights against the CPU play at a steady 60 frames per second, special moves and their cut-ins included, with music and sound effects, drawn with OpenGL at twice the resolution of the PS2. The movies are skipped for now.',
-      href: gh('FightingForOnePiece_Recomp'),
+      href: bozos('FightingForOnePiece_Recomp'),
     },
   ],
 };

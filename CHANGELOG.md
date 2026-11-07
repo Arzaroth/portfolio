@@ -13,6 +13,11 @@ CI and refuses a version with no dated section here.
 ### Added
 
 - Projects show their icon beside their name.
+- Champions of Norrath among the PS2 ports, and a link to RecompWatcher.
+
+### Changed
+
+- The ps2 workspace presents The Bozos and BozoEngine, and the ports link to their repositories under The Bozos.
 
 ## [0.5.0] - 2026-11-04
 

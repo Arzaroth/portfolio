@@ -15,6 +15,7 @@ export interface Project {
 }
 
 const gh = (repo: string) => `https://github.com/Arzaroth/${repo}`;
+const bozos = (repo: string) => `https://github.com/TheBozos/${repo}`;
 const source = (repo: string): Link => ({ label: 'Source', href: gh(repo) });
 
 export const elsewhere = [
@@ -266,8 +267,10 @@ export const smith: Project = {
 };
 
 export const recomp = {
-  lede: "Native Linux ports of PlayStation 2 games. Not emulators: each one turns the game's own code into C++ and runs it on a rewrite of the PS2 hardware, the graphics drawn with OpenGL. No game files included, you need your own disc.",
-  engine: { name: 'PS2Recomp', href: 'https://github.com/boubou666/PS2Recomp' },
+  lede: "Native PC ports of PlayStation 2 games. Not emulators: each one turns the game's own code into C++ and runs it as a real program. No game files included, you need your own disc.",
+  group: { name: 'The Bozos', href: 'https://github.com/TheBozos' },
+  engine: { name: 'BozoEngine', href: bozos('BozoEngine') },
+  watcher: { name: 'RecompWatcher', href: 'https://thebozos.github.io/RecompWatcher/' },
   ports: [
     {
       name: 'Soulcalibur III',
@@ -275,8 +278,9 @@ export const recomp = {
       disc: 'SLUS-21216',
       status: 'Playable',
       description:
-        'Plays from start to finish in automated tests, and humans are playing it now. Fights run at about 58 frames per second with music and voices, drawn with OpenGL, at twice the resolution if you ask, and saves load back after a restart.',
-      href: gh('SoulCaliburIII_Recomp'),
+        'Plays from start to finish in automated tests, and humans are playing it now. Fights run at about 60 frames per second with music and voices, drawn with OpenGL, at twice the resolution if you ask, and saves load back after a restart.',
+      href: bozos('SoulCaliburIII_Recomp'),
+      tags: ['C++', 'Linux', 'Windows'],
     },
     {
       name: 'Smash Court Tennis Pro Tournament 2',
@@ -285,7 +289,8 @@ export const recomp = {
       status: 'Playable',
       description:
         'Exhibition and World Tournament matches play, with music and sound effects, drawn with OpenGL at twice the resolution of the PS2. The memory card and the other modes are next.',
-      href: gh('SmashCourtTennisProTournament2_Recomp'),
+      href: bozos('SmashCourtTennisProTournament2_Recomp'),
+      tags: ['C++', 'Linux'],
     },
     {
       name: 'Fighting for One Piece',
@@ -294,7 +299,18 @@ export const recomp = {
       status: 'Playable',
       description:
         'Fights against the CPU play at a steady 60 frames per second, special moves and their cut-ins included, with music and sound effects, drawn with OpenGL at twice the resolution of the PS2. The movies are skipped for now.',
-      href: gh('FightingForOnePiece_Recomp'),
+      href: bozos('FightingForOnePiece_Recomp'),
+      tags: ['C++', 'Linux'],
+    },
+    {
+      name: 'Champions of Norrath',
+      tab: 'Champions of Norrath',
+      disc: 'SLUS-20565',
+      status: 'Bring-up',
+      description:
+        "Built on BozoEngine, with no emulated PS2 hardware. It runs from the start-up screens into its levels, and the level geometry, textures and menus are starting to draw. Models, movies and the Windows build aren't there yet.",
+      href: bozos('ChampionsOfNorrath_Recomp'),
+      tags: ['C++', 'BozoEngine', 'Linux'],
     },
   ],
 };

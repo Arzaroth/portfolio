@@ -32,6 +32,10 @@ CI and refuses a version with no dated section here.
 
 - PS2Recomp from the friends' projects.
 
+### Fixed
+
+- Early years opens its introduction first, then the list, like the other workspaces.
+
 ## [0.5.0] - 2026-11-04
 
 ### Changed

@@ -22,7 +22,7 @@ export const workspaces: Workspace[] = [
   { id: 'recomp', label: 'ps2', color: 'orchid', accent: 'sky', blurb: 'PlayStation 2 games, recompiled to native code', tree: ['v', 0.42, 0, 1] },
   { id: 'selfhosted', label: 'self-hosting', color: 'teal', accent: 'sky', blurb: 'What runs on the rack, and on the TV', tree: ['v', 0.5, 0, ['h', 0.42, ['v', 0.5, 3, 2], ['v', 0.5, 1, 4]]] },
   { id: 'contributions', label: 'contributions', color: 'clay', accent: 'gold', blurb: "Friends' projects, and patches sent upstream", tree: ['h', 0.4, 0, 1] },
-  { id: 'archive', label: 'early years', color: 'ash', accent: 'lav', blurb: '2014 onwards, ponies included', tree: ['h', 0.19, 1, 0] },
+  { id: 'archive', label: 'early years', color: 'ash', accent: 'lav', blurb: '2014 onwards, ponies included', tree: ['h', 0.19, 0, 1] },
 ];
 
 export const colorVar = (c: Color) => `var(--${c})`;

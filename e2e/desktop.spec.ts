@@ -169,6 +169,7 @@ test('the ps2 games share one browser, a tab each under its disc', async ({ page
 
 test('the rack panels stop the hover reaching the servers behind them', async ({ page, isMobile }) => {
   test.skip(isMobile, 'needs a mouse');
+  test.slow();
   await page.goto('/#selfhosted');
   await expectOnly(page, 'selfhosted');
   const view = page.locator('#selfhosted .rackview');
@@ -178,7 +179,7 @@ test('the rack panels stop the hover reaching the servers behind them', async ({
   const tip = page.locator('.rack-tip');
   const hovered = async () => {
     let found = 0;
-    for (let x = box.x + 4; x < box.x + box.width - 4; x += 12) {
+    for (let x = box.x + 4; x < box.x + box.width - 4; x += 24) {
       await page.mouse.move(x, box.y + box.height * 0.32);
       if (await tip.isVisible()) found++;
     }

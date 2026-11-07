@@ -23,6 +23,15 @@ CI and refuses a version with no dated section here.
 
 - The rack's panels stop the hover, so a server behind one no longer slides out.
 
+### Fixed
+
+- Contributions no longer lists MarcDownHQ and TheBozos repositories as upstream, and
+  older contributions no longer fall off the list.
+
+### Removed
+
+- PS2Recomp from the friends' projects.
+
 ## [0.5.0] - 2026-11-04
 
 ### Changed

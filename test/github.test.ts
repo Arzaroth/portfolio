@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { commitsFrom, friendCounts, pullsFrom, span, upstreamFrom, type FriendSpec, type Pull } from '../src/scripts/github';
+import { commitsFrom, friendCounts, MY_OWNERS, PULLS_URL, pullsFrom, span, upstreamFrom, type FriendSpec, type Pull } from '../src/scripts/github';
 import { friends, notUpstream, upstream, upstreamNames } from '../src/data/projects';
 
 const pr = (repo: string, year: number, merged = true): Pull => ({ repo, year, merged });
@@ -61,6 +61,15 @@ describe('contributions from GitHub', () => {
       return Array.from({ length: Number(n) }, (_, i) => pr(u.repo, i === 0 ? Number(lo) : last));
     });
     expect(upstreamFrom(pulls, notUpstream, upstreamNames)).toEqual(upstream);
+  });
+
+  it('asks GitHub to leave out everything I own', () => {
+    const query = decodeURIComponent(PULLS_URL);
+    for (const owner of MY_OWNERS) expect(query).toContain(`-user:${owner}`);
+  });
+
+  it('ships no repository I own in the fallback', () => {
+    for (const u of upstream) expect(MY_OWNERS).not.toContain(u.repo.split('/')[0]);
   });
 
   it('never lists a friend among the upstream projects', () => {

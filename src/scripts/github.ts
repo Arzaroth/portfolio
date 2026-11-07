@@ -1,6 +1,8 @@
 export const ME = 'Arzaroth';
 
-export const PULLS_URL = `https://api.github.com/search/issues?q=${encodeURIComponent(`author:${ME} type:pr -user:${ME}`)}&per_page=100`;
+export const MY_OWNERS = [ME, 'MarcDownHQ', 'TheBozos'];
+
+export const PULLS_URL = `https://api.github.com/search/issues?q=${encodeURIComponent(`author:${ME} type:pr ${MY_OWNERS.map((o) => `-user:${o}`).join(' ')}`)}&per_page=100`;
 export const contributorsUrl = (repo: string) => `https://api.github.com/repos/${repo}/contributors?per_page=100`;
 
 export interface Pull {

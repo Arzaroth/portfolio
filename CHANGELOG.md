@@ -10,6 +10,8 @@ CI and refuses a version with no dated section here.
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-07
+
 ### Added
 
 - Projects show their icon beside their name.
@@ -17,16 +19,8 @@ CI and refuses a version with no dated section here.
 
 ### Changed
 
-- The ps2 workspace presents The Bozos and BozoEngine, and the ports link to their repositories under The Bozos.
-
-### Fixed
-
-- The rack's panels stop the hover, so a server behind one no longer slides out.
-
-### Fixed
-
-- Contributions no longer lists MarcDownHQ and TheBozos repositories as upstream, and
-  older contributions no longer fall off the list.
+- The ps2 workspace presents The Bozos and BozoEngine, and the ports link to their
+  repositories under The Bozos.
 
 ### Removed
 
@@ -34,6 +28,9 @@ CI and refuses a version with no dated section here.
 
 ### Fixed
 
+- The rack's panels stop the hover, so a server behind one no longer slides out.
+- Contributions no longer lists MarcDownHQ and TheBozos repositories as upstream, and
+  older contributions no longer fall off the list.
 - Early years opens its introduction first, then the list, like the other workspaces.
 
 ## [0.5.0] - 2026-11-04
@@ -140,7 +137,8 @@ CI and refuses a version with no dated section here.
   desktop and a phone browser.
 - `tools/deploy.sh` publishes `dist/` to arzaroth.com.
 
-[Unreleased]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.5.0...HEAD
+[Unreleased]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.6.0...HEAD
+[0.6.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.5.0...v0.6.0
 [0.5.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.4.1...v0.5.0
 [0.4.1]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.4.0...v0.4.1
 [0.4.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.3.0...v0.4.0

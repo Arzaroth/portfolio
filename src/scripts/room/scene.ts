@@ -43,6 +43,15 @@ const need = <T extends Element>(root: ParentNode, sel: string) => {
   return el;
 };
 
+const softwareGL = () => {
+  const gl = document.createElement('canvas').getContext('webgl2') ?? document.createElement('canvas').getContext('webgl');
+  if (!gl) return true;
+  const info = gl.getExtension('WEBGL_debug_renderer_info');
+  const name = String(info ? gl.getParameter(info.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER));
+  gl.getExtension('WEBGL_lose_context')?.loseContext();
+  return /swiftshader|llvmpipe|softpipe|software|basic render/i.test(name);
+};
+
 export async function startRoom(root: HTMLElement) {
   const MOBILE = matchMedia('(max-width: 760px), (pointer: coarse)').matches;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -52,10 +61,12 @@ export async function startRoom(root: HTMLElement) {
     new Promise((r) => setTimeout(r, 2500)),
   ]);
 
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: !MOBILE, powerPreference: 'high-performance' });
-  let pr = Math.min(devicePixelRatio, 1.5);
+  const SOFT = softwareGL();
+  const LITE = MOBILE || SOFT;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: !LITE, powerPreference: 'high-performance' });
+  let pr = SOFT ? 1 : Math.min(devicePixelRatio, 1.5);
   renderer.setPixelRatio(pr);
-  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.enabled = !SOFT;
   renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.shadowMap.autoUpdate = false;
   let shadowDirty = 3;
@@ -294,7 +305,7 @@ export async function startRoom(root: HTMLElement) {
     o.userData.pick = plantTag;
   });
 
-  const { cat, tick: catTick } = buildCat(MOBILE ? 12 : 22);
+  const { cat, tick: catTick } = buildCat(SOFT ? 0 : MOBILE ? 12 : 22);
   cat.position.set(-0.02, rackTop, 0.12);
   cat.rotation.y = -1.0;
   scene.add(cat);
@@ -306,7 +317,7 @@ export async function startRoom(root: HTMLElement) {
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
   const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.5, 0.5, 0.85);
-  bloom.enabled = !MOBILE;
+  bloom.enabled = !LITE;
   composer.addPass(bloom);
   composer.addPass(new OutputPass());
 
@@ -539,6 +550,7 @@ export async function startRoom(root: HTMLElement) {
   const t0 = performance.now();
   const proj = new THREE.Vector3();
   let lastDraw = 0;
+  let cost = 0;
   let frames = 0;
   let slow = 0;
   let sampleStart = 0;
@@ -562,7 +574,7 @@ export async function startRoom(root: HTMLElement) {
         moving = true;
         shadowDirty = 2;
       }
-    if (!moving && now - lastDraw < 66) return;
+    if (now - lastDraw < Math.max(moving ? 0 : 66, cost * 3)) return;
     if (moving && quality > 0 && now) {
       if (!sampleStart) sampleStart = now;
       frames++;
@@ -604,7 +616,10 @@ export async function startRoom(root: HTMLElement) {
       l.m.emissiveIntensity = reduce ? 2.5 : v > 0.2 ? 3.2 : 0.4;
     }
     if (!reduce) catTick(t);
-    composer.render();
+    const before = performance.now();
+    if (bloom.enabled) composer.render();
+    else renderer.render(scene, camera);
+    cost = cost * 0.7 + (performance.now() - before) * 0.3;
     const a = selected && !narrow() ? anchorFor(selected) : null;
     if (a) {
       proj.copy(a).project(camera);

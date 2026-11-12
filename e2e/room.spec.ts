@@ -35,6 +35,14 @@ test('a server picked in the list opens its card, and the close button puts it b
   await expect(card).not.toHaveClass(/\bopen\b/);
 });
 
+test('nothing covers the room before the Konami code', async ({ page }) => {
+  await page.goto('/');
+  await powered(page);
+  const box = await page.locator('#rk-canvas').boundingBox();
+  const top = await page.evaluate(([x, y]) => document.elementFromPoint(x, y)?.id, [box!.x + box!.width * 0.6, box!.y + box!.height * 0.5]);
+  expect(top).toBe('rk-canvas');
+});
+
 test('escape closes the card', async ({ page }) => {
   await page.goto('/');
   await powered(page);

@@ -10,6 +10,8 @@ CI and refuses a version with no dated section here.
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-11-12
+
 ### Added
 
 - The monitor on the desk shows the site as it was in 0.3.0, before the tiling desktop,
@@ -168,7 +170,8 @@ CI and refuses a version with no dated section here.
   desktop and a phone browser.
 - `tools/deploy.sh` publishes `dist/` to arzaroth.com.
 
-[Unreleased]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.7.0...HEAD
+[Unreleased]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.8.0...HEAD
+[0.8.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.7.0...v0.8.0
 [0.7.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.6.0...v0.7.0
 [0.6.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.5.0...v0.6.0
 [0.5.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.4.1...v0.5.0

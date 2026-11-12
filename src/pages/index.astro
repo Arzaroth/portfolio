@@ -12,9 +12,18 @@ import Recomp from '../components/Recomp.astro';
 import SelfHosting from '../components/SelfHosting.astro';
 import Contributions from '../components/Contributions.astro';
 import EarlyYears from '../components/EarlyYears.astro';
+import '../styles/global.css';
+import '../styles/desktop.css';
+import '../styles/windows.css';
+import '../styles/terminal.css';
+import '../styles/sections.css';
+import '../styles/responsive.css';
+
+const fonts =
+  'https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;500;600&display=swap';
 ---
 
-<Base>
+<Base fonts={fonts}>
   <Wall />
   <Bar />
   <div class="toast" role="status" aria-live="polite" hidden><b></b><span></span></div>

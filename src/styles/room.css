@@ -108,6 +108,7 @@ a { color: inherit; }
 .rk-boot .logo { color: #ffb45e; }
 .rk-splash { position: fixed; inset: 0; z-index: 45; background: #000; display: grid; place-content: center; justify-items: center; gap: 44px; opacity: 0; transition: opacity .5s; }
 .rk-splash.on { opacity: 1; }
+.rk-splash[hidden], .rk-desktop[hidden], .rk-boot[hidden] { display: none; }
 .rk-splash svg { width: 96px; height: 96px; filter: drop-shadow(0 0 18px rgba(236, 139, 161, .35)); animation: rk-throb 2.2s ease-in-out infinite; }
 @keyframes rk-throb { 0%, 100% { opacity: .55; transform: scale(.97); } 50% { opacity: 1; transform: scale(1); } }
 .rk-splash .meter { width: 180px; height: 3px; border-radius: 2px; background: rgba(255, 255, 255, .12); overflow: hidden; }

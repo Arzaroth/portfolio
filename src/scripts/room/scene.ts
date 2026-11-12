@@ -90,15 +90,15 @@ export async function startRoom(root: HTMLElement) {
   sun.shadow.normalBias = 0.012;
   sun.shadow.radius = 3;
   const lampLight = new THREE.PointLight('#ffb25a', 0, 0, 1.6);
-  lampLight.position.set(-1.25, 1.52, 1.15);
+  lampLight.position.set(0.85, 1.52, -0.5);
   lampLight.castShadow = true;
   lampLight.shadow.mapSize.setScalar(MOBILE ? 512 : 1024);
   lampLight.shadow.bias = -0.002;
   lampLight.shadow.normalBias = 0.01;
   lampLight.shadow.radius = 4;
   const spill = new THREE.SpotLight('#ffcf94', 0, 4, 0.9, 0.8, 1.4);
-  spill.position.set(-1.25, 1.32, 1.15);
-  spill.target.position.set(-1.1, 0, 1.2);
+  spill.position.set(0.85, 1.32, -0.5);
+  spill.target.position.set(0.85, 0, -0.25);
   const ledGlow = new THREE.PointLight('#5dff9a', 0.25, 1.2, 2);
   ledGlow.position.set(0.15, 1.1, 0.75);
   scene.add(hemi, fill, moon, sun, lampLight, spill, spill.target, ledGlow);
@@ -250,7 +250,7 @@ export async function startRoom(root: HTMLElement) {
   }
 
   const lamp = new THREE.Group();
-  lamp.position.set(-1.25, 0, 1.15);
+  lamp.position.set(0.85, 0, -0.5);
   scene.add(lamp);
   const black = new THREE.MeshStandardMaterial({ color: '#141414', roughness: 0.4, metalness: 0.6 });
   add(new THREE.CylinderGeometry(0.15, 0.17, 0.03, 32), black, 0, 0.015, 0, lamp);
@@ -603,9 +603,9 @@ export async function startRoom(root: HTMLElement) {
       sv.faceMat.emissiveIntensity = hot || selected === sv.id ? 0.07 : 0;
     }
     const lampOn = night ? (reduce ? 1 : Math.min(1, Math.max(0, (t - 0.35) / 0.25))) : 0;
-    lampLight.intensity = 11 * lampOn;
+    lampLight.intensity = 8 * lampOn;
     spill.intensity = 6 * lampOn;
-    shadeMat.emissiveIntensity = 1.6 * lampOn;
+    shadeMat.emissiveIntensity = 1.1 * lampOn;
     servers.forEach((sv, i) => {
       if (!sv.lit && (reduce || t > 1.1 + i * 0.06)) {
         sv.lit = true;

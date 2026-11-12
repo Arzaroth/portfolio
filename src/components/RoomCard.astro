@@ -1,0 +1,66 @@
+---
+import { rack, whereOf, type Card, type Row } from '../data/room';
+
+interface Props {
+  card: Card;
+}
+
+const { card } = Astro.props;
+const tape = rack.find((s) => s.id === card.id)?.tape ?? 'black';
+const ext = { target: '_blank', rel: 'noopener' };
+const rowClass = (r: Row) => (r.icon !== undefined ? 'with-icon' : undefined);
+const List = card.ordered ? 'ol' : 'ul';
+---
+
+<article class="rk-entry" id={`server-${card.id}`} data-id={card.id} aria-labelledby={`server-${card.id}-name`}>
+  <header>
+    {card.icon ? <img src={card.icon} alt="" width="64" height="64" loading="lazy" /> : <span class={`noicon tape ${tape}`} aria-hidden="true">{card.name[0].toUpperCase()}</span>}
+    <div>
+      <h2 id={`server-${card.id}-name`}>{card.name}</h2>
+      <p><span class="slot">{whereOf(card.id)}</span>{card.sub && <span>{card.sub}</span>}</p>
+    </div>
+  </header>
+  {card.badge && <span class="chip">{card.badge}</span>}
+  {card.paragraphs.map((p) => <p>{p}</p>)}
+  {
+    card.rows && (
+      <List>
+        {card.rows.map((r) => (
+          <li class={rowClass(r)}>
+            {r.icon !== undefined && (r.icon ? <img src={r.icon} alt="" width="32" height="32" loading="lazy" /> : <i />)}
+            <b>{r.href ? <a href={r.href} {...ext}>{r.title}</a> : r.title}</b>
+            {r.aside && (r.chip ? <span class={`chip ${r.chip}`}>{r.aside}</span> : <span>{r.aside}</span>)}
+            {r.note && <small>{r.note}</small>}
+          </li>
+        ))}
+      </List>
+    )
+  }
+  {
+    card.extra && (
+      <>
+        <p class="meta">{card.extra.lead}</p>
+        <ul>
+          {card.extra.rows.map((r) => (
+            <li>
+              <b>{r.href ? <a href={r.href} {...ext}>{r.title}</a> : r.title}</b>
+              {r.aside && <span>{r.aside}</span>}
+            </li>
+          ))}
+        </ul>
+      </>
+    )
+  }
+  {card.footer && <p class="meta">{card.footer.map((f) => (typeof f === 'string' ? f : <a href={f.href} {...ext}>{f.label}</a>))}</p>}
+  {
+    card.links && card.links.length > 0 && (
+      <div class="links">
+        {card.links.map((l, i) => (
+          <a href={l.href} class={i === 0 ? 'primary' : undefined} {...ext}>
+            {l.label}
+          </a>
+        ))}
+      </div>
+    )
+  }
+</article>

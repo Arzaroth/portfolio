@@ -1,19 +1,18 @@
 ---
-import '../styles/global.css';
-import '../styles/desktop.css';
-import '../styles/windows.css';
-import '../styles/terminal.css';
-import '../styles/sections.css';
-import '../styles/responsive.css';
-
 interface Props {
   title?: string;
   description?: string;
+  fonts: string;
+  colorScheme?: string;
+  themeColor?: string;
 }
 
 const {
   title = 'Arzaroth',
   description = 'Arzaroth: apps, desktop tools, self-hosting and open source work.',
+  fonts,
+  colorScheme = 'dark',
+  themeColor = '#1c1730',
 } = Astro.props;
 ---
 
@@ -24,19 +23,17 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content={colorScheme} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#1c1730" />
+    <meta name="theme-color" content={themeColor} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
+    <link href={fonts} rel="stylesheet" />
     <script is:inline>document.documentElement.classList.add('js');</script>
+    <slot name="head" />
   </head>
   <body>
     <slot />

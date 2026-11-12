@@ -52,32 +52,32 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('opens on the hello workspace', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/desktop/');
   await expectOnly(page, 'about');
   await expect(page.getByRole('heading', { level: 1 })).toHaveAccessibleName('Arzaroth');
 });
 
 test('switches to the workspace picked in the bar', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/desktop/');
   await page.locator('.ws-btn[data-go="gauges"]').click();
   await expectOnly(page, 'gauges');
   await expect(page).toHaveURL(/#gauges$/);
 });
 
 test('opens the workspace named in the link', async ({ page }) => {
-  await page.goto('/#ouroboros');
+  await page.goto('/desktop/#ouroboros');
   await expectOnly(page, 'ouroboros');
   await expectFullCount(page);
 });
 
 test('an old link to the sealed names opens the workbench', async ({ page }) => {
-  await page.goto('/#sealed');
+  await page.goto('/desktop/#sealed');
   await expectOnly(page, 'workshop');
   await expect(page.locator('#workshop .sealed h3')).toHaveText(['Magister', 'Rackmancy']);
 });
 
 test('a tier under the pointer lights its arc on the ring', async ({ page }) => {
-  await page.goto('/#ouroboros');
+  await page.goto('/desktop/#ouroboros');
   await expectOnly(page, 'ouroboros');
   await openAll(page);
   await expect(page.locator('#ouroboros .ring .arc')).toHaveCount(8);
@@ -88,7 +88,7 @@ test('a tier under the pointer lights its arc on the ring', async ({ page }) => 
 
 test('the line count follows the latest ouroboros release', async ({ page }) => {
   await page.route(latestRelease, (route) => route.fulfill({ json: { body: 'Prose.\n\nLOC: 31337\n' } }));
-  await page.goto('/#ouroboros');
+  await page.goto('/desktop/#ouroboros');
   await expect(page.locator('#ouroboros [data-count]')).toHaveText('31,337');
   await expect(page.locator('#ouroboros .links a')).toHaveText('Read all 31,337 lines');
 });
@@ -100,14 +100,14 @@ test('the line count arriving after the workspace settled still lands', async ({
     await held;
     await route.fulfill({ json: { body: 'LOC: 31337' } });
   });
-  await page.goto('/#ouroboros');
+  await page.goto('/desktop/#ouroboros');
   await expectFullCount(page);
   release();
   await expect(page.locator('#ouroboros [data-count]')).toHaveText('31,337');
 });
 
 test('every window wears the colour of its workspace', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/desktop/');
   for (const id of order) {
     const want = await page.locator(`.ws-btn[data-go="${id}"]`).evaluate((b) => getComputedStyle(b).getPropertyValue('--c').trim());
     const got = await page.locator(`#${id} > .win`).evaluateAll((ws) => ws.map((w) => getComputedStyle(w).getPropertyValue('--acc').trim()));
@@ -136,7 +136,7 @@ test('the contribution counts follow GitHub', async ({ page }) => {
   await page.route('https://api.github.com/repos/*/*/contributors**', (route) =>
     route.fulfill({ json: [{ login: 'Arzaroth', contributions: 4242 }] }),
   );
-  await page.goto('/#contributions');
+  await page.goto('/desktop/#contributions');
   await expectOnly(page, 'contributions');
   await expect(page.locator('#contributions [data-repo="boubou666/doot"] [data-count]')).toHaveText('30');
   await expect(page.locator('#contributions [data-repo="Guillaume69/rocket-vibe"] [data-count]')).toHaveText('4,242');
@@ -144,7 +144,7 @@ test('the contribution counts follow GitHub', async ({ page }) => {
 });
 
 test('early years opens its introduction before the list', async ({ page, isMobile }) => {
-  await page.goto('/#archive');
+  await page.goto('/desktop/#archive');
   await expectOnly(page, 'archive');
   await expect(page.locator('#archive > .win').first()).toHaveAttribute('aria-label', 'early-years.md');
   if (isMobile) return;
@@ -152,7 +152,7 @@ test('early years opens its introduction before the list', async ({ page, isMobi
 });
 
 test('the ps2 games share one browser, a tab each under its disc', async ({ page, isMobile }) => {
-  await page.goto('/#recomp');
+  await page.goto('/desktop/#recomp');
   await expectOnly(page, 'recomp');
   if (!isMobile) {
     await expect(page.locator('#recomp .win.master')).toHaveAttribute('aria-label', 'the-bozos.md');
@@ -180,7 +180,7 @@ test('the ps2 games share one browser, a tab each under its disc', async ({ page
 test('the rack panels stop the hover reaching the servers behind them', async ({ page, isMobile }) => {
   test.skip(isMobile, 'needs a mouse');
   test.slow();
-  await page.goto('/#selfhosted');
+  await page.goto('/desktop/#selfhosted');
   await expectOnly(page, 'selfhosted');
   const view = page.locator('#selfhosted .rackview');
   await expect(view).toHaveClass(/\b(gl|no-gl)\b/);
@@ -208,7 +208,7 @@ test('the rack panels stop the hover reaching the servers behind them', async ({
 });
 
 test('the rack in self-hosting is drawn in 3D, or falls back to the list', async ({ page }) => {
-  await page.goto('/#selfhosted');
+  await page.goto('/desktop/#selfhosted');
   await expectOnly(page, 'selfhosted');
   const view = page.locator('#selfhosted .rackview');
   await expect(view).toHaveClass(/\b(gl|no-gl)\b/);
@@ -221,12 +221,12 @@ test('the rack in self-hosting is drawn in 3D, or falls back to the list', async
 });
 
 test('an unknown link falls back to hello', async ({ page }) => {
-  await page.goto('/#nothing-here');
+  await page.goto('/desktop/#nothing-here');
   await expectOnly(page, 'about');
 });
 
 test('back and forward retrace the workspaces visited', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/desktop/');
   await page.locator('.ws-btn[data-go="gauges"]').click();
   await expectOnly(page, 'gauges');
   await page.locator('.ws-btn[data-go="ouroboros"]').click();
@@ -240,7 +240,7 @@ test('back and forward retrace the workspaces visited', async ({ page }) => {
 });
 
 test('an unknown link does not leave a dead entry behind', async ({ page }) => {
-  await page.goto('/#nothing-here');
+  await page.goto('/desktop/#nothing-here');
   await expect(page).toHaveURL(/#about$/);
   await page.locator('.ws-btn[data-go="apps"]').click();
   await page.goBack();
@@ -248,7 +248,7 @@ test('an unknown link does not leave a dead entry behind', async ({ page }) => {
 });
 
 test('an unknown hash typed on hello is put back to hello', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/desktop/');
   await expectOnly(page, 'about');
   await page.evaluate(() => (location.hash = 'bogus'));
   await expect(page).toHaveURL(/#about$/);
@@ -256,7 +256,7 @@ test('an unknown hash typed on hello is put back to hello', async ({ page }) => 
 });
 
 test('the workspace list on hello opens each workspace', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/desktop/');
   await openAll(page);
   await page.locator('#about .row[data-go="contributions"]').click();
   await expectOnly(page, 'contributions');
@@ -265,7 +265,7 @@ test('the workspace list on hello opens each workspace', async ({ page }) => {
 });
 
 test('a terminal prints a sample of the program typed', async ({ page }) => {
-  await page.goto('/#tools');
+  await page.goto('/desktop/#tools');
   await expectOnly(page, 'tools');
   const term = page.locator('#tools .win', { hasText: 'resumove' }).first();
   const cli = term.locator('.cli');
@@ -283,7 +283,7 @@ test('a terminal prints a sample of the program typed', async ({ page }) => {
 });
 
 test('the rack in fastfetch has a unit per workspace, in its colour', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/desktop/');
   const units = page.locator('#about .fetch svg rect[rx="1.5"]');
   await expect(units).toHaveCount(workspaces.length);
   await expect(page.locator('#about .swatches i')).toHaveCount(workspaces.length);
@@ -292,7 +292,7 @@ test('the rack in fastfetch has a unit per workspace, in its colour', async ({ p
 });
 
 test('tab completes the program name', async ({ page }) => {
-  await page.goto('/#about');
+  await page.goto('/desktop/#about');
   const cli = page.locator('#about .cli');
   await cli.fill('fast');
   await cli.press('Tab');
@@ -302,7 +302,7 @@ test('tab completes the program name', async ({ page }) => {
 });
 
 test('the gauges share one terminal, a tab each', async ({ page }) => {
-  await page.goto('/#gauges');
+  await page.goto('/desktop/#gauges');
   await expectOnly(page, 'gauges');
   const tabs = page.locator('#gauges [role="tab"]');
   await expect(tabs).toHaveText(['TokenGauge', 'remuda', 'TailGauge', 'smith', 'wyrmyon']);
@@ -324,7 +324,7 @@ test.describe('desktop', () => {
   test.skip(({ isMobile }) => isMobile, 'tiling and keyboard are desktop only');
 
   test('ctrl and a number walk every workspace', async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/desktop/');
     await expect(page.locator('.bar .mod')).toHaveText('ctrl');
     for (const [i, id] of order.entries()) {
       await page.keyboard.press(`Control+${keyOf(i)}`);
@@ -333,7 +333,7 @@ test.describe('desktop', () => {
   });
 
   test('the window under the pointer takes the focus, and its terminal the keyboard', async ({ page }) => {
-    await page.goto('/#tools');
+    await page.goto('/desktop/#tools');
     await expectOnly(page, 'tools');
     await openAll(page);
     await page.waitForTimeout(600);
@@ -348,7 +348,7 @@ test.describe('desktop', () => {
   });
 
   test('tab and shift tab move between the gauge tabs, each shown from its bottom', async ({ page }) => {
-    await page.goto('/#gauges');
+    await page.goto('/desktop/#gauges');
     await expectOnly(page, 'gauges');
     await page.waitForTimeout(600);
     const gauges = page.locator('#gauges .win.tabbed');
@@ -369,7 +369,7 @@ test.describe('desktop', () => {
   });
 
   test('without the pointer on it, tab leaves the gauges window as usual', async ({ page }) => {
-    await page.goto('/#gauges');
+    await page.goto('/desktop/#gauges');
     await page.locator('#gauges [role="tab"]').first().focus();
     await page.keyboard.press('Tab');
     await expect(page.locator('#gauges .panel:not([hidden]) h2')).toHaveText('TokenGauge');
@@ -377,7 +377,7 @@ test.describe('desktop', () => {
   });
 
   test('tab completes a name before it changes tab', async ({ page }) => {
-    await page.goto('/#gauges');
+    await page.goto('/desktop/#gauges');
     await page.waitForTimeout(600);
     await page.locator('#gauges .win.tabbed').hover();
     await page.keyboard.type('token');
@@ -387,7 +387,7 @@ test.describe('desktop', () => {
   });
 
   test('m swaps the focused window into the main tile, and l moves the focus', async ({ page }) => {
-    await page.goto('/#tools');
+    await page.goto('/desktop/#tools');
     await expectOnly(page, 'tools');
     await openAll(page);
     const main = page.locator('#tools .win.master');
@@ -401,7 +401,7 @@ test.describe('desktop', () => {
   });
 
   test('typing in a terminal takes letters and digits, and ctrl still switches', async ({ page }) => {
-    await page.goto('/#tools');
+    await page.goto('/desktop/#tools');
     const cli = page.locator('#tools .cli').first();
     await cli.click();
     await page.keyboard.type('hjkl m 2');
@@ -414,7 +414,7 @@ test.describe('desktop', () => {
   const konami = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
 
   test('the Konami code lets the windows float, and Esc tiles them back', async ({ page }) => {
-    await page.goto('/#apps');
+    await page.goto('/desktop/#apps');
     await expectOnly(page, 'apps');
     await settled(page);
     const tiled = () => page.locator('#apps > .win').evaluateAll((ws) => ws.map((w) => [w.style.left, w.style.top, w.style.width, w.style.height].join()));
@@ -431,7 +431,7 @@ test.describe('desktop', () => {
   });
 
   test('another workspace ends floating mode', async ({ page }) => {
-    await page.goto('/#apps');
+    await page.goto('/desktop/#apps');
     await settled(page);
     for (const k of konami) await page.keyboard.press(k);
     await expect(page.locator('#apps')).toHaveClass(/\bfloating\b/);
@@ -441,7 +441,7 @@ test.describe('desktop', () => {
   });
 
   test('the code typed in a terminal leaves its prompt clean', async ({ page }) => {
-    await page.goto('/#tools');
+    await page.goto('/desktop/#tools');
     const cli = page.locator('#tools .cli').first();
     await cli.click();
     await cli.fill('t3');
@@ -453,7 +453,7 @@ test.describe('desktop', () => {
   const open = (page: Page) => page.locator('.ws.on > .win:not(.pane-hidden)');
 
   test('the first view opens on the main window, and a workspace reached directly opens whole', async ({ page }) => {
-    await page.goto('/#tools');
+    await page.goto('/desktop/#tools');
     await expectOnly(page, 'tools');
     await expect(open(page)).toHaveCount(1);
     await page.keyboard.press('Control+7');
@@ -465,7 +465,7 @@ test.describe('desktop', () => {
   });
 
   test('j and k open and close the windows one by one, and carry on across workspaces', async ({ page }) => {
-    await page.goto('/#tools');
+    await page.goto('/desktop/#tools');
     await expectOnly(page, 'tools');
     await expect(page.locator('.steps i')).toHaveCount(4);
     await openAll(page);
@@ -490,7 +490,7 @@ test.describe('desktop', () => {
   });
 
   test('stepping walks the tabs of a tabbed window before the next window', async ({ page }) => {
-    await page.goto('/#apps');
+    await page.goto('/desktop/#apps');
     await expectOnly(page, 'apps');
     await openAll(page);
     await page.keyboard.press('j');
@@ -511,7 +511,7 @@ test.describe('desktop', () => {
   });
 
   test('a workspace reached directly shows every step done', async ({ page }) => {
-    await page.goto('/#about');
+    await page.goto('/desktop/#about');
     await page.keyboard.press('Control+3');
     await expectOnly(page, 'gauges');
     await expect(page.locator('.steps i')).toHaveCount(7);
@@ -525,7 +525,7 @@ test.describe('desktop', () => {
   });
 
   test('the wheel over the bar opens and closes the windows', async ({ page }) => {
-    await page.goto('/#selfhosted');
+    await page.goto('/desktop/#selfhosted');
     await expectOnly(page, 'selfhosted');
     await settled(page);
     await page.mouse.move(700, 30);
@@ -537,7 +537,7 @@ test.describe('desktop', () => {
   });
 
   test('one fast trackpad flick steps once, however large its deltas', async ({ page }) => {
-    await page.goto('/#tools');
+    await page.goto('/desktop/#tools');
     await expectOnly(page, 'tools');
     const flick = Array.from({ length: 24 }, (_, i): [number, number] => [Math.round(110 * (1 - i / 24)) + 4, 16]);
     await wheel(page, flick);
@@ -550,7 +550,7 @@ test.describe('desktop', () => {
   });
 
   test('slow small wheel ticks still step', async ({ page }) => {
-    await page.goto('/#tools');
+    await page.goto('/desktop/#tools');
     await expectOnly(page, 'tools');
     await settled(page);
     await wheel(page, [[20, 250], [20, 250], [20, 250]]);
@@ -561,7 +561,7 @@ test.describe('desktop', () => {
     const context = await browser.newContext({ viewport: { width: 1280, height: 560 } });
     const page = await context.newPage();
     await page.route('https://api.github.com/**', (route) => route.abort());
-    await page.goto('/#ouroboros');
+    await page.goto('/desktop/#ouroboros');
     await expectOnly(page, 'ouroboros');
     await openAll(page);
     await settled(page);
@@ -579,7 +579,7 @@ test.describe('desktop', () => {
   });
 
   test('tabbing into a closed window opens it', async ({ page }) => {
-    await page.goto('/#about');
+    await page.goto('/desktop/#about');
     await expectOnly(page, 'about');
     await expect(page.locator('#about .win[aria-label="~/workspaces"]')).toHaveClass(/pane-hidden/);
     await page.locator('#about .row[data-go="apps"]').focus();
@@ -587,7 +587,7 @@ test.describe('desktop', () => {
   });
 
   test('floating mode opens every window, and closes again the ones that were closed', async ({ page }) => {
-    await page.goto('/#apps');
+    await page.goto('/desktop/#apps');
     await expectOnly(page, 'apps');
     await page.keyboard.press('j');
     await expect(open(page)).toHaveCount(2);
@@ -605,7 +605,7 @@ test.describe('desktop', () => {
     const context = await browser.newContext({ viewport: { width: 700, height: 900 } });
     const page = await context.newPage();
     await page.route('https://api.github.com/**', (route) => route.abort());
-    await page.goto('/#tools');
+    await page.goto('/desktop/#tools');
     await expectOnly(page, 'tools');
     await page.locator('#tools .win[aria-label="t3cc"] .cli').focus();
     await page.setViewportSize({ width: 1440, height: 900 });
@@ -616,7 +616,7 @@ test.describe('desktop', () => {
   });
 
   test('ctrl on the workspace already shown opens it whole', async ({ page }) => {
-    await page.goto('/#tools');
+    await page.goto('/desktop/#tools');
     await expectOnly(page, 'tools');
     await expect(open(page)).toHaveCount(1);
     await page.keyboard.press('Control+4');
@@ -624,7 +624,7 @@ test.describe('desktop', () => {
   });
 
   test('closed windows are hidden from screen readers until they open', async ({ page }) => {
-    await page.goto('/#tools');
+    await page.goto('/desktop/#tools');
     await expectOnly(page, 'tools');
     await expect(page.locator('#tools > .win[aria-hidden="true"]')).toHaveCount(3);
     await page.keyboard.press('j');
@@ -636,7 +636,7 @@ test.describe('desktop', () => {
     const context = await browser.newContext({ viewport: { width: 1100, height: 700 } });
     const page = await context.newPage();
     await page.route('https://api.github.com/**', (route) => route.abort());
-    await page.goto('/#recomp');
+    await page.goto('/desktop/#recomp');
     await expectOnly(page, 'recomp');
     const body = page.locator('#recomp .win.recomp .body');
     for (let i = 0; i < 12; i++) {
@@ -651,7 +651,7 @@ test.describe('desktop', () => {
     const page = await context.newPage();
     await page.route('https://api.github.com/**', (route) => route.abort());
     for (const id of order) {
-      await page.goto(`/#${id}`);
+      await page.goto(`/desktop/#${id}`);
       await expectOnly(page, id);
       await openAll(page);
       await settled(page);
@@ -668,7 +668,7 @@ test.describe('desktop', () => {
 
   test('the windows tile the desk without overlapping', async ({ page }) => {
     for (const id of order) {
-      await page.goto(`/#${id}`);
+      await page.goto(`/desktop/#${id}`);
       await expectOnly(page, id);
       await openAll(page);
       await settled(page);
@@ -694,7 +694,7 @@ test.describe('phone', () => {
   test.skip(({ isMobile }) => !isMobile, 'phone layout only');
 
   test('the windows stack and nothing scrolls sideways', async ({ page }) => {
-    await page.goto('/#apps');
+    await page.goto('/desktop/#apps');
     await expectOnly(page, 'apps');
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(overflow).toBeLessThanOrEqual(0);
@@ -709,7 +709,7 @@ test('every window shows at once on a phone and with reduced motion', async ({ b
   const context = await browser.newContext(isMobile ? {} : { reducedMotion: 'reduce', viewport: { width: 1440, height: 900 } });
   const page = await context.newPage();
   await page.route('https://api.github.com/**', (route) => route.abort());
-  await page.goto('/#selfhosted');
+  await page.goto('/desktop/#selfhosted');
   await expect(page.locator('#selfhosted > .win')).toHaveCount(5);
   await expect(page.locator('#selfhosted > .win.pane-hidden')).toHaveCount(0);
   await expect(page.locator('.steps')).toBeHidden();
@@ -720,7 +720,7 @@ test('with reduced motion, the counts land at once', async ({ browser }) => {
   const context = await browser.newContext({ reducedMotion: 'reduce' });
   const page = await context.newPage();
   await page.route('https://api.github.com/**', (route) => route.abort());
-  await page.goto('/#ouroboros');
+  await page.goto('/desktop/#ouroboros');
   await expectFullCount(page);
   await context.close();
 });

@@ -1,7 +1,9 @@
 # portfolio
 
-Arzaroth's page at [arzaroth.com](https://arzaroth.com), laid out as a tiling desktop.
-Each part of the work is a workspace, and each project a window in it.
+Arzaroth's page at [arzaroth.com](https://arzaroth.com): a 42U rack in a living room, drawn
+with three.js, where every server is a project. Pull one out to read what it is. The
+Konami code boots one of the machines into the previous design, a tiling desktop where
+each part of the work is a workspace, now at `/desktop/`.
 
 ## Develop
 
@@ -18,7 +20,17 @@ Or with npm directly: `npm run dev`, `npm run check`, `npm test`, `npm run build
 
 ## Where things live
 
-- `src/data/projects.ts`: every piece of copy on the page.
+- `src/data/projects.ts`: every piece of copy on the site.
+- `src/data/room.ts`: the rack in the room, top to bottom, each server's face, label tape and
+  colour, and the card it opens, built from `projects.ts`.
+- `src/pages/index.astro` and `src/components/RoomCard.astro`: the room. Every card is in
+  the page, so it reads without JavaScript or WebGL, as a list of cards.
+- `src/scripts/room/`: the room in three.js. `scene.ts` builds it and handles picking, the
+  camera, day and night, and the Konami code, `textures.ts` paints the server faces and the
+  desk's monitor, `cat.ts` the cat asleep on the rack, and `boot.ts` the BIOS and boot
+  screens shown on the way into the desktop.
+- `src/styles/room.css`: the room's stylesheet.
+- `src/pages/desktop.astro`: the tiling desktop.
 - `src/data/desktop.ts`: the workspaces, their colours, and the layout tree that splits each
   one into tiles. A leaf is a window, numbered in the order the workspace's component
   lists them.
@@ -42,11 +54,11 @@ Or with npm directly: `npm run dev`, `npm run check`, `npm test`, `npm run build
   to show when GitHub cannot be reached.
 - `src/styles/`: one stylesheet per area. The stacked layout is the default; the tiled
   one needs JavaScript and a screen wider than 760 px. `responsive.css` loads last.
-- `test/`: unit tests for the layout trees and the terminal. `e2e/`: Playwright, desktop
-  and phone.
+- `test/`: unit tests for the rack, the layout trees and the terminal. `e2e/`: Playwright,
+  desktop and phone, one spec for the room and one for the desktop.
 
 Adding a workspace means adding it to `desktop.ts` and a component with a matching
-`<Workspace id>` to `src/pages/index.astro`. The unit tests fail if a layout tree does not
+`<Workspace id>` to `src/pages/desktop.astro`. The unit tests fail if a layout tree does not
 place each of the component's windows exactly once.
 
 ## Release and deploy

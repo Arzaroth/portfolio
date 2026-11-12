@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+import Wall from '../components/Wall.astro';
+import Bar from '../components/Bar.astro';
+import Hello from '../components/Hello.astro';
+import Apps from '../components/Apps.astro';
+import Gauges from '../components/Gauges.astro';
+import Tools from '../components/Tools.astro';
+import Workbench from '../components/Workbench.astro';
+import Ouroboros from '../components/Ouroboros.astro';
+import Recomp from '../components/Recomp.astro';
+import SelfHosting from '../components/SelfHosting.astro';
+import Contributions from '../components/Contributions.astro';
+import EarlyYears from '../components/EarlyYears.astro';
+import '../styles/global.css';
+import '../styles/desktop.css';
+import '../styles/windows.css';
+import '../styles/terminal.css';
+import '../styles/sections.css';
+import '../styles/responsive.css';
+
+const fonts =
+  'https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;500;600&display=swap';
+---
+
+<Base fonts={fonts}>
+  <Wall />
+  <Bar />
+  <div class="toast" role="status" aria-live="polite" hidden><b></b><span></span></div>
+  <main class="desk" id="desk">
+    <Hello />
+    <Apps />
+    <Gauges />
+    <Tools />
+    <Workbench />
+    <Ouroboros />
+    <Recomp />
+    <SelfHosting />
+    <Contributions />
+    <EarlyYears />
+  </main>
+</Base>
+
+<script>
+  import { initDesktop } from '../scripts/desktop';
+  import { initTerminals } from '../scripts/terminal';
+
+  initTerminals();
+  initDesktop();
+</script>

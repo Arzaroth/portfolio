@@ -3,7 +3,8 @@
 Arzaroth's page at [arzaroth.com](https://arzaroth.com): a 42U rack in a living room, drawn
 with three.js, where every server is a project. Pull one out to read what it is. The
 Konami code boots one of the machines into the previous design, a tiling desktop where
-each part of the work is a workspace, now at `/desktop/`.
+each part of the work is a workspace. It is served at `/desktop/` but only shows inside
+the room, in a frame; opened on its own it sends the visitor back to the room.
 
 ## Develop
 
@@ -28,9 +29,10 @@ Or with npm directly: `npm run dev`, `npm run check`, `npm test`, `npm run build
 - `src/scripts/room/`: the room in three.js. `scene.ts` builds it and handles picking, the
   camera, day and night, and the Konami code, `textures.ts` paints the server faces and the
   desk's monitor, `cat.ts` the cat asleep on the rack, and `boot.ts` the BIOS and boot
-  screens shown on the way into the desktop.
+  screens shown on the way into the desktop, before its splash. On a software WebGL
+  renderer the room drops shadows, bloom and fur.
 - `src/styles/room.css`: the room's stylesheet.
-- `src/pages/desktop.astro`: the tiling desktop.
+- `src/pages/desktop.astro`: the tiling desktop, embedded in the room.
 - `src/data/desktop.ts`: the workspaces, their colours, and the layout tree that splits each
   one into tiles. A leaf is a window, numbered in the order the workspace's component
   lists them.

@@ -10,6 +10,26 @@ CI and refuses a version with no dated section here.
 
 ## [Unreleased]
 
+### Added
+
+- j and k walk the rack, pulling out the next server down or up.
+- After the boot screens, a splash with the desktop's mark and a progress bar, while the
+  desktop loads.
+- The Bozos' card shows the organisation's avatar.
+
+### Changed
+
+- The tiling desktop opens inside the room's page, in a frame, and `/desktop/` on its own
+  leads back to the room.
+- The floor lamp stands in the back corner, right of the rack, and glows a little less.
+
+### Fixed
+
+- The camera can no longer go under the floor or through the side wall, where everything
+  seemed to float.
+- On software WebGL the room drops shadows, bloom and fur, and frames keep to a budget,
+  so the page stays responsive. The browser tests in CI failed on this.
+
 ## [0.8.0] - 2026-11-12
 
 ### Added

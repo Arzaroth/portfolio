@@ -10,6 +10,15 @@ CI and refuses a version with no dated section here.
 
 ## [Unreleased]
 
+## [0.9.1] - 2026-11-12
+
+### Fixed
+
+- The pointer reaches the room again: the hidden boot splash covered it and took every
+  click, hover and drag.
+- The floor lamp stands in the far right corner, out of the opening view, so it no longer
+  glares at the visitor; it still lights the rack from the side.
+
 ## [0.9.0] - 2026-11-12
 
 ### Added
@@ -192,7 +201,8 @@ CI and refuses a version with no dated section here.
   desktop and a phone browser.
 - `tools/deploy.sh` publishes `dist/` to arzaroth.com.
 
-[Unreleased]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.9.0...HEAD
+[Unreleased]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.9.1...HEAD
+[0.9.1]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.9.0...v0.9.1
 [0.9.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.8.0...v0.9.0
 [0.8.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.7.0...v0.8.0
 [0.7.0]: https://git.arzaroth.com/Arzaroth/portfolio/compare/v0.6.0...v0.7.0

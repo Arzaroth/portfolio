@@ -124,5 +124,6 @@ a { color: inherit; }
   .live .rk-lead { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .001s !important; animation-iteration-count: 1 !important; transition-duration: .001s !important; }
+  *, *::before, *::after { animation-duration: .001s !important; animation-iteration-count: 1 !important; }
+  .live .rk-card, .live .rk-card.open, .live .rk-lead, .rk-boot { transition: none !important; }
 }

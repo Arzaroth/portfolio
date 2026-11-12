@@ -1,0 +1,50 @@
+---
+import Base from '../layouts/Base.astro';
+import RoomCard from '../components/RoomCard.astro';
+import { elsewhere } from '../data/projects';
+import { cards, labelOf, pickable } from '../data/room';
+import '../styles/room.css';
+
+const fonts =
+  'https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Gloock&family=VT323&family=Caveat:wght@700&display=swap';
+---
+
+<Base fonts={fonts} colorScheme="light dark" themeColor="#16302e">
+  <main id="rack">
+    <script is:inline>document.getElementById('rack').classList.add('live');</script>
+    <canvas id="rk-canvas" aria-label="A 42U server rack standing in a living room, lit by a floor lamp at night. Each server is one project."></canvas>
+    <div class="rk-shade"></div>
+    <div class="rk-intro">
+      <div class="rk-mark"><span class="eyebrow"><i></i>42U, living room</span><h1>Arzaroth<b aria-hidden="true">.</b></h1></div>
+      <p>I started in DevOps and ended up a CISO. I still write plenty of code, and most of it runs on my own machines. That's why there's a 42U rack in my living room.</p>
+      <p class="how how-live">Every server in it is a project. Click one to pull it out, and drag to walk around the room.</p>
+      <p class="how how-static">Every server in it is a project, listed top to bottom.</p>
+      <div class="rk-links">
+        {elsewhere.map((l) => <a href={l.href} target="_blank" rel="noopener">{l.label}</a>)}
+      </div>
+      <nav class="rk-inv" aria-label="Servers in the rack">
+        <h2>In the rack, top to bottom</h2>
+        <ul>
+          {pickable.map((id) => <li><a href={`#server-${id}`} data-id={id}>{labelOf(id)}</a></li>)}
+        </ul>
+      </nav>
+    </div>
+    <p class="rk-loading">Powering on the rack</p>
+    <div class="rk-boot" hidden><pre></pre></div>
+    <svg class="rk-lead" aria-hidden="true"><line x1="0" y1="0" x2="0" y2="0"></line><circle r="3.5" cx="0" cy="0"></circle></svg>
+    <aside class="rk-card" aria-live="polite"><button class="close" type="button" aria-label="Push it back in">×</button><div class="body"></div></aside>
+    <section class="rk-entries" aria-label="What runs on the rack">
+      {cards.map((card) => <RoomCard card={card} />)}
+    </section>
+  </main>
+</Base>
+
+<script>
+  import { startRoom } from '../scripts/room/scene';
+
+  const root = document.getElementById('rack')!;
+  startRoom(root).catch((err) => {
+    root.classList.remove('live');
+    console.error(err);
+  });
+</script>

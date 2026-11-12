@@ -46,7 +46,7 @@ Or with npm directly: `npm run dev`, `npm run check`, `npm test`, `npm run build
   and phone.
 
 Adding a workspace means adding it to `desktop.ts` and a component with a matching
-`<Workspace id>` to `src/pages/index.astro`. The unit tests fail if a layout tree does not
+`<Workspace id>` to `src/pages/desktop.astro`. The unit tests fail if a layout tree does not
 place each of the component's windows exactly once.
 
 ## Release and deploy

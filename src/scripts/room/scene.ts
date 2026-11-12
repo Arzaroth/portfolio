@@ -536,6 +536,14 @@ export async function startRoom(root: HTMLElement) {
       deselect();
       return;
     }
+    const typing = e.target instanceof HTMLElement && e.target.closest('input, textarea, [contenteditable]');
+    if ((e.key === 'j' || e.key === 'k') && !e.ctrlKey && !e.metaKey && !e.altKey && !typing) {
+      const ids = [...chips.keys()];
+      const at = selected ? ids.indexOf(selected) : -1;
+      const next = e.key === 'j' ? (at < 0 ? 0 : Math.min(ids.length - 1, at + 1)) : at < 0 ? ids.length - 1 : Math.max(0, at - 1);
+      select(ids[next]);
+      chips.get(ids[next])?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    }
     const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
     kp = k === KON[kp] ? kp + 1 : k === KON[0] ? 1 : 0;
     if (kp === KON.length) {

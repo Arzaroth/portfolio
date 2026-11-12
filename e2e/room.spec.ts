@@ -44,6 +44,17 @@ test('escape closes the card', async ({ page }) => {
   await expect(page.locator('.rk-card')).not.toHaveClass(/\bopen\b/);
 });
 
+test('j and k walk the rack, top to bottom', async ({ page }) => {
+  await page.goto('/');
+  await powered(page);
+  await page.keyboard.press('j');
+  await expect(page.locator('.rk-card.open h2')).toHaveText('Code lives at home too');
+  await page.keyboard.press('j');
+  await expect(page.locator('.rk-card.open h2')).toHaveText('smith');
+  await page.keyboard.press('k');
+  await expect(page.locator('.rk-card.open h2')).toHaveText('Code lives at home too');
+});
+
 test('a link to a server opens with that server pulled out', async ({ page }) => {
   await page.goto('/#server-ouroboros');
   await expect(page.locator('.rk-card.open h2')).toHaveText('ouroboros', { timeout: 20000 });

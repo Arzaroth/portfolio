@@ -592,6 +592,8 @@ export async function startRoom(root: HTMLElement) {
     }
     for (const key of VIEW_KEYS) cam[key] += (goal[key] - cam[key]) * k;
     camera.position.set(cam.tx + cam.r * Math.sin(cam.yaw) * Math.cos(cam.pitch), cam.ty + cam.r * Math.sin(cam.pitch), cam.tz + cam.r * Math.cos(cam.yaw) * Math.cos(cam.pitch));
+    camera.position.x = Math.max(-2.95, camera.position.x);
+    camera.position.y = Math.max(0.25, camera.position.y);
     camera.lookAt(cam.tx, cam.ty, cam.tz);
     for (const sv of servers) {
       const hot = hover?.id === sv.id;

@@ -10,6 +10,20 @@ CI and refuses a version with no dated section here.
 
 ## [Unreleased]
 
+### Added
+
+- The home page is a 42U rack in a living room, in 3D. Every server is a project: click one,
+  or pick it in the list, and it slides out with its card, and the monitor on the desk
+  shows it. A cat sleeps on top of the rack. The room follows the visitor's light or dark
+  setting, and phones get their own framing and a lighter render.
+- The Konami code dives into a server, runs its BIOS and boot screens, and lands on the
+  tiling desktop.
+- Without JavaScript or WebGL, the home page lists every server as a card.
+
+### Changed
+
+- The tiling desktop moved to `/desktop/`, and its logo leads back to the room.
+
 ## [0.6.0] - 2026-11-07
 
 ### Added

@@ -392,7 +392,11 @@ export function monitor() {
   const tex = finish(x.canvas);
   const w = x.canvas.width;
   const h = x.canvas.height;
+  const past = new Image();
+  past.src = '/screens/v0.3.0.webp';
+  let current: string | null = null;
   const draw = (id: string | null) => {
+    current = id;
     const card = id ? cardOf(id) : null;
     const g = x.createLinearGradient(0, 0, w, h);
     g.addColorStop(0, card ? (colors[card.id] ?? '#1d2b33') : '#1d2b33');
@@ -409,12 +413,46 @@ export function monitor() {
     x.fillText(new Date().toTimeString().slice(0, 5), w - 16, 14);
     x.textAlign = 'left';
     if (!card) {
-      x.font = '400 104px Gloock, Georgia, serif';
-      x.fillStyle = 'rgba(255,255,255,.9)';
-      x.fillText('Arzaroth', 70, 290);
-      x.font = '400 24px Archivo';
-      x.fillStyle = 'rgba(255,255,255,.55)';
-      x.fillText('Pull a server out and it opens here.', 74, 368);
+      x.fillStyle = '#dfe1e5';
+      x.fillRect(0, 28, w, 70);
+      x.fillStyle = '#f7f8fa';
+      x.beginPath();
+      x.roundRect(14, 36, 210, 30, [9, 9, 0, 0]);
+      x.fill();
+      x.font = '500 15px Archivo';
+      x.fillStyle = '#30343a';
+      x.fillText('Arzaroth', 44, 52);
+      x.fillStyle = '#16181b';
+      x.fillRect(24, 46, 12, 12);
+      x.fillStyle = '#f7f8fa';
+      x.fillRect(0, 66, w, 32);
+      x.fillStyle = '#e9ebee';
+      x.beginPath();
+      x.roundRect(110, 71, w - 220, 22, 11);
+      x.fill();
+      x.fillStyle = '#4a4f57';
+      x.font = '500 14px Archivo';
+      x.fillText('arzaroth.com', 130, 82);
+      const chip = 'v0.3.0, before the desktop';
+      const cw = x.measureText(chip).width + 18;
+      x.fillStyle = '#ffb45e';
+      x.beginPath();
+      x.roundRect(w - 118 - cw, 73, cw, 18, 9);
+      x.fill();
+      x.fillStyle = '#1d1408';
+      x.fillText(chip, w - 109 - cw, 82);
+      ['#c2c5ca', '#c2c5ca', '#c2c5ca'].forEach((c, i) => {
+        x.fillStyle = c;
+        x.beginPath();
+        x.arc(30 + i * 24, 82, 7, 0, 7);
+        x.fill();
+      });
+      if (past.complete && past.naturalWidth) x.drawImage(past, 0, 0, past.naturalWidth, ((h - 98) * past.naturalWidth) / w, 0, 98, w, h - 98);
+      else {
+        x.fillStyle = '#dde0e4';
+        x.fillRect(0, 98, w, h - 98);
+        past.addEventListener('load', () => current === null && draw(null), { once: true });
+      }
       tex.needsUpdate = true;
       return;
     }
@@ -447,7 +485,7 @@ export function monitor() {
         x.clip();
         x.drawImage(img, 84, 120, 112, 112);
         x.restore();
-      } else img.addEventListener('load', () => draw(id), { once: true });
+      } else img.addEventListener('load', () => current === id && draw(id), { once: true });
       tx = 222;
     }
     x.fillStyle = '#16181b';

@@ -17,7 +17,7 @@ const fonts =
     <div class="rk-intro">
       <div class="rk-mark"><span class="eyebrow"><i></i>42U, living room</span><h1>Arzaroth<b aria-hidden="true">.</b></h1></div>
       <p>I started in DevOps and ended up a CISO. I still write plenty of code, and most of it runs on my own machines. That's why there's a 42U rack in my living room.</p>
-      <p class="how how-live">Every server in it is a project. Click one to pull it out, and drag to walk around the room.</p>
+      <p class="how how-live">Every server in it is a project. Click one to pull it out, or walk the rack with <kbd>j</kbd> and <kbd>k</kbd>. Drag to walk around the room.</p>
       <p class="how how-static">Every server in it is a project, listed top to bottom.</p>
       <div class="rk-links">
         {elsewhere.map((l) => <a href={l.href} target="_blank" rel="noopener">{l.label}</a>)}
@@ -31,6 +31,21 @@ const fonts =
     </div>
     <p class="rk-loading">Powering on the rack</p>
     <div class="rk-boot" hidden><pre></pre></div>
+    <div class="rk-splash" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <defs>
+          <linearGradient id="splash-tint" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#f3a46f"></stop>
+            <stop offset=".55" stop-color="#ec8ba1"></stop>
+            <stop offset="1" stop-color="#b7a0f4"></stop>
+          </linearGradient>
+        </defs>
+        <path d="M12 2.5 21.5 21h-4.2L12 10.4 6.7 21H2.5Z" fill="url(#splash-tint)"></path>
+        <path d="M9.2 16.5h5.6" stroke="#000" stroke-width="2"></path>
+      </svg>
+      <div class="meter"><i></i></div>
+    </div>
+    <iframe class="rk-desktop" title="The tiling desktop" hidden></iframe>
     <svg class="rk-lead" aria-hidden="true"><line x1="0" y1="0" x2="0" y2="0"></line><circle r="3.5" cx="0" cy="0"></circle></svg>
     <aside class="rk-card" aria-live="polite"><button class="close" type="button" aria-label="Push it back in">×</button><div class="body"></div></aside>
     <section class="rk-entries" aria-label="What runs on the rack">

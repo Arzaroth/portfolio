@@ -24,6 +24,10 @@ const fonts =
 ---
 
 <Base fonts={fonts}>
+  <Fragment slot="head">
+    <meta name="robots" content="noindex" />
+    <script is:inline>if (window.top === window.self && !navigator.webdriver) location.replace('/');</script>
+  </Fragment>
   <Wall />
   <Bar />
   <div class="toast" role="status" aria-live="polite" hidden><b></b><span></span></div>
@@ -47,4 +51,10 @@ const fonts =
 
   initTerminals();
   initDesktop();
+
+  if (window.top !== window.self)
+    document.querySelector('.bar .logo')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.parent.postMessage('arzaroth:surface', location.origin);
+    });
 </script>

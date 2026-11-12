@@ -43,6 +43,15 @@ const need = <T extends Element>(root: ParentNode, sel: string) => {
   return el;
 };
 
+const softwareGL = () => {
+  const gl = document.createElement('canvas').getContext('webgl2') ?? document.createElement('canvas').getContext('webgl');
+  if (!gl) return true;
+  const info = gl.getExtension('WEBGL_debug_renderer_info');
+  const name = String(info ? gl.getParameter(info.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER));
+  gl.getExtension('WEBGL_lose_context')?.loseContext();
+  return /swiftshader|llvmpipe|softpipe|software|basic render/i.test(name);
+};
+
 export async function startRoom(root: HTMLElement) {
   const MOBILE = matchMedia('(max-width: 760px), (pointer: coarse)').matches;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -52,10 +61,12 @@ export async function startRoom(root: HTMLElement) {
     new Promise((r) => setTimeout(r, 2500)),
   ]);
 
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: !MOBILE, powerPreference: 'high-performance' });
-  let pr = Math.min(devicePixelRatio, 1.5);
+  const SOFT = softwareGL();
+  const LITE = MOBILE || SOFT;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: !LITE, powerPreference: 'high-performance' });
+  let pr = SOFT ? 1 : Math.min(devicePixelRatio, 1.5);
   renderer.setPixelRatio(pr);
-  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.enabled = !SOFT;
   renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.shadowMap.autoUpdate = false;
   let shadowDirty = 3;
@@ -79,15 +90,15 @@ export async function startRoom(root: HTMLElement) {
   sun.shadow.normalBias = 0.012;
   sun.shadow.radius = 3;
   const lampLight = new THREE.PointLight('#ffb25a', 0, 0, 1.6);
-  lampLight.position.set(-1.25, 1.52, 1.15);
+  lampLight.position.set(0.85, 1.52, -0.5);
   lampLight.castShadow = true;
   lampLight.shadow.mapSize.setScalar(MOBILE ? 512 : 1024);
   lampLight.shadow.bias = -0.002;
   lampLight.shadow.normalBias = 0.01;
   lampLight.shadow.radius = 4;
   const spill = new THREE.SpotLight('#ffcf94', 0, 4, 0.9, 0.8, 1.4);
-  spill.position.set(-1.25, 1.32, 1.15);
-  spill.target.position.set(-1.1, 0, 1.2);
+  spill.position.set(0.85, 1.32, -0.5);
+  spill.target.position.set(0.85, 0, -0.25);
   const ledGlow = new THREE.PointLight('#5dff9a', 0.25, 1.2, 2);
   ledGlow.position.set(0.15, 1.1, 0.75);
   scene.add(hemi, fill, moon, sun, lampLight, spill, spill.target, ledGlow);
@@ -239,7 +250,7 @@ export async function startRoom(root: HTMLElement) {
   }
 
   const lamp = new THREE.Group();
-  lamp.position.set(-1.25, 0, 1.15);
+  lamp.position.set(0.85, 0, -0.5);
   scene.add(lamp);
   const black = new THREE.MeshStandardMaterial({ color: '#141414', roughness: 0.4, metalness: 0.6 });
   add(new THREE.CylinderGeometry(0.15, 0.17, 0.03, 32), black, 0, 0.015, 0, lamp);
@@ -294,7 +305,7 @@ export async function startRoom(root: HTMLElement) {
     o.userData.pick = plantTag;
   });
 
-  const { cat, tick: catTick } = buildCat(MOBILE ? 12 : 22);
+  const { cat, tick: catTick } = buildCat(SOFT ? 0 : MOBILE ? 12 : 22);
   cat.position.set(-0.02, rackTop, 0.12);
   cat.rotation.y = -1.0;
   scene.add(cat);
@@ -306,7 +317,7 @@ export async function startRoom(root: HTMLElement) {
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
   const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.5, 0.5, 0.85);
-  bloom.enabled = !MOBILE;
+  bloom.enabled = !LITE;
   composer.addPass(bloom);
   composer.addPass(new OutputPass());
 
@@ -497,20 +508,62 @@ export async function startRoom(root: HTMLElement) {
     setTimeout(() => {
       if (run !== bootRun) return;
       runBoot(boot, sv.s.label ?? sv.id, `slot ${slotOf(sv.s)}, ${sv.s.height}U`, () => run === bootRun).then((done) => {
-        if (done && run === bootRun) location.assign('/desktop/');
+        if (done && run === bootRun) openDesktop(run);
       });
     }, reduce ? 0 : 2100);
+  };
+  const splash = need<HTMLElement>(root, '.rk-splash');
+  const meter = need<HTMLElement>(splash, '.meter i');
+  const desktop = need<HTMLIFrameElement>(root, '.rk-desktop');
+  let away = false;
+  const wait = (ms: number) => new Promise((r) => setTimeout(r, reduce ? Math.min(ms, 20) : ms));
+  const openDesktop = async (run: number) => {
+    const alive = () => run === bootRun;
+    splash.hidden = false;
+    meter.style.width = '0';
+    requestAnimationFrame(() => splash.classList.add('on'));
+    const loaded = new Promise((r) => desktop.addEventListener('load', r, { once: true }));
+    desktop.src = '/desktop/';
+    await wait(400);
+    boot.classList.remove('on');
+    boot.hidden = true;
+    for (const w of [18, 37, 55, 71]) {
+      if (!alive()) return;
+      meter.style.width = `${w}%`;
+      await wait(420);
+    }
+    await loaded;
+    if (!alive()) return;
+    meter.style.width = '100%';
+    await wait(550);
+    away = true;
+    desktop.hidden = false;
+    requestAnimationFrame(() => desktop.classList.add('on'));
+    await wait(600);
+    splash.classList.remove('on');
+    splash.hidden = true;
+    desktop.contentWindow?.focus();
   };
   const surface = () => {
     bootRun++;
     diving = false;
+    away = false;
     boot.classList.remove('on');
+    splash.classList.remove('on');
+    desktop.classList.remove('on');
     setTimeout(() => {
       boot.hidden = true;
+      splash.hidden = true;
+      desktop.hidden = true;
+      desktop.removeAttribute('src');
       boot.querySelector('pre')!.textContent = '';
     }, 350);
     deselect();
+    window.focus();
   };
+  addEventListener('message', (e) => {
+    if (e.origin === location.origin && e.data === 'arzaroth:surface') surface();
+  });
   addEventListener('pageshow', (e) => {
     if (e.persisted && diving) surface();
   });
@@ -524,6 +577,14 @@ export async function startRoom(root: HTMLElement) {
     if (e.key === 'Escape') {
       deselect();
       return;
+    }
+    const typing = e.target instanceof HTMLElement && e.target.closest('input, textarea, [contenteditable]');
+    if ((e.key === 'j' || e.key === 'k') && !e.ctrlKey && !e.metaKey && !e.altKey && !typing) {
+      const ids = [...chips.keys()];
+      const at = selected ? ids.indexOf(selected) : -1;
+      const next = e.key === 'j' ? (at < 0 ? 0 : Math.min(ids.length - 1, at + 1)) : at < 0 ? ids.length - 1 : Math.max(0, at - 1);
+      select(ids[next]);
+      chips.get(ids[next])?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
     }
     const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
     kp = k === KON[kp] ? kp + 1 : k === KON[0] ? 1 : 0;
@@ -539,6 +600,7 @@ export async function startRoom(root: HTMLElement) {
   const t0 = performance.now();
   const proj = new THREE.Vector3();
   let lastDraw = 0;
+  let cost = 0;
   let frames = 0;
   let slow = 0;
   let sampleStart = 0;
@@ -552,7 +614,7 @@ export async function startRoom(root: HTMLElement) {
   };
   const loop = (now = 0) => {
     requestAnimationFrame(loop);
-    if (document.hidden) return;
+    if (document.hidden || away) return;
     const t = (performance.now() - t0) / 1000;
     const k = reduce ? 1 : 0.075;
     let moving = !!drag || t < 3;
@@ -562,7 +624,7 @@ export async function startRoom(root: HTMLElement) {
         moving = true;
         shadowDirty = 2;
       }
-    if (!moving && now - lastDraw < 66) return;
+    if (now - lastDraw < Math.max(moving ? 0 : 66, cost * 3)) return;
     if (moving && quality > 0 && now) {
       if (!sampleStart) sampleStart = now;
       frames++;
@@ -580,6 +642,8 @@ export async function startRoom(root: HTMLElement) {
     }
     for (const key of VIEW_KEYS) cam[key] += (goal[key] - cam[key]) * k;
     camera.position.set(cam.tx + cam.r * Math.sin(cam.yaw) * Math.cos(cam.pitch), cam.ty + cam.r * Math.sin(cam.pitch), cam.tz + cam.r * Math.cos(cam.yaw) * Math.cos(cam.pitch));
+    camera.position.x = Math.max(-2.95, camera.position.x);
+    camera.position.y = Math.max(0.25, camera.position.y);
     camera.lookAt(cam.tx, cam.ty, cam.tz);
     for (const sv of servers) {
       const hot = hover?.id === sv.id;
@@ -589,9 +653,9 @@ export async function startRoom(root: HTMLElement) {
       sv.faceMat.emissiveIntensity = hot || selected === sv.id ? 0.07 : 0;
     }
     const lampOn = night ? (reduce ? 1 : Math.min(1, Math.max(0, (t - 0.35) / 0.25))) : 0;
-    lampLight.intensity = 11 * lampOn;
+    lampLight.intensity = 8 * lampOn;
     spill.intensity = 6 * lampOn;
-    shadeMat.emissiveIntensity = 1.6 * lampOn;
+    shadeMat.emissiveIntensity = 1.1 * lampOn;
     servers.forEach((sv, i) => {
       if (!sv.lit && (reduce || t > 1.1 + i * 0.06)) {
         sv.lit = true;
@@ -604,7 +668,10 @@ export async function startRoom(root: HTMLElement) {
       l.m.emissiveIntensity = reduce ? 2.5 : v > 0.2 ? 3.2 : 0.4;
     }
     if (!reduce) catTick(t);
-    composer.render();
+    const before = performance.now();
+    if (bloom.enabled) composer.render();
+    else renderer.render(scene, camera);
+    cost = cost * 0.7 + (performance.now() - before) * 0.3;
     const a = selected && !narrow() ? anchorFor(selected) : null;
     if (a) {
       proj.copy(a).project(camera);

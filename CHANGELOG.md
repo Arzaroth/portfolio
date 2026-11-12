@@ -10,6 +10,21 @@ CI and refuses a version with no dated section here.
 
 ## [Unreleased]
 
+### Added
+
+- The monitor on the desk shows the site as it was in 0.3.0, before the tiling desktop,
+  until a server is pulled out.
+
+### Changed
+
+- The plant by the rack is a Chinese money plant in a terracotta pot, on a saucer, with
+  round leaves on long stalks around a scarred stem.
+
+### Fixed
+
+- With reduced motion, a server's card shows its name and icon again.
+- Shadows no longer stripe curved surfaces in the room.
+
 ## [0.7.0] - 2026-11-12
 
 ### Added

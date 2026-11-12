@@ -5,6 +5,7 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { fixtures, rack as layout, RACK_UNITS, slotOf, type Server } from '../../data/room';
 import { buildCat } from './cat';
+import { buildPlant } from './plant';
 import { FACE_W, FACE_Z, FACES, PORT_X, PX, U, faceTexture, monitor, noteTexture, plasterTexture, skyTexture, woodTexture } from './textures';
 import { runBoot } from './boot';
 
@@ -75,12 +76,14 @@ export async function startRoom(root: HTMLElement) {
   sun.shadow.mapSize.setScalar(MOBILE ? 1024 : 2048);
   Object.assign(sun.shadow.camera, { left: -3, right: 3, top: 3, bottom: -1, near: 0.5, far: 14 });
   sun.shadow.bias = -0.0008;
+  sun.shadow.normalBias = 0.012;
   sun.shadow.radius = 3;
   const lampLight = new THREE.PointLight('#ffb25a', 0, 0, 1.6);
   lampLight.position.set(-1.25, 1.52, 1.15);
   lampLight.castShadow = true;
   lampLight.shadow.mapSize.setScalar(MOBILE ? 512 : 1024);
   lampLight.shadow.bias = -0.002;
+  lampLight.shadow.normalBias = 0.01;
   lampLight.shadow.radius = 4;
   const spill = new THREE.SpotLight('#ffcf94', 0, 4, 0.9, 0.8, 1.4);
   spill.position.set(-1.25, 1.32, 1.15);
@@ -282,37 +285,12 @@ export async function startRoom(root: HTMLElement) {
   add(new THREE.CylinderGeometry(0.025, 0.025, 0.4, 12), black, 0, 0.22, 0, chair);
   add(new THREE.CylinderGeometry(0.26, 0.26, 0.025, 5), black, 0, 0.03, 0, chair);
 
-  const plant = new THREE.Group();
+  const plant = buildPlant();
   plant.position.set(1.02, 0, 0.5);
+  plant.scale.setScalar(1.35);
   scene.add(plant);
-  add(new THREE.CylinderGeometry(0.15, 0.11, 0.34, 40), new THREE.MeshStandardMaterial({ color: '#c96f4a', roughness: 0.5 }), 0, 0.17, 0, plant);
-  const soil = new THREE.Mesh(new THREE.CircleGeometry(0.14, 32), new THREE.MeshStandardMaterial({ color: '#2a1c12' }));
-  soil.rotation.x = -Math.PI / 2;
-  soil.position.y = 0.33;
-  plant.add(soil);
-  const leafMat = new THREE.MeshStandardMaterial({ color: '#3f8a4a', roughness: 0.55, side: THREE.DoubleSide });
-  const stemMat = new THREE.MeshStandardMaterial({ color: '#4d7a33' });
-  const up = new THREE.Vector3(0, 1, 0);
-  const soilTop = new THREE.Vector3(0, 0.33, 0);
-  for (let i = 0; i < 11; i++) {
-    const a = (i / 11) * Math.PI * 2 + Math.random() * 0.4;
-    const tilt = 0.2 + Math.random() * 0.45;
-    const len = 0.35 + Math.random() * 0.4;
-    const dir = new THREE.Vector3(Math.cos(a) * Math.sin(tilt), Math.cos(tilt), Math.sin(a) * Math.sin(tilt));
-    const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.005, 0.007, len, 6), stemMat);
-    stem.position.copy(dir.clone().multiplyScalar(len / 2)).add(soilTop);
-    stem.quaternion.setFromUnitVectors(up, dir);
-    plant.add(stem);
-    const leaf = new THREE.Mesh(new THREE.SphereGeometry(1, 20, 12), leafMat);
-    leaf.scale.set(0.09 + Math.random() * 0.04, 0.008, 0.16 + Math.random() * 0.06);
-    leaf.position.copy(dir.clone().multiplyScalar(len + 0.1)).add(soilTop);
-    leaf.lookAt(leaf.position.clone().add(new THREE.Vector3(Math.cos(a), -0.2, Math.sin(a))));
-    leaf.rotateX(-0.35);
-    plant.add(leaf);
-  }
   const plantTag: Pickable = { id: 'poucevert' };
   plant.traverse((o) => {
-    if ((o as THREE.Mesh).isMesh) o.castShadow = true;
     o.userData.pick = plantTag;
   });
 
@@ -405,7 +383,7 @@ export async function startRoom(root: HTMLElement) {
   const anchorFor = (id: string) => {
     const sv = servers.find((x) => x.id === id);
     if (sv) return anchor.set(FACE_W / 2 - 0.02, sv.g.position.y, FACE_Z + sv.g.position.z);
-    if (id === 'poucevert') return anchor.set(1.02, 0.9, 0.5);
+    if (id === 'poucevert') return anchor.set(1.02, 0.72, 0.5);
     if (id === 'cat') return anchor.copy(cat.position).add(new THREE.Vector3(0.1, 0.1, 0.05));
     return null;
   };
@@ -436,7 +414,7 @@ export async function startRoom(root: HTMLElement) {
       Object.assign(goal, narrow() ? { yaw: 0.45, pitch: 0.26, r: 2.0, tx: 0.08, ty: y - 0.32, tz: 0.7 } : { yaw: 0.55, pitch: 0.18, r: 2.1, tx: 0.42, ty: y, tz: 0.55 });
     } else if (id === 'cat')
       Object.assign(goal, narrow() ? { yaw: 0.4, pitch: 0.35, r: 1.6, tx: 0, ty: rackTop - 0.3, tz: 0.2 } : { yaw: 0.5, pitch: 0.28, r: 1.6, tx: 0.35, ty: rackTop, tz: 0.2 });
-    else Object.assign(goal, narrow() ? { yaw: 0.4, pitch: 0.3, r: 2.3, tx: 0.85, ty: 0.25, tz: 0.45 } : { yaw: 0.45, pitch: 0.16, r: 2.3, tx: 1.35, ty: 0.65, tz: 0.45 });
+    else Object.assign(goal, narrow() ? { yaw: 0.4, pitch: 0.3, r: 3.1, tx: 1.02, ty: 0.05, tz: 0.5 } : { yaw: 0.5, pitch: 0.2, r: 1.65, tx: 1.2, ty: 0.5, tz: 0.5 });
   };
   const deselect = () => {
     display.draw(null);

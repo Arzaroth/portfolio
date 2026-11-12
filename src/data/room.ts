@@ -213,6 +213,7 @@ const special: Record<string, Card> = {
   bozos: {
     id: 'bozos',
     name: 'The Bozos',
+    icon: '/icons/bozos.png',
     sub: 'PlayStation 2 ports',
     paragraphs: [recomp.lede],
     rows: recomp.ports.map((p) => ({

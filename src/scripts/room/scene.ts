@@ -508,20 +508,62 @@ export async function startRoom(root: HTMLElement) {
     setTimeout(() => {
       if (run !== bootRun) return;
       runBoot(boot, sv.s.label ?? sv.id, `slot ${slotOf(sv.s)}, ${sv.s.height}U`, () => run === bootRun).then((done) => {
-        if (done && run === bootRun) location.assign('/desktop/');
+        if (done && run === bootRun) openDesktop(run);
       });
     }, reduce ? 0 : 2100);
+  };
+  const splash = need<HTMLElement>(root, '.rk-splash');
+  const meter = need<HTMLElement>(splash, '.meter i');
+  const desktop = need<HTMLIFrameElement>(root, '.rk-desktop');
+  let away = false;
+  const wait = (ms: number) => new Promise((r) => setTimeout(r, reduce ? Math.min(ms, 20) : ms));
+  const openDesktop = async (run: number) => {
+    const alive = () => run === bootRun;
+    splash.hidden = false;
+    meter.style.width = '0';
+    requestAnimationFrame(() => splash.classList.add('on'));
+    const loaded = new Promise((r) => desktop.addEventListener('load', r, { once: true }));
+    desktop.src = '/desktop/';
+    await wait(400);
+    boot.classList.remove('on');
+    boot.hidden = true;
+    for (const w of [18, 37, 55, 71]) {
+      if (!alive()) return;
+      meter.style.width = `${w}%`;
+      await wait(420);
+    }
+    await loaded;
+    if (!alive()) return;
+    meter.style.width = '100%';
+    await wait(550);
+    away = true;
+    desktop.hidden = false;
+    requestAnimationFrame(() => desktop.classList.add('on'));
+    await wait(600);
+    splash.classList.remove('on');
+    splash.hidden = true;
+    desktop.contentWindow?.focus();
   };
   const surface = () => {
     bootRun++;
     diving = false;
+    away = false;
     boot.classList.remove('on');
+    splash.classList.remove('on');
+    desktop.classList.remove('on');
     setTimeout(() => {
       boot.hidden = true;
+      splash.hidden = true;
+      desktop.hidden = true;
+      desktop.removeAttribute('src');
       boot.querySelector('pre')!.textContent = '';
     }, 350);
     deselect();
+    window.focus();
   };
+  addEventListener('message', (e) => {
+    if (e.origin === location.origin && e.data === 'arzaroth:surface') surface();
+  });
   addEventListener('pageshow', (e) => {
     if (e.persisted && diving) surface();
   });
@@ -572,7 +614,7 @@ export async function startRoom(root: HTMLElement) {
   };
   const loop = (now = 0) => {
     requestAnimationFrame(loop);
-    if (document.hidden) return;
+    if (document.hidden || away) return;
     const t = (performance.now() - t0) / 1000;
     const k = reduce ? 1 : 0.075;
     let moving = !!drag || t < 3;

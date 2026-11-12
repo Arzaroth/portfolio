@@ -60,16 +60,20 @@ test('a link to a server opens with that server pulled out', async ({ page }) =>
   await expect(page.locator('.rk-card.open h2')).toHaveText('ouroboros', { timeout: 20000 });
 });
 
-test('the Konami code boots a machine into the old desktop, and its logo leads back', async ({ page }) => {
+test('the Konami code boots a machine into the old desktop, inside the page, and its logo leads back', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   await powered(page);
   for (const key of ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a']) await page.keyboard.press(key);
-  await expect(page.locator('.rk-boot')).toBeVisible();
   await expect(page.locator('.rk-boot')).toContainText('ARZAROTH BIOS');
-  await expect(page).toHaveURL(/\/desktop\/$/, { timeout: 20000 });
-  await page.getByRole('link', { name: 'Back to the room' }).click();
+  const desktop = page.locator('.rk-desktop');
+  await expect(desktop).toBeVisible({ timeout: 20000 });
   await expect(page).toHaveURL(/:\d+\/$/);
+  const frame = page.frameLocator('.rk-desktop');
+  await expect(frame.locator('.bar')).toBeVisible();
+  await frame.getByRole('link', { name: 'Back to the room' }).click();
+  await expect(desktop).toBeHidden();
+  await expect(page.locator('#rk-canvas')).toBeVisible();
 });
 
 test('escape backs out of the boot', async ({ page }) => {
